@@ -22,6 +22,31 @@ class inventoryItem {
         this.dateObj = new Date(); // Format: "YYYY-MM-DDTHH:mm:ss.sssZ"
         this.createdDate = this.dateObj.toISOString().split("T")[0]; // Format: YYYY-MM-DD
     }
+
+    getJson() {
+        const ret = {
+            itemID: this.itemID,
+            userId: this.userId,
+            ingredientName: this.ingredientName,
+            quantity: this.quantity,
+            unit: this.unit,
+            category: this.category,
+            purchaseDate: this.purchaseDate,
+            expiryDate: this.expiryDate,
+            location: this.location,
+            cost: this.cost,
+            createdDate: this.createdDate
+        }
+        return ret;
+    }
+
+    adjustQuantity(amount) {
+        const newQuantity = this.quantity + amount;
+        if (newQuantity < 0) {
+            throw new Error("Quantity cannot be negative");
+        }
+        this.quantity = newQuantity;
+    }
 }
 
 module.exports = { inventoryItem };

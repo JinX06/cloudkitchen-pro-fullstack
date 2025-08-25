@@ -37,6 +37,93 @@ class Recipe {
         this.createdDate = this.dateObj.toISOString().split("T")[0]; // Format: YYYY-MM-DD
 
     }
+
+    getJSON() {
+        const ret = {
+            recipeID: this.recipeID,
+            title: this.title,
+            chef: this.chef,
+            ingredients: this.ingredients,
+            instructions: this.instructions,
+            mealType: this.mealType,
+            cuisineType: this.cuisineType,
+            prepTime: this.prepTime,
+            difficulty: this.difficulty,
+            servings: this.servings,
+            createdDate: this.createdDate
+        };
+        return ret;
+    }
+
+    addIngredient(entry) {
+        // entry: string OR { name, quantity }
+        const index = this.ingredients.length;
+        const validated = validateIngredientEntry(entry, index, "ingredients");
+        this.ingredients.push(validated);
+    }
+
+    addInstruction(step, position = -1) {
+        const trimmed = assertString(step, "instruction");
+        if (position === -1 || position >= this.instructions.length) {
+            // If position not specified, push new instruction to the end
+            this.instructions.push(trimmed);
+        } else {
+            // Insert at given position
+            this.instructions.splice(position, 0, trimmed);
+        }
+    }
+
+    scaleServings(newServings) {
+        assertPositiveInt(newServings, "New Servings");
+        const scaleFactor = newServings / this.servings;
+
+        const scaled = [];
+
+        for (let i = 0; i < this.ingredients.length; i++) {
+            const ingredient = this.ingredients[i];
+
+            let quantityText = "";
+            let name = "";
+
+            if (isString(ingredient)) {
+                // Entire string is quantity + name combined
+                quantityText = ingredient.trim();
+            } else {
+                // Object: { name, quantity }
+                name = ingredient.name;
+                quantityText = ingredient.quantity.trim();
+            }
+
+            // Split quantity text into number and unit parts
+            let numberStr = "";
+            let unit = "";
+
+            for (let char of quantityText) {
+                if (!isNaN(char) && char !== " ") {
+                    numberStr += char;
+                } else if (char === ".") {
+                    numberStr += "."; // 25"."5
+                } else {
+                    unit += char; // "grams"
+                }
+            }
+
+            if (numberStr) {
+                const originalNumber = parseFloat(numberStr);
+                const scaledNumber = Math.round(originalNumber * scaleFactor * 100) / 100;
+                if (isString(ingredient)) {
+                    scaled.push(`${scaledNumber}${unit.trim()}`);
+                } else {
+                    scaled.push({ name, quantity: `${scaledNumber}${unit.trim()}` });
+                }
+            } else {
+                // No unit: leave as-is
+                scaled.push(ingredient);
+            }
+        }
+
+        return scaled;
+    }
 }
 
 module.exports = { Recipe };

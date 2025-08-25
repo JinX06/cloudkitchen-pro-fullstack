@@ -8,12 +8,59 @@
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body style="background-color: #395f48; padding-top:90px; display: flex; min-height: 100vh; flex-direction: column;">
-    <nav class="navbar navbar-dark mb-4 fixed-top" style="background-color:#212922">
-        <div class="container">
+    <nav class="navbar navbar-dark navbar-expand-lg mb-4 fixed-top"
+        style="background-color:#212922; padding-top:.25rem; padding-bottom:.25rem; height:65px;">
+
+        <div class="container justify-content-start">
+
             <a class="navbar-brand d-flex align-items-center" href="/">
-                <img src="/images/logo.png" alt="Recipe Hub logo" class="me-2" style="height:45px; width:auto;" loading="lazy">
-                Recipe Hub
+                <img src="/images/logo.png" alt="Recipe Hub logo" style="height:45px; width:auto; margin-right:5px;">
+                <strong>Recipe Hub</strong>
             </a>
+
+            <ul class="navbar-nav flex-row ms-3 gap-1 align-items-center">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/home-34076352">Home</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="recipesDropdown" role="button"
+                        data-bs-toggle="dropdown">
+                        Recipes
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/recipes-34076352">View Recipes</a></li>
+                        <li><a class="dropdown-item" href="/recipes/add">Add Recipe</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="inventoryDropdown" role="button"
+                        data-bs-toggle="dropdown">
+                        Inventory
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/inventory">View Inventory</a></li>
+                        <li><a class="dropdown-item" href="/inventory/add">Add Inventory</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="hdTasksDropdown" role="button"
+                        data-bs-toggle="dropdown">
+                        HD Tasks
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/recipes/filter">Filter Recipes</a></li>
+                        <li><a class="dropdown-item" href="/recipes/search">Search Recipes</a></li>
+                        <li><a class="dropdown-item" href="/inventory/alerts">Inventory Alerts</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+
+            <small style="color: rgb(91, 91, 91); margin-left: auto; margin-right: 0; font-size: 0.8rem;">Welcome, Ong Jin Xiang - 3407352</small>
         </div>
     </nav>
     

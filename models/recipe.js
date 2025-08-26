@@ -18,8 +18,12 @@ class Recipe {
         // Validate ingredients array
         assert(ingredients, "Ingredients");
         const cleanedIngredients = [];
+
+        // Ignore empty ingredients/empty elements in list [1,2,"",3] = [1,2,3])
         for (let i = 0; i < ingredients.length; i++) {
-            cleanedIngredients.push(validateIngredientEntry(ingredients[i], i, "ingredients"));
+            if (ingredients[i].trim().length !== 0){
+                cleanedIngredients.push(validateIngredientEntry(ingredients[i], i, "ingredients"));
+            }
         }
         this.ingredients = cleanedIngredients; // strings or { name, quantity }
 
@@ -28,7 +32,7 @@ class Recipe {
 
         this.mealType = assertString(mealType, "Meal Type");
         this.cuisineType = assertString(cuisineType, "Cuisine Type");
-        this.prepTime = assertNonNegativeNumber(prepTime, "Prep Time");
+        this.prepTime = assertPositiveInt(prepTime, "Prep Time");
         this.difficulty = assertEnum(difficulty, ["Easy", "Medium", "Hard"], "Difficulty");
         this.servings = assertPositiveInt(servings, "Servings");
 

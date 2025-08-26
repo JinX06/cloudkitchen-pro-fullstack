@@ -3,6 +3,8 @@ const ejs = require("ejs");
 const morgan = require("morgan")
 const path = require("path");
 const app = express();
+const {recipeDB} = require("./data/recipeDB")
+const {inventoryItemDB} = require("./data/inventoryItemDB")
 
 // Set the port number
 const port_number = 8080;
@@ -10,6 +12,12 @@ const port_number = 8080;
 // Set the view engine to EJS
 app.set("view engine", "ejs");
 app.engine("html", ejs.renderFile);
+
+// Make recipeDB and inventoryItemDB available as a "global" variable
+app.locals.recipeDB = recipeDB;
+app.locals.inventoryItemDB = inventoryItemDB;
+
+app.locals.errorOBJ = null;
 
 // Set Express to look for views in multiple directories
 app.set("views", [
@@ -37,28 +45,24 @@ app.use("/images", express.static(path.join(__dirname, "public", "images")));
 
 // ================== Routes ==================
 
-// Temporary page for testing different routes using ejs (will be removed later)
 app.get("/", (req, res) => {
-    const routes = [
-        { url: "/home-34076352", label: "Home" },
-        { url: "/not-found-34076352", label: "404" },
-        { url: "/recipes-34076352", label: "Recipes" }
-    ];
-
-    res.render("temp.html", { routes });
+    res.redirect("/home-34076352")
 });
 
-app.get("/home-34076352", (req, res) =>{
-    res.render("index.html");
-});
+app.use("/", require(path.join(__dirname, "routes/pages/home")));
+app.use("/", require(path.join(__dirname, "routes/pages/recipe")));
 
-app.get("/not-found-34076352", (req, res) => {
-    res.status(404).render("404.html");
-});
+app.use("/", require(path.join(__dirname, "routes/api/recipe")))
+// app.use("/", require("./routes/pages/recipes"));
+// app.use("/", require("./routes/pages/inventory"));
+// app.use("/", require("./routes/pages/errors"));
+// app.use("/api", require("./routes/api/recipes"));
+// app.use("/api", require("./routes/api/inventory"));
+app.use("/", require("./routes/pages/errors"));
 
-app.get("/recipes-34076352", (req, res) => {
-    res.render("recipes.html");
-});
+
+
+
 
 app.listen(port_number, () => {
     console.log(`Server is running on http://localhost:${port_number}`);

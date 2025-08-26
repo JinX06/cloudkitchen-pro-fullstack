@@ -3,11 +3,7 @@ const express = require("express")
 const router = express.Router();
 
 router.post("/api/recipes/add-34076352", (req, res) => {
-    // Convert form fields into the exact shapes your Recipe expects
-    const {
-        title, chef, mealType, cuisine1, cuisine2, prepTime, difficulty, servings,
-        ingredients, instructions
-    } = req.body;
+    const {title, chef, mealType, cuisine1, cuisine2, prepTime, difficulty, servings,ingredients, instructions} = req.body;
 
     //   Handle the cuisine selection (existing/new)
     let finalCuisine = "";

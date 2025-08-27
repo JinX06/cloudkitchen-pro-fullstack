@@ -23,7 +23,7 @@ class inventoryItem {
         this.createdDate = this.dateObj.toISOString().split("T")[0]; // Format: YYYY-MM-DD
     }
 
-    getJson() {
+    getJSON() {
         const ret = {
             itemID: this.itemID,
             userId: this.userId,

@@ -32,11 +32,11 @@
 
     <section class="container my-4">
         <!-- Page header -->
-        <div class="align-items-center gap-3 mb-2">
+        <div class="align-items-center gap-3 mb-2 text-light">
             <div class="flex-column flex-grow-1 text-center">
-                <h1 class="m-0 fw-bold" style="font-size: 50px; color: rgb(247, 241, 201);">
-                    <span style="font-size: 50px; color: white;">+</span>
-                    Add New Recipe
+                <h1 class="m-0 fw-bold" style="font-size: 50px;">
+                    <span style="font-size: 50px;">+</span>
+                    Add New Recipe 
                 </h1>
                 <hr style="border: none; height: 5px; background-color: black; opacity: 100; border-radius: 15px;">
             </div>
@@ -48,7 +48,6 @@
                 <strong>Recipe Form</strong>
             </div>
             <div class="card-body">
-                <!-- Form start (no backend wired yet) -->
                 <form action="/api/recipes/add-34076352" method="POST" validate>
                     <!-- Basic Info -->
                     <div class="mb-4">
@@ -95,7 +94,7 @@
                                 <div class="col">
                                     <select name="cuisine1" class="form-select">
                                         <option value="" selected>Select existing…</option>
-                                        <% (cuisines || []).forEach(c=> { %>
+                                        <% (cuisines).forEach(c=> { %>
                                             <option value="<%= c %>">
                                                 <%= c %>
                                             </option>

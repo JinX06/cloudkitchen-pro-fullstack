@@ -1,9 +1,9 @@
-<%- include('partials/header', {title: 'Recipe Hub -  Recipes'}) %>
+<%- include("partials/header", {title: "Recipe Hub -  Recipes"}) %>
 
 <style>
   .btn { border-radius: 10px; }
-  .table thead th { background:#214c36; color:#e2f1e8; border:0; font-weight:600; text-align: center; vertical-align: middle;}
-  .table tbody td { text-align: center; vertical-align: middle; font-size: 0.9rem;}
+  .table thead th { background:#214c36; color:#e2f1e8; border:0; font-weight:600; text-align: center; vertical-align: middle; font-size: 0.9rem;}
+  .table tbody td { text-align: center; vertical-align: middle; font-size: 0.8rem;}
   .card { border:1px solid rgba(255,255,255,.15); box-shadow: 0 6px 16px rgba(0,0,0,.25); }
 </style>
 
@@ -20,7 +20,7 @@
   <!-- Toolbar -->
   <div class="d-flex gap-2 mb-4" style="border-radius: 10px; ">
     <a href="/recipes-add-34076352" class="btn btn-primary">+ Add New Recipe</a>
-    <a href="#" class="btn  btn btn-danger">🗑️ Delete Recipe</a>
+    <a href="recipes-remove-34076352" class="btn  btn btn-danger">🗑️ Delete Recipe</a>
   </div>
 
   <!-- Table Card -->
@@ -36,6 +36,8 @@
             <th>Recipe ID</th>
             <th>Title</th>
             <th>Chef</th>
+            <th>Ingredients</th>
+            <th>Instructions</th>
             <th>Meal Type</th>
             <th>Cuisine</th>
             <th>Difficulty</th>
@@ -53,16 +55,32 @@
               <td><%= tempRecipe.recipeID %></td>
               <td class="text-middle fw-semibold"><%= tempRecipe.title %></td>
               <td><%= tempRecipe.chef %></td>
+              
+              <td class="text-start">
+                <% for(let i = 0; i < tempRecipe.ingredients.length; i++) { %>
+                  <div style="font-size: 0.6rem; padding: 2px 0;"><%= tempRecipe.ingredients[i] %></div>
+                <% } %>
+              </td>
+              
+              <td class="text-start">  
+                 <% for(let i = 0; i < tempRecipe.instructions.length; i++) { %>
+                   <div style="font-size: 0.6rem; padding: 2px 0;"><%= tempRecipe.instructions[i] %></div>
+                 <% } %>
+              </td>
+              
+              
               <td>
                 <span class="badge text-white" style="background-color: darkcyan;"><%= tempRecipe.mealType %></span>
               </td>
+              
               <td><%= tempRecipe.cuisineType %></td>
+              
               <td>
-                <% if (difficulty === 'Easy') { %>
+                <% if (difficulty === "Easy") { %>
                   <span class="badge badge-pill" style="background:#4CAF50;">Easy</span>
-                <% } else if (difficulty === 'Medium') { %>
+                <% } else if (difficulty === "Medium") { %>
                   <span class="badge badge-pill" style="background:#d99800;">Medium</span>
-                <% } else if (difficulty === 'Hard') { %>
+                <% } else if (difficulty === "Hard") { %>
                   <span class="badge badge-pill" style="background:#D32F2F;">Hard</span>
                 <% } else { %>
                   <span class="badge badge-pill bg-secondary"><%= difficulty %></span>
@@ -73,9 +91,8 @@
               <td><%= tempRecipe.createdDate %></td>
               <td class="py-2">
                 <div class="d-flex justify-content-center gap-2">
-                  <a href="#" class="btn btn-sm btn-primary">View</a>
-                  <a href="#" class="btn btn-sm btn-warning text-dark">Edit</a>
-                  <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                  <a href="recipes-view-34076352?recipeID=<%= tempRecipe.recipeID %>" class="btn btn-sm btn-primary">View</a>
+                  <a href="recipes-remove-34076352?recipeID=<%= tempRecipe.recipeID %>" class="btn btn-sm btn-danger">Delete</a>
                 </div>
               </td>
             </tr>
@@ -86,4 +103,4 @@
   </div>
 </div>
 
-<%- include('partials/footer') %>
+<%- include("partials/footer") %>

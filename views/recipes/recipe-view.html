@@ -1,0 +1,35 @@
+<%- include('partials/header', {title: 'Recipe Hub - View Recipe' }) %>
+
+<section>
+  <div class="card bg-dark text-white" style="margin: 20px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8)">
+    <h2>📖 View Recipe</h2>
+    <% if (selectedRecipe) { %>
+      <h4>Recipe Details:</h4>
+      <div class="card bg-white text-dark" style="margin-top: 20px; border-radius: 6px;">
+        <div class="card-header bg-primary text-white fw-bold" style="padding: 20px;">
+          <h4 style="margin-bottom: 0;"><%= selectedRecipe.title %></h4>
+          <small style="font-weight: lighter; margin-top: 0;">By: <%= selectedRecipe.chef %></small>
+        </div>
+        <div class="card-body">
+          <div><strong>Meal Type:</strong> <%= selectedRecipe.mealType %></div>
+          <div><strong>Cuisine:</strong> <%= selectedRecipe.cuisineType %></div>
+          <div><strong>Difficulty:</strong> <%= selectedRecipe.difficulty %></div>
+          <div><strong>Prep Time:</strong> <%= selectedRecipe.prepTime %> min</div>
+          <div><strong>Servings:</strong> <%= selectedRecipe.servings %></div>
+          <div><strong>Created:</strong> <%= selectedRecipe.createdDate %></div>
+          <div><strong>Ingredients:</strong> <%= selectedRecipe.ingredients %></div>
+          <div><strong>Instructions:</strong> <%= selectedRecipe.instructions.join(", ") %></div>
+          <hr>
+          <button type="button" class="btn btn-secondary" onclick="window.history.back();">Back</button>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="alert alert-warning" style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; margin-top: 20px;">
+        No recipe selected or recipe not found.
+      </div>
+      <button type="button" class="btn btn-secondary" onclick="window.history.back();">Back</button>
+    <% } %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,190 @@
+<%- include('partials/header', {title: 'Recipe Hub -  Add Recipe' }) %>
+
+
+    <!-- Page Styles -->
+    <style>
+        .section-title {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: white
+        }
+
+        .form-card .card-header {
+            background: #c88d45;
+            color: #fff;
+        }
+
+        .hintText {
+            color: #cccccc;
+            font-size: .9rem;
+            font-weight: 350;
+        }
+
+        .required::after {
+            content: " *";
+            color: #ef4444;
+        }
+
+        .required {
+            color: white;
+        }
+    </style>
+
+    <section class="container my-4">
+        <!-- Page header -->
+        <div class="align-items-center gap-3 mb-2">
+            <div class="flex-column flex-grow-1 text-center">
+                <h1 class="m-0 fw-bold" style="font-size: 50px; color: rgb(247, 241, 201);">
+                    <span style="font-size: 50px; color: white;">+</span>
+                    Add New Recipe
+                </h1>
+                <hr style="border: none; height: 5px; background-color: black; opacity: 100; border-radius: 15px;">
+            </div>
+        </div>
+
+        <div class="card form-card" style="background-color:#3b4349;">
+            <div class="h3 card-header d-flex align-items-center gap-2 bg-dark">
+                <span>📋</span>
+                <strong>Recipe Form</strong>
+            </div>
+            <div class="card-body">
+                <!-- Form start (no backend wired yet) -->
+                <form action="/api/recipes/add-34076352" method="POST" validate>
+                    <!-- Basic Info -->
+                    <div class="mb-4">
+                        <div class="section-title mb-2"><span>🧾 </span>Basic Information</div>
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label class="required" for="title">Recipe Title</label>
+                                <input id="title" name="title" type="text" class="form-control"
+                                    placeholder="e.g., Chocolate Chip Cookies" required>
+                                <div class="invalid-feedback">Please enter a recipe title.</div>
+                            </div>
+                            <div class="col-4">
+                                <label class="required" for="chef">Chef Name</label>
+                                <input id="chef" name="chef" type="text" class="form-control"
+                                    placeholder="YourName-12345678" required>
+                                <div class="invalid-feedback">Chef name (with ID) is required.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        
+                        <!-- Recipe Details -->
+                        <div class="section-title mb-2"><span>🍽️ </span>Recipe Details</div>
+                        <div class="row g-3">
+                            <div class="col-4">
+                                <label class="required" for="mealType">Meal Type</label>
+                                <select id="mealType" name="mealType" class="form-select" required>
+                                    <option value="" selected disabled>Select meal type…</option>
+                                    <option>Breakfast</option>
+                                    <option>Lunch</option>
+                                    <option>Dinner</option>
+                                </select>
+                                <div class="invalid-feedback">Select a meal type.</div>
+                            </div>
+
+                        <!-- Cuisine Type (either/or handled in backend) -->
+                        <div class="col-8">
+                            <label class="required">Cuisine Type</label>
+
+                            <div class="row g-2 align-items-center">
+
+                                <!-- existing options -->
+                                <div class="col">
+                                    <select name="cuisine1" class="form-select">
+                                        <option value="" selected>Select existing…</option>
+                                        <% (cuisines || []).forEach(c=> { %>
+                                            <option value="<%= c %>">
+                                                <%= c %>
+                                            </option>
+                                            <% }) %>
+                                    </select>
+                                </div>
+
+                                <div class="col-auto text-center text-white-50">or</div>
+
+                                <div class="col">
+                                    <!-- new cuisine -->
+                                    <input name="cuisine2" type="text" class="form-control"
+                                        placeholder="Type a new cuisine">
+                                </div>
+
+                            </div>
+
+                            <div class="form-text text-white-50 mt-1" style="font-weight: bold;">
+                                Select an existing cuisine or type a new one. If you enter a custom cuisine, it will override the dropdown selection.
+                            </div>
+                        </div>
+
+                        <!-- Prep Time -->
+                    </div>
+                    <div class="row g-3 mt-2">
+                        <div class="col-4">
+                            <label class="required" for="prepTime">Prep Time (min)</label>
+                            <input id="prepTime" name="prepTime" type="number" min="0" step="1" class="form-control"
+                                value="30" required>
+                            <div class="invalid-feedback">Enter minutes.</div>
+                        </div>
+
+                        <!-- Difficulty -->
+                        <div class="col-4">
+                            <label class="required" for="difficulty">Difficulty</label>
+                            <select id="difficulty" name="difficulty" class="form-select" required>
+                                <option value="" selected disabled>Select…</option>
+                                <option>Easy</option>
+                                <option>Medium</option>
+                                <option>Hard</option>
+                            </select>
+                            <div class="invalid-feedback">Select difficulty.</div>
+                        </div>
+
+                        <!-- Servings -->
+                        <div class="col-4">
+                            <label class="required" for="servings">Servings</label>
+                            <input id="servings" name="servings" type="number" min="1" step="1" class="form-control"
+                                value="2" required>
+                            <div class="invalid-feedback">Enter servings.</div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- Ingredients -->
+                    <div class="mb-4">
+                        <div class="section-title mb-2 required"><span>🥕 </span>Ingredients</div>
+                        <div class="mb-2 hintText">Enter each ingredient on a new line or separate with commas.</div>
+                        <textarea id="ingredients" name="ingredients" class="form-control" rows="6" placeholder="2 cups all-purpose flour
+1 cup sugar
+2 eggs
+1 tsp vanilla extract" required></textarea>
+                        <div class="invalid-feedback">Please add at least one ingredient.</div>
+                    </div>
+
+                    <!-- Instructions -->
+                    <div class="mb-4">
+                        <div class="section-title mb-2 required"><span>👩‍🍳 </span>Instructions</div>
+                        <div class="mb-2 hintText">Provide clear, step-by-step cooking instructions.</div>
+                        <textarea id="instructions" name="instructions" class="form-control" rows="7" placeholder="1) Preheat oven to 180°C
+2) Mix dry ingredients
+3) Add wet ingredients and combine
+4) Bake for 12–15 minutes" required></textarea>
+                        <div class="invalid-feedback">Please provide instructions.</div>
+                    </div>
+
+                    <h6 class="text-danger fw-bold">Required Field *</h6>
+
+                    <!-- Actions -->
+                    <div class="d-flex flex-wrap gap-2 justify-content-between">
+                        <div class="d-flex gap-2">
+                            <a href="/recipes-34076352" class="btn btn-outline-light">← View Recipes</a>
+                            <button type="reset" class="btn btn-danger">Reset</button>
+                        </div>
+                        <button type="submit" class="btn btn-primary px-4">Add Recipe</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <%- include('partials/footer') %>

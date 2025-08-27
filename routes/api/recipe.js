@@ -57,4 +57,19 @@ router.post("/api/recipes/add-34076352", (req, res) => {
     }
 });
 
+router.post("/api/recipes/delete-34076352", (req, res) => {
+    const { recipeID } = req.query;
+    console.log(recipeID)
+    const list = req.app.locals.recipeDB;
+    const index = list.findIndex(recipe => recipe.recipeID === recipeID);
+
+    if (index !== -1) {
+        list.splice(index, 1);
+        return res.redirect("/recipes-34076352");
+    } else {
+        req.app.locals.errorOBJ = { status: 400, message: "Recipe not found." };
+        return res.redirect("/error-34076352");
+    }
+});
+
 module.exports = router;

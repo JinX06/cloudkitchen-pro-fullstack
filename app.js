@@ -13,7 +13,7 @@ const port_number = 8080;
 app.set("view engine", "ejs");
 app.engine("html", ejs.renderFile);
 
-// Make recipeDB and inventoryItemDB available as a "global" variable
+// Make *.app.locals available as a "global" variable for routes to access
 app.locals.recipeDB = recipeDB;
 app.locals.inventoryItemDB = inventoryItemDB;
 
@@ -41,8 +41,6 @@ app.use("/bootstrap", express.static(path.join(__dirname, "node_modules", "boots
 // Serve static files from the public/images directory
 app.use("/images", express.static(path.join(__dirname, "public", "images")));
 
-
-
 // ================== Routes ==================
 
 app.get("/", (req, res) => {
@@ -50,19 +48,14 @@ app.get("/", (req, res) => {
 });
 
 app.use("/", require(path.join(__dirname, "routes/pages/home")));
+
 app.use("/", require(path.join(__dirname, "routes/pages/recipe")));
-
 app.use("/", require(path.join(__dirname, "routes/api/recipe")))
-// app.use("/", require("./routes/pages/recipes"));
-// app.use("/", require("./routes/pages/inventory"));
-// app.use("/", require("./routes/pages/errors"));
-// app.use("/api", require("./routes/api/recipes"));
-// app.use("/api", require("./routes/api/inventory"));
+
+app.use("/", require(path.join(__dirname, "routes/pages/inventory")));
+app.use("/", require(path.join(__dirname, "routes/api/inventory")))
+
 app.use("/", require("./routes/pages/errors"));
-
-
-
-
 
 app.listen(port_number, () => {
     console.log(`Server is running on http://localhost:${port_number}`);

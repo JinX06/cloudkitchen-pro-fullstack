@@ -1,118 +1,137 @@
 <%- include("partials/header", {title: "Recipe Hub - Add Inventory Item" }) %>
 
-<style>
-  .section-title { font-weight: 700; font-size: 1.15rem; color: white; }
-  .form-card .card-header { background: #c88d45; color: #fff; }
-  .hintText { color: #cccccc; font-size: .9rem; font-weight: 350; }
-  .required::after { content: " *"; color: #ef4444; }
-  .required { color: white; }
-</style>
+  <style>
+    .section-title {
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: white;
+    }
 
-<section class="container my-4">
-  <!-- Page header -->
-  <div class="align-items-center gap-3 mb-2 text-light">
-    <div class="flex-column flex-grow-1 text-center">
-      <h1 class="m-0 fw-bold" style="font-size: 50px;">
-        <span style="font-size: 50px;">+</span>
-        Add Inventory Item
-      </h1>
-      <hr style="border: none; height: 5px; background-color: black; opacity: 100; border-radius: 15px;">
+    .form-card .card-header {
+      background: #c88d45;
+      color: #fff;
+    }
+
+    .hintText {
+      color: #cccccc;
+      font-size: .9rem;
+      font-weight: 350;
+    }
+
+    .required::after {
+      content: " *";
+      color: #ef4444;
+    }
+
+    .required {
+      color: white;
+    }
+  </style>
+
+  <section class="container my-4">
+    <!-- Page header -->
+    <div class="align-items-center gap-3 mb-2 text-light">
+      <div class="flex-column flex-grow-1 text-center">
+        <h1 class="m-0 fw-bold" style="font-size: 50px;">
+          <span style="font-size: 50px;">+
+            Add Inventory Item
+        </h1>
+        <hr style="border: none; height: 5px; background-color: black; opacity: 100; border-radius: 15px;">
+      </div>
     </div>
-  </div>
 
-  <div class="card form-card" style="background-color:#3b4349;">
-    <div class="h3 card-header d-flex align-items-center gap-2 bg-dark">
-      <span>📦</span>
-      <strong>Inventory Form</strong>
+    <div class="card form-card" style="background-color:#3b4349;">
+      <div class="h3 card-header d-flex align-items-center gap-2 bg-dark">
+        📦
+        <strong>Inventory Form</strong>
+      </div>
+
+      <div class="card-body">
+        <form action="/api/inventory/add-34076352" method="POST" validate>
+          <!-- Basic Info -->
+          <div class="mb-4">
+            <div class="section-title mb-2">🧾 Basic Information</div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="required">User ID</label>
+                <input name="userId" type="text" class="form-control" placeholder="YourName-12345678" required>
+                <div class="invalid-feedback">User ID is required.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="required">Ingredient Name</label>
+                <input name="ingredientName" type="text" class="form-control" placeholder="e.g., Fresh Tomatoes"
+                  required>
+                <div class="invalid-feedback">Ingredient name is required.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inventory Details -->
+          <div class="mb-4">
+            <div class="section-title mb-2">📋 Inventory Details</div>
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="required">Quantity</label>
+                <input name="quantity" type="number" min="0" step="0.01" class="form-control" value="1" required>
+                <div class="invalid-feedback">Enter a non-negative quantity.</div>
+              </div>
+              <div class="col-md-4">
+                <label class="required">Unit</label>
+                <input name="unit" type="text" class="form-control" placeholder="e.g., pieces, kg" required>
+                <div class="invalid-feedback">Unit is required.</div>
+              </div>
+              <div class="col-md-4">
+                <label class="required">Category</label>
+                <input name="category" type="text" class="form-control" placeholder="e.g., Vegetables" required>
+                <div class="invalid-feedback">Category is required.</div>
+              </div>
+            </div>
+
+            <div class="row g-3 mt-1">
+              <div class="col-md-4">
+                <label class="required">Purchase Date</label>
+                <input name="purchaseDate" type="date" class="form-control" required>
+                <div class="invalid-feedback">Purchase date is required.</div>
+              </div>
+              <div class="col-md-4">
+                <label class="required">Expiry Date</label>
+                <input name="expiryDate" type="date" class="form-control" required>
+                <div class="invalid-feedback">Expiry date is required.</div>
+              </div>
+              <div class="col-md-4">
+                <label class="required">Location</label>
+                <select name="location" class="form-select" required>
+                  <option value="" selected disabled>Select…</option>
+                  <option>Pantry</option>
+                  <option>Fridge</option>
+                  <option>Freezer</option>
+                </select>
+                <div class="invalid-feedback">Select a storage location.</div>
+              </div>
+            </div>
+
+            <div class="row g-3 mt-1">
+              <div class="col-md-4">
+                <label class="required">Total Cost ($)</label>
+                <input name="cost" type="number" min="0" step="0.01" class="form-control" placeholder="0.00" required>
+                <div class="invalid-feedback">Enter a non-negative cost.</div>
+              </div>
+            </div>
+          </div>
+
+          <h6 class="text-danger fw-bold">Required Field *</h6>
+
+          <!-- Actions -->
+          <div class="d-flex flex-wrap gap-2 justify-content-between">
+            <div class="d-flex gap-2">
+              <a href="/inventory-34076352" class="btn btn-outline-light">← View Inventory</a>
+              <button type="reset" class="btn btn-danger">Reset</button>
+            </div>
+            <button type="submit" class="btn btn-primary px-4">Add Item</button>
+          </div>
+        </form>
+      </div>
     </div>
+  </section>
 
-    <div class="card-body">
-      <form action="/api/inventory/add-34076352" method="POST" validate>
-        <!-- Basic Info -->
-        <div class="mb-4">
-          <div class="section-title mb-2"><span>🧾 </span>Basic Information</div>
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="required">User ID</label>
-              <input name="userId" type="text" class="form-control"
-                     placeholder="YourName-12345678" required>
-              <div class="invalid-feedback">User ID is required.</div>
-            </div>
-            <div class="col-md-6">
-              <label class="required">Ingredient Name</label>
-              <input name="ingredientName" type="text" class="form-control"
-                     placeholder="e.g., Fresh Tomatoes" required>
-              <div class="invalid-feedback">Ingredient name is required.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Inventory Details -->
-        <div class="mb-4">
-          <div class="section-title mb-2"><span>📋 </span>Inventory Details</div>
-          <div class="row g-3">
-            <div class="col-md-4">
-              <label class="required">Quantity</label>
-              <input name="quantity" type="number" min="0" step="0.01" class="form-control" value="1" required>
-              <div class="invalid-feedback">Enter a non-negative quantity.</div>
-            </div>
-            <div class="col-md-4">
-              <label class="required">Unit</label>
-              <input name="unit" type="text" class="form-control" placeholder="e.g., pieces, kg" required>
-              <div class="invalid-feedback">Unit is required.</div>
-            </div>
-            <div class="col-md-4">
-              <label class="required">Category</label>
-              <input name="category" type="text" class="form-control" placeholder="e.g., Vegetables" required>
-              <div class="invalid-feedback">Category is required.</div>
-            </div>
-          </div>
-
-          <div class="row g-3 mt-1">
-            <div class="col-md-4">
-              <label class="required">Purchase Date</label>
-              <input name="purchaseDate" type="date" class="form-control" required>
-              <div class="invalid-feedback">Purchase date is required.</div>
-            </div>
-            <div class="col-md-4">
-              <label class="required">Expiry Date</label>
-              <input name="expiryDate" type="date" class="form-control" required>
-              <div class="invalid-feedback">Expiry date is required.</div>
-            </div>
-            <div class="col-md-4">
-              <label class="required">Location</label>
-              <select name="location" class="form-select" required>
-                <option value="" selected disabled>Select…</option>
-                <option>Pantry</option>
-                <option>Fridge</option>
-                <option>Freezer</option>
-              </select>
-              <div class="invalid-feedback">Select a storage location.</div>
-            </div>
-          </div>
-
-          <div class="row g-3 mt-1">
-            <div class="col-md-4">
-              <label class="required">Total Cost ($)</label>
-              <input name="cost" type="number" min="0" step="0.01" class="form-control" placeholder="0.00" required>
-              <div class="invalid-feedback">Enter a non-negative cost.</div>
-            </div>
-          </div>
-        </div>
-
-        <h6 class="text-danger fw-bold">Required Field *</h6>
-
-        <!-- Actions -->
-        <div class="d-flex flex-wrap gap-2 justify-content-between">
-          <div class="d-flex gap-2">
-            <a href="/inventory-34076352" class="btn btn-outline-light">← View Inventory</a>
-            <button type="reset" class="btn btn-danger">Reset</button>
-          </div>
-          <button type="submit" class="btn btn-primary px-4">Add Item</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</section>
-
-<%- include("partials/footer") %>
+  <%- include("partials/footer") %>

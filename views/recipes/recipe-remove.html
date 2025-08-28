@@ -1,6 +1,6 @@
 <%- include('partials/header', {title: 'Recipe Hub -  Remove Recipe' }) %>
 
-<section>
+<div>
     <div class="card bg-dark text-white" style="margin: 20px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8)">
         <h2>📖 Remove Recipe</h2>
         <form action="/api/recipes/delete-34076352?recipeID=<%= selectedRecipeId %>" method="POST">
@@ -65,7 +65,7 @@
             <% } %>
             </form>
     </div>
-</section>
+</div>
 
 
 <%- include('partials/footer') %>

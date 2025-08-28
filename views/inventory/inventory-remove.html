@@ -1,6 +1,6 @@
 <%- include('partials/header', {title: 'Recipe Hub -  Remove Inventory Item' }) %>
 
-<section>
+<div>
   <div class="card bg-dark text-white" style="margin: 20px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8)">
     <h2>📦 Remove Inventory Item</h2>
     <form action="/api/inventory/delete-34076352?itemID=<%= selectedItemId %>" method="POST">
@@ -55,6 +55,6 @@
       <% } %>
     </form>
   </div>
-</section>
+</div>
 
 <%- include('partials/footer') %>

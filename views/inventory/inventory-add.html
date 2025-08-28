@@ -1,34 +1,14 @@
 <%- include("partials/header", {title: "Recipe Hub - Add Inventory Item" }) %>
 
-  <style>
-    .section-title {
-      font-weight: 700;
-      font-size: 1.15rem;
-      color: white;
-    }
+<style>
+  .div-title { font-weight: 700; font-size: 1.15rem; color: white; }
+  .form-card .card-header { background: #c88d45; color: #fff; }
+  .hintText { color: #cccccc; font-size: .9rem; font-weight: 350; }
+  .required::after { content: " *"; color: #ef4444; }
+  .required { color: white; }
+</style>
 
-    .form-card .card-header {
-      background: #c88d45;
-      color: #fff;
-    }
-
-    .hintText {
-      color: #cccccc;
-      font-size: .9rem;
-      font-weight: 350;
-    }
-
-    .required::after {
-      content: " *";
-      color: #ef4444;
-    }
-
-    .required {
-      color: white;
-    }
-  </style>
-
-  <section class="container my-4">
+  <div class="container my-4">
     <!-- Page header -->
     <div class="align-items-center gap-3 mb-2 text-light">
       <div class="flex-column flex-grow-1 text-center">
@@ -40,17 +20,17 @@
       </div>
     </div>
 
-    <div class="card form-card" style="background-color:#3b4349;">
-      <div class="h3 card-header d-flex align-items-center gap-2 bg-dark">
-        📦
-        <strong>Inventory Form</strong>
-      </div>
+  <div class="card form-card" style="background-color:#3b4349;">
+    <div class="h3 card-header d-flex align-items-center gap-2 bg-dark">
+      <span>📦</span>
+      <strong>Inventory Form</strong>
+    </div>
 
       <div class="card-body">
-        <form action="/api/inventory/add-34076352" method="POST" validate>
+        <form action="/api/inventory/add-34076352" method="POST">
           <!-- Basic Info -->
           <div class="mb-4">
-            <div class="section-title mb-2">🧾 Basic Information</div>
+            <div class="div-title mb-2">🧾 Basic Information</div>
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="required">User ID</label>
@@ -68,7 +48,7 @@
 
           <!-- Inventory Details -->
           <div class="mb-4">
-            <div class="section-title mb-2">📋 Inventory Details</div>
+            <div class="div-title mb-2">📋 Inventory Details</div>
             <div class="row g-3">
               <div class="col-md-4">
                 <label class="required">Quantity</label>
@@ -132,6 +112,6 @@
         </form>
       </div>
     </div>
-  </section>
+  </div>
 
   <%- include("partials/footer") %>

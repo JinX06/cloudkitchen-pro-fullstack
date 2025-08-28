@@ -16,7 +16,7 @@
 
     <!-- Main header box -->
     <div class="container-fluid titlebox">
-      <section class="position-relative py-5" style="color:#fff; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);">
+      <div class="position-relative py-5" style="color:#fff; width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);">
     <div class="container position-relative px-5">
           <div class="row align-items-center g-4">
             <div class="col-lg-7">
@@ -38,25 +38,23 @@
                     <div style="font-size: 3.3rem;">🍲</div>
                     <div>
                       <div class="h5 mb-1">What to eat? 🤔</div>
-                      <div class="fs-6" style="color: grey;">Spin the wheel and get a recipe suggestion</div>
+                      <div class="fs-6" style="color: grey;">Feeling hungry? Let us pick a recipe for you!</div>
                     </div>
                   </div>
                   <div class="mt-3 d-flex gap-2">
                     <a href="/recipes-view-34076352?recipeID=RANDOM" class="btn btn-primary w-100">Surprise Me</a>
-
-
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
     </div>
     <hr style="border: solid white; opacity: 100%; margin-top:40px">
 
     <!-- Stats -->
-    <section class="container my-5">
+    <div class="container my-5">
       <div class="row g-3 g-md-4">
         <div class="col-6 col-lg-3">
           <div class="card text-center shadow-sm border-0 bg-light text-dark">
@@ -96,10 +94,10 @@
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
     <!-- Quick Actions -->
-    <section class="container mb-5">
+    <div class="container mb-5">
       <h2 class="h4 mb-3 text-light">Quick Actions</h2>
       <div class="row g-4">
         <div class="col-md-4">
@@ -126,13 +124,13 @@
           <div class="card quickaction action-tile">
             <div class="card-header text-white" style="background-color: rgb(44, 79, 58)"><span class="me-1">🏆</span>HD Tasks</div>
             <div class="card-body vstack gap-2">
-              <a href="#" class="btn btn-outline-secondary w-100">Filter Recipes</a>
-              <a href="#" class="btn btn-outline-secondary w-100">Search &amp; Scale</a>
+              <a href="/recipes-filter-34076352" class="btn btn-outline-secondary w-100">Filter Recipes</a>
+              <a href="#" class="btn btn-outline-secondary w-100">Search & Scale</a>
               <a href="#" class="btn btn-outline-secondary w-100">Smart Alerts</a>
               <a href="#" class="btn btn-outline-secondary w-100">Recipe Integration</a>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
 <%- include("partials/footer") %>

@@ -3,7 +3,7 @@
 
     <!-- Page Styles -->
     <style>
-        .section-title {
+        .div-title {
             font-weight: 700;
             font-size: 1.15rem;
             color: white
@@ -30,7 +30,7 @@
         }
     </style>
 
-    <section class="container my-4">
+    <div class="container my-4">
         <!-- Page header -->
         <div class="align-items-center gap-3 mb-2 text-light">
             <div class="flex-column flex-grow-1 text-center">
@@ -48,10 +48,10 @@
                 <strong>Recipe Form</strong>
             </div>
             <div class="card-body">
-                <form action="/api/recipes/add-34076352" method="POST" validate>
+                <form action="/api/recipes/add-34076352" method="POST">
                     <!-- Basic Info -->
                     <div class="mb-4">
-                        <div class="section-title mb-2"><span>🧾 </span>Basic Information</div>
+                        <div class="div-title mb-2"><span>🧾 </span>Basic Information</div>
                         <div class="row g-3">
                             <div class="col-md-8">
                                 <label class="required" for="title">Recipe Title</label>
@@ -71,7 +71,7 @@
                     <div class="mb-4">
                         
                         <!-- Recipe Details -->
-                        <div class="section-title mb-2"><span>🍽️ </span>Recipe Details</div>
+                        <div class="div-title mb-2"><span>🍽️ </span>Recipe Details</div>
                         <div class="row g-3">
                             <div class="col-4">
                                 <label class="required" for="mealType">Meal Type</label>
@@ -151,7 +151,7 @@
 
                     <!-- Ingredients -->
                     <div class="mb-4">
-                        <div class="section-title mb-2 required"><span>🥕 </span>Ingredients</div>
+                        <div class="div-title mb-2 required"><span>🥕 </span>Ingredients</div>
                         <div class="mb-2 hintText">Enter each ingredient on a new line or separate with commas.</div>
                         <textarea id="ingredients" name="ingredients" class="form-control" rows="6" placeholder="2 cups all-purpose flour
 1 cup sugar
@@ -162,7 +162,7 @@
 
                     <!-- Instructions -->
                     <div class="mb-4">
-                        <div class="section-title mb-2 required"><span>👩‍🍳 </span>Instructions</div>
+                        <div class="div-title mb-2 required"><span>👩‍🍳 </span>Instructions</div>
                         <div class="mb-2 hintText">Provide clear, step-by-step cooking instructions.</div>
                         <textarea id="instructions" name="instructions" class="form-control" rows="7" placeholder="1) Preheat oven to 180°C
 2) Mix dry ingredients
@@ -184,6 +184,6 @@
                 </form>
             </div>
         </div>
-    </section>
+    </div>
 
     <%- include('partials/footer') %>

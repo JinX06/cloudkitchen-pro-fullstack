@@ -40,6 +40,8 @@ class Recipe {
 
         this.createdDate = this.dateObj.toISOString().split("T")[0]; // Format: YYYY-MM-DD
 
+        this.weight = 0; //Used for HD++ tasks for recipe suggestions
+
     }
 
     getJSON() {

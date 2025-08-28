@@ -18,6 +18,7 @@ app.locals.recipeDB = recipeDB;
 app.locals.inventoryItemDB = inventoryItemDB;
 
 app.locals.errorOBJ = null;
+app.locals.suggestedRecipes = [];
 
 // Set Express to look for views in multiple directories
 app.set("views", [

@@ -6,7 +6,7 @@
     <% if (selectedRecipe) { %>
       <h4>Recipe Details:</h4>
       <div class="card bg-white text-dark" style="margin-top: 20px; border-radius: 6px;">
-        <div class="card-header bg-primary text-white fw-bold" style="padding: 20px;">
+        <div class="card-header bg-secondary text-white fw-bold" style="padding: 20px;">
           <h4 style="margin-bottom: 0;"><%= selectedRecipe.title %></h4>
           <small style="font-weight: lighter; margin-top: 0;">By: <%= selectedRecipe.chef %></small>
         </div>
@@ -20,7 +20,7 @@
           <div><strong>Ingredients:</strong> <%= selectedRecipe.ingredients %></div>
           <div><strong>Instructions:</strong> <%= selectedRecipe.instructions.join(", ") %></div>
           <hr>
-          <button type="button" class="btn btn-secondary" onclick="window.history.back();">Back</button>
+          <button type="button" class="btn btn-primary" onclick="window.history.back();">Back</button>
         </div>
       </div>
     <% } else { %>

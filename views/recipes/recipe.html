@@ -14,13 +14,16 @@
       <h1 style="color: white; font-weight: bolder;">📖 All Recipes</h1>
       <div style="color: #ffffff;">Discover and Manage your recipe collection</div>
     </div>
-    <span class="badge bg-secondary fs-6"> <%= myRecipe.length %> recipes</span>
+    <span class="badge bg-dark fs-6 px-2 py-3"> Total Recipes: <%= myRecipe.length %></span>
   </div>
 
   <!-- Toolbar -->
-  <div class="d-flex gap-2 mb-4" style="border-radius: 10px; ">
-    <a href="/recipes-add-34076352" class="btn btn-primary">+ Add New Recipe</a>
-    <a href="recipes-remove-34076352" class="btn  btn btn-danger">🗑️ Delete Recipe</a>
+  <div class="d-flex gap-2 mb-4" style="border-radius: 10px;">
+    <a href="recipes-add-34076352" class="btn btn-primary">+ Add New Recipe</a>
+    <a href="recipes-remove-34076352" class="btn btn-danger">🗑️ Delete Recipe</a>
+    <div class="ms-auto">
+    <a href="/recipes-filter-34076352" class="btn btn-secondary float-right">🔎 Filter Recipe</a>
+    </div>
   </div>
 
   <!-- Table Card -->

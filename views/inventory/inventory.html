@@ -11,12 +11,14 @@
         <!-- Page header -->
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
-                <h1 style="color: white; font-weight: bolder;">📦 Inventory</h1>
-                <div style="color: #ffffff;">Track and manage your pantry items</div>
+            <h1 style="color: white; font-weight: bolder;">📦 Inventory</h1>
+            <div style="color: #ffffff;">Track and manage your pantry items</div>
             </div>
-            <span class="badge bg-secondary fs-6">
-                <%= myInventory.length %> items
-            </span>
+            <div class="card bg-dark text-white p-2 fw-bold" style="border-radius: 10px;">
+                    <span>Total Items: <%= myInventory.length %> </span>
+                    <hr style="margin-top: 2px; margin-bottom: 2px">
+                    <span>Inventory Value: <%= inventoryValue %> $</span>
+            </div>
         </div>
 
         <!-- Toolbar -->
@@ -44,6 +46,7 @@
                             <th>Expiry</th>
                             <th>Added</th>
                             <th>Cost ($)</th>
+                            <th>Expiry Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -81,6 +84,24 @@
                                     <td>
                                         <%= tempItem.cost%>
                                     </td>
+
+                                    <td>
+                                        <% 
+                                            const expiryDate = new Date(tempItem.expiryDate);
+                                            const today = new Date();
+                                            const daysLeft = Math.floor((expiryDate - today) / (1000 * 60 * 60 * 24)); // deviding by total milliseconds in a day
+                                        %>
+
+                                        <% if (daysLeft < 0) { %>
+                                            <span class="badge bg-danger">Expired</span>
+                                        <% } else if (daysLeft <= 7) { %>
+                                            <span class="badge bg-warning text-dark">Expiring Soon (<%= daysLeft %> days)</span>
+                                        <% } else { %>
+                                            <span class="badge bg-success">OK (<%= daysLeft %> days)</span>
+                                        <% } %>
+                                        <br><small><%= tempItem.expirationDate %></small>
+                                    </td>
+
                                     <td class="py-2">
                                         <div class="d-flex justify-content-center gap-2">
                                             <a href="/inventory-view-34076352?itemID=<%= tempItem.itemID %>" class="btn btn-sm btn-primary">View</a>

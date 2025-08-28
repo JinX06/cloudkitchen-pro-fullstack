@@ -8,12 +8,16 @@
 
       <select class="form-select" onchange="window.location='/inventory-remove-34076352' + ('?itemID=' + this.value)">
         <option value="" selected>Select an item</option>
+        
+        <% let selected = ""; %> <!-- For select box to stay selected after form submission -->
+
         <% for (let i = 0; i < myInventory.length; i++) { 
              const r = myInventory[i].getJSON(); 
-             let selected = '';
              if (selectedItemId === r.itemID) { selected = 'selected'; }
         %>
           <option value="<%= r.itemID %>" <%= selected %>><%= r.itemID %> | <%= r.ingredientName %></option>
+
+          <% selected = ""; %>
         <% } %>
       </select>
 

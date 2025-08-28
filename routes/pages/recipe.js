@@ -1,9 +1,9 @@
 const express = require("express")
 const router = express.Router();
-const { uniqueCuisineList } = require("../../utils/recipeUtils.js");
+const { uniqueCuisineList, uniqueMealTypeList } = require("../../utils/recipeUtils.js");
 
 router.get("/recipes-34076352", (req, res) => {
-    res.render("recipes.html", {
+    res.render("recipe.html", {
         myRecipe: req.app.locals.recipeDB
     });
 });
@@ -47,6 +47,46 @@ router.get("/recipes-view-34076352", (req, res) => {
         selectedRecipe: selected ? selected.getJSON() : null
     });
 });
+
+router.get("/recipes-filter-34076352", (req, res) => {
+    const { mealType, cuisineType, difficulty } = req.query;
+
+    const recipeDB = req.app.locals.recipeDB;
+    let filteredRecipes = recipeDB;
+
+    // Filter by mealType (case-insensitive)
+    if (mealType) {
+        filteredRecipes = filteredRecipes.filter(recipe => 
+            recipe.mealType && recipe.mealType.toLowerCase().includes(mealType.toLowerCase())
+        );
+    }
+
+    // Filter by cuisineType (case-insensitive)
+    if (cuisineType) {
+        filteredRecipes = filteredRecipes.filter(recipe => 
+            recipe.cuisineType && recipe.cuisineType.toLowerCase().includes(cuisineType.toLowerCase())
+        );
+    }
+
+    // Filter by difficulty (case-insensitive)
+    if (difficulty) {
+        filteredRecipes = filteredRecipes.filter(recipe => 
+            recipe.difficulty && recipe.difficulty.toLowerCase().includes(difficulty.toLowerCase())
+        );
+    }
+
+    // Get unique lists for options
+    res.render("recipe-filter.html", {
+        filteredRecipes,
+        uniqueCuisines: uniqueCuisineList(recipeDB),
+        uniqueMealTypes: uniqueMealTypeList(recipeDB),
+        mealType,
+        cuisineType,
+        difficulty
+    });
+});
+
+
 
 module.exports = router;
 

@@ -6,4 +6,12 @@ function uniqueCuisineList(recipes) {
   return Array.from(set);
 }
 
-module.exports = { uniqueCuisineList };
+function uniqueMealTypeList(recipes) {
+  const set = new Set();
+  for (const recipe of recipes) {
+    set.add(recipe.mealType);
+  }
+  return Array.from(set);
+}
+
+module.exports = { uniqueCuisineList, uniqueMealTypeList };

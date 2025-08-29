@@ -86,7 +86,22 @@ router.get("/recipes-filter-34076352", (req, res) => {
     });
 });
 
+router.get("/recipes-suggestions-34076352", (req,res) =>{
+    res.render("recipes/recipe-suggestion.html", {
+        myRecipe: req.app.locals.recipeDB,
+        uniqueCuisines: uniqueCuisineList(req.app.locals.recipeDB),
+        uniqueMealTypes: uniqueMealTypeList(req.app.locals.recipeDB),
+    });
+});
 
+router.get("/recipes/recipe-suggestion-results-34076352.html", (req, res) => {
+    let results = req.app.locals.suggestedRecipes;
+    results = results.slice(0, 3);
+    let r1 = results[0]
+    console.log(r1)
+
+    res.render("recipes/recipe-suggestion-results.html", { suggestions: results });
+});
 
 module.exports = router;
 

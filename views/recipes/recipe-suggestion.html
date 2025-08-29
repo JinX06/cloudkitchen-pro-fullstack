@@ -1,12 +1,7 @@
 <%- include("partials/header", {title: "Recipe Hub -  Smart Recipe Suggestions" }) %>
 
-<style>
-
-
-</style>
-
 <div class="container" style="max-width: 760px; margin: 32px auto;">
-  <form action="/recipes-suggestions-34076352" method="POST" class="card p-4" style="background:#3b4349;color:#fff;border-radius:12px">
+  <form action="/api/recipes-suggestions-34076352" method="POST" class="card p-4" style="background:#3b4349;color:#fff;border-radius:12px">
 
     <!-- Q1: Cuisine Type-->
     <div>
@@ -72,29 +67,16 @@
       <hr>
     </div>
 
-    <!-- Q6: Servings-->
-    <div>
-      <h3 class="mb-4">How many servings should this recipe provide?</h3>
-      <div class="d-flex flex-wrap gap-2">
-        <label><input type="radio" name="servings" value="1" required> 1</label>
-        <label><input type="radio" name="servings" value="2"> 2</label>
-        <label><input type="radio" name="servings" value="3"> 3</label>
-        <label><input type="radio" name="servings" value="4"> 4</label>
-        <label><input type="radio" name="servings" value="6"> 6</label>
-        <label><input type="radio" name="servings" value="8"> 8</label>
-      </div>
-      <hr class="mt-4">
-    </div>
-
     <!--Meal Type-->
     <div>
       <h3 class=" mb-2">What meal are you planning?</h3>
       <div class="d-flex flex-column gap-1">
-        <label><input type="radio" name="mealType" value="Breakfast" checked> Breakfast</label>
+        <label><input type="radio" name="mealType" value="Breakfast"> Breakfast</label>
         <label><input type="radio" name="mealType" value="Lunch"> Lunch</label>
         <label><input type="radio" name="mealType" value="Dinner"> Dinner</label>
+        <label><input type="radio" name="mealType" value="Snack"> Snack</label>
+        <label><input type="radio" name="mealType" value="Dessert"> Dessert</label>
       </div>
-      <div class="form-text" style="color:#cbd5e1;">(Optional - used as a tie-breaker/boost)</div>
       <hr>
     </div>
 

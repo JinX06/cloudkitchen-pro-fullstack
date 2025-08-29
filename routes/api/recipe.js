@@ -1,6 +1,7 @@
 const { Recipe } = require("../../models/recipe");
 const express = require("express")
 const router = express.Router();
+const { getRecipeSuggestions } = require("../../utils/recipeSuggestions/recipeSuggestions.js");
 
 router.post("/api/recipes/add-34076352", (req, res) => {
     const {title, chef, mealType, cuisine1, cuisine2, prepTime, difficulty, servings,ingredients, instructions} = req.body;
@@ -69,6 +70,22 @@ router.post("/api/recipes/delete-34076352", (req, res) => {
         req.app.locals.errorOBJ = { status: 400, message: "Recipe not found." };
         return res.redirect("/error-34076352");
     }
+});
+
+router.post("/api/recipes-suggestions-34076352", (req, res) => {
+  const userResponse = {
+    cuisineType: req.body.cuisineType,
+    prepBucket: req.body.prepBucket, // "0-5" | "6-15" | ...
+    difficulty: req.body.difficulty, // "Easy" | "Medium" | "Hard"
+    ingBucket: req.body.ingBucket, // "1-3" | "4-6" | ...
+    stepBucket: req.body.stepBucket, // "1-3" | "4-6" | ...
+  };
+
+  req.app.locals.suggestedRecipes = getRecipeSuggestions(userResponse);
+
+
+  res.redirect("/recipes/recipe-suggestion-results-34076352.html");
+//   res.send(req.app.locals.suggestedRecipes);
 });
 
 module.exports = router;

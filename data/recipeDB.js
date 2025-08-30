@@ -44,7 +44,7 @@ const myRecipe3 = new Recipe(
 const myRecipe4 = new Recipe(
     "Egg Fried Rice",
     "OngJinXiang-34076352",
-    ["Cooked rice", "Eggs", "Spring onion", "Soy sauce", "Oil"],
+    ["Cooked rice", "2 Eggs", "Spring onion", "Soy sauce", "Oil"],
     ["Heat oil in pan","Add beaten eggs and scramble in pan","Add rice and stir-fry","Add soy sauce","Mix in chopped spring onion"],
     "Lunch",
     "Chinese",

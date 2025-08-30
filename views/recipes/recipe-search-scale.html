@@ -1,3 +1,89 @@
 <%- include('partials/header', {title: 'Recipe Hub -  Search & Scale' }) %>
-    <h1>Search & Scale Recipes</h1>
+
+    <div class="container my-4">
+    <h1 style="color: white; font-weight: bolder;">🔍Search & Scale Recipe ⚖️</h1>
+    </div>
+
+    <style>
+        p {
+            margin: 0;
+        }
+    </style>
+    <form method="get">
+    <div class="bg-dark p-3 rounded shadow mx-auto">
+        <div class="row">
+            <div class="col-9">
+                <label for="search" class="form-label text-light">Search</label>
+
+                <input id="search" name="search" class="form-text form-control" value="<%= searchQuery %>"></input>
+
+            </div>
+            <div class="col-3 mb-3">
+                <label for="scaleFactor" class="form-label text-light">
+                    Scale Factor:
+                    <span id="scaleValue" class="badge bg-secondary"><%= scaleFactor %>x</span>
+                </label>
+
+
+                <input id="scaleFactor" name="scaleFactor" type="range" class="pt-4 form-range" min="1" max="10" value="<%= scaleFactor %>" oninput="document.getElementById('scaleValue').textContent = this.value + 'x';">
+
+            </div>
+
+        </div>
+
+        <br>
+        <button type="submit" class="btn btn-primary px-4 w-20">Search</button>
+        <a href="/recipes-search-scale-34076352" class="btn btn-secondary px-4 w-20">Clear</a>
+    </div>
+    
+    </form>
+
+    <!-- Display filtered recipes -->
+    <div class="mt-4">
+        <h2 style="color: white;">Search Results</h2>
+        <% if (searchResults.length > 0) { %>
+            <div class="row card bg-dark mb-3">
+                <% searchResults.forEach((recipe) => { %>
+                    <div class="bg-dark pt-3" style="border-radius: 12px;">
+                        <div class="card bg-light text-dark mb-3 shadow">
+                            <div class="card-header bg-secondary text-white fw-bold p-3">
+                                <h4 style="margin-bottom: 0;"><%= recipe.title %></h4>
+                                <small style="font-weight: lighter; margin-top: 0;">By: <%= recipe.chef %></small>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><span class="fw-bolder">Ingredients:</span></p>
+                                        <ul>
+                                            <% for(const ingredient of recipe.ingredients) { %>
+                                                <li><%= ingredient %></li>
+                                            <% } %>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><span class="fw-bolder">Instructions:</span></p>
+                                        <ol>
+                                            <% for(const step of recipe.instructions) { %>
+                                                <li><%= step %></li>
+                                            <% } %>
+                                        </ol>
+                                    </div>
+                                    <hr>
+                                </div>
+                                <p><span class="fw-bolder">Meal Type:</span> <%= recipe.mealType %></p>
+                                <p><span class="fw-bolder">Cuisine:</span> <%= recipe.cuisineType %></p>
+                                <p><span class="fw-bolder">Prep Time:</span> <%= recipe.prepTime %> min</p>
+                                <p><span class="fw-bolder">Difficulty:</span> <%= recipe.difficulty %></p>
+                                <p><span class="fw-bolder">Servings:</span> <%= recipe.servings %></p>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        <% } else { %>
+            <p class="alert alert-warning text-dark">No recipes match the search criteria.</p>
+        <% } %>
+    </div>
+
+
 <%- include('partials/footer') %>

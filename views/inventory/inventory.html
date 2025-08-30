@@ -52,7 +52,7 @@
                     </thead>
                     <tbody>
                         <% for (let i=0; i < myInventory.length; i++) { %>
-                            <% const tempItem=myInventory[i].getJSON(); %>
+                            <% const tempItem = myInventory[i]; %>
                                 <tr class="text-center">
                                     <td>
                                         <%= tempItem.itemID %>
@@ -82,16 +82,11 @@
                                     </td>
 
                                     <td>
-                                        <%= tempItem.cost%>
+                                        <%= tempItem.cost %>
                                     </td>
 
                                     <td>
-                                        <% 
-                                            const expiryDate = new Date(tempItem.expiryDate);
-                                            const today = new Date();
-                                            const daysLeft = Math.floor((expiryDate - today) / (1000 * 60 * 60 * 24)); // deviding by total milliseconds in a day
-                                        %>
-
+                                        <% const daysLeft = tempItem.daysLeft; %>
                                         <% if (daysLeft < 0) { %>
                                             <span class="badge bg-danger">Expired</span>
                                         <% } else if (daysLeft <= 7) { %>
@@ -99,7 +94,6 @@
                                         <% } else { %>
                                             <span class="badge bg-success">OK (<%= daysLeft %> days)</span>
                                         <% } %>
-                                        <br><small><%= tempItem.expirationDate %></small>
                                     </td>
 
                                     <td class="py-2">

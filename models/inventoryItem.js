@@ -21,31 +21,18 @@ class inventoryItem {
 
         this.dateObj = new Date(); // Format: "YYYY-MM-DDTHH:mm:ss.sssZ"
         this.createdDate = this.dateObj.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+
+        this.daysLeft = this.getExpiryStatus(); // for displaying expiry status in inventory view page
+        console.log(this.daysLeft);
     }
 
-    getJSON() {
-        const ret = {
-            itemID: this.itemID,
-            userId: this.userId,
-            ingredientName: this.ingredientName,
-            quantity: this.quantity,
-            unit: this.unit,
-            category: this.category,
-            purchaseDate: this.purchaseDate,
-            expiryDate: this.expiryDate,
-            location: this.location,
-            cost: this.cost,
-            createdDate: this.createdDate
-        }
-        return ret;
-    }
 
-    adjustQuantity(amount) {
-        const newQuantity = this.quantity + amount;
-        if (newQuantity < 0) {
-            throw new Error("Quantity cannot be negative");
-        }
-        this.quantity = newQuantity;
+    getExpiryStatus() {
+        const expiryDate = new Date(this.expiryDate);
+        const today = new Date();
+        const daysLeft = Math.floor((expiryDate - today) / (1000 * 60 * 60 * 24)); // deviding by total milliseconds in a day
+
+        return daysLeft
     }
 }
 

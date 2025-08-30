@@ -88,7 +88,7 @@
             <div class="card-body py-4">
               <div class="fs-4">💰</div>
               <!-- for loop to alculate my inventoy value -->
-              <div class="display-6 fw-bold"><%= myInventoryValue %></div>
+              <div class="display-6 fw-bold"><%= myInventoryValue %> $</div>
               <div class="text-uppercase small" style="color: grey;">Inventory Value</div>
             </div>
           </div>
@@ -101,33 +101,33 @@
       <h2 class="h4 mb-3 text-light">Quick Actions</h2>
       <div class="row g-4">
         <div class="col-md-4">
-          <div class="card quickaction action-tile">
+          <div class="card quickaction action-tile shadow" style="background-color: rgb(72, 116, 90);">
             <div class="card-header text-white" style="background-color: rgb(44, 79, 58)"><span class="me-1">🍳</span>Recipe Actions</div>
             <div class="card-body vstack gap-2">
-              <a href="/recipes-add-34076352" class="btn btn-primary w-100">+ Add New Recipe</a>
-              <a href="/recipes-34076352" class="btn btn-outline-primary w-100">View All Recipes</a>
-              <a href="/recipes-remove-34076352" class="btn btn-outline-danger w-100">Delete Recipe</a>
+              <a href="/recipes-add-34076352" class="btn btn-success w-100 btn-outline-light">+ Add New Recipe</a>
+              <a href="/recipes-34076352" class="btn btn-primary w-100 btn-outline-light">View All Recipes</a>
+              <a href="/recipes-remove-34076352" class="btn btn-danger w-100 btn-outline-light">Delete Recipe</a>
             </div>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="card quickaction action-tile">
+          <div class="card quickaction action-tile shadow" style="background-color: rgb(72, 116, 90);">
             <div class="card-header text-white" style="background-color: rgb(44, 79, 58)"><span class="me-1">🧺</span>Inventory Actions</div>
             <div class="card-body vstack gap-2">
-              <a href="/inventory-add-34076352" class="btn btn-success w-100">+ Add Inventory Item</a>
-              <a href="/inventory-34076352" class="btn btn-outline-success w-100">View Inventory</a>
-              <a href="/inventory-remove-34076352" class="btn btn-outline-danger w-100">Delete Item</a>
+              <a href="/inventory-add-34076352" class="btn btn-success w-100 btn-outline-light">+ Add Inventory Item</a>
+              <a href="/inventory-34076352" class="btn btn-primary w-100 btn-outline-light">View Inventory</a>
+              <a href="/inventory-remove-34076352" class="btn btn-danger w-100 btn-outline-light">Delete Item</a>
             </div>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="card quickaction action-tile">
+          <div class="card quickaction action-tile shadow" style="background-color: rgb(72, 116, 90);">
             <div class="card-header text-white" style="background-color: rgb(44, 79, 58)"><span class="me-1">🏆</span>HD Tasks</div>
             <div class="card-body vstack gap-2">
-              <a href="/recipes-filter-34076352" class="btn btn-outline-secondary w-100">Filter Recipes</a>
-              <a href="#" class="btn btn-outline-secondary w-100">Search & Scale</a>
-              <a href="#" class="btn btn-outline-secondary w-100">Smart Alerts</a>
-              <a href="#" class="btn btn-outline-secondary w-100">Recipe Integration</a>
+              <a href="/recipes-filter-34076352" class="btn btn-success w-100 btn-outline-light">Filter Recipes</a>
+              <a href="/recipes-search-scale-34076352" class="btn btn-warning w-100 btn-outline-light">Search & Scale</a>
+              <a href="#" class="btn btn-primary w-100 btn-outline-light">Smart Alerts</a>
+              <a href="#" class="btn btn-danger w-100 btn-outline-light">Recipe Integration</a>
             </div>
           </div>
         </div>

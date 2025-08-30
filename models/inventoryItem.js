@@ -23,7 +23,6 @@ class inventoryItem {
         this.createdDate = this.dateObj.toISOString().split("T")[0]; // Format: YYYY-MM-DD
 
         this.daysLeft = this.getExpiryStatus(); // for displaying expiry status in inventory view page
-        console.log(this.daysLeft);
     }
 
 

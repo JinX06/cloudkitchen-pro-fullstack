@@ -53,7 +53,7 @@ function getRecipeSuggestions(userResponse) {
         recipe.weight = totalScore;
     }
 
-    //Credit to: https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
+    //Learn from: https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-property-value
     recipes.sort(function(recipe1, recipe2) {
         return (recipe2.weight) - (recipe1.weight); //sorts by descending weight
     });

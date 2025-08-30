@@ -43,23 +43,6 @@ class Recipe {
         this.weight = 0; //Used for HD++ tasks for recipe suggestions
 
     }
-
-    getJSON() {
-        const ret = {
-            recipeID: this.recipeID,
-            title: this.title,
-            chef: this.chef,
-            ingredients: this.ingredients,
-            instructions: this.instructions,
-            mealType: this.mealType,
-            cuisineType: this.cuisineType,
-            prepTime: this.prepTime,
-            difficulty: this.difficulty,
-            servings: this.servings,
-            createdDate: this.createdDate
-        };
-        return ret;
-    }
 }
 
 module.exports = { Recipe };

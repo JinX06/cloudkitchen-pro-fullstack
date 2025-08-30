@@ -52,8 +52,8 @@
         </thead>
         <tbody>
           <% for (let i=0; i < myRecipe.length; i++){ %>
-            <% const tempRecipe = myRecipe[i].getJSON(); %>
-            <% const difficulty = myRecipe[i].getJSON().difficulty; %>
+            <% const tempRecipe = myRecipe[i]; %>
+            <% const difficulty = myRecipe[i].difficulty; %>
             <tr class="text-center">
               <td><%= tempRecipe.recipeID %></td>
               <td class="text-middle fw-semibold"><%= tempRecipe.title %></td>

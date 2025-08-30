@@ -25,7 +25,7 @@ router.get("/recipes-remove-34076352", (req, res) => {
 
     res.render("recipes/recipe-remove.html", {
         myRecipe: recipeDB,
-        selectedRecipe: selected ? selected.getJSON() : null,
+        selectedRecipe: selected,
         selectedRecipeId: recipeID
     });
 });
@@ -44,7 +44,7 @@ router.get("/recipes-view-34076352", (req, res) => {
     }
 
     res.render("recipes/recipe-view.html", {
-        selectedRecipe: selected ? selected.getJSON() : null
+        selectedRecipe: selected
     });
 });
 

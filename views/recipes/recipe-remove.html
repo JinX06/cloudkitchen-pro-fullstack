@@ -14,7 +14,7 @@
 
             <!-- Create options for each recipe -->
                 <% for (let i = 0; i < myRecipe.length; i++) { 
-                    const r = myRecipe[i].getJSON(); 
+                    const r = myRecipe[i]; 
                     let selected = '';
                     if (selectedRecipeId === r.recipeID) {
                         selected = 'selected';

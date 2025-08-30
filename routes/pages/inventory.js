@@ -24,7 +24,7 @@ router.get("/inventory-remove-34076352", (req, res) => {
 
     res.render("inventory/inventory-remove.html", {
         myInventory: list,
-        selectedItem: selected ? selected.getJSON() : null,
+        selectedItem: selected,
         selectedItemId: itemID
     });
 })
@@ -39,7 +39,7 @@ router.get("/inventory-view-34076352", (req, res) => {
     }
 
     res.render("inventory/inventory-view.html", {
-        selectedItem: selected ? selected.getJSON() : null
+        selectedItem: selected
     });
 })
 

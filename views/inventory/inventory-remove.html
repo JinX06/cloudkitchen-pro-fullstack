@@ -12,7 +12,7 @@
         <% let selected = ""; %> <!-- For select box to stay selected after form submission -->
 
         <% for (let i = 0; i < myInventory.length; i++) { 
-             const r = myInventory[i].getJSON(); 
+             const r = myInventory[i]; 
              if (selectedItemId === r.itemID) { selected = 'selected'; }
         %>
           <option value="<%= r.itemID %>" <%= selected %>><%= r.itemID %> | <%= r.ingredientName %></option>
@@ -37,7 +37,7 @@
             <div><strong>Purchase Date:</strong> <%= selectedItem.purchaseDate %></div>
             <div><strong>Expiry Date:</strong> <%= selectedItem.expiryDate %></div>
             <div><strong>Cost:</strong> <%= selectedItem.cost %></div>
-            <div><strong>Added:</strong> <%= selectedItem.addedDate %></div>
+            <div><strong>Added:</strong> <%= selectedItem.createdDate %></div>
             <div>
               <hr>
               <div class="form-switch mb-2">
@@ -59,6 +59,9 @@
       <% } %>
     </form>
   </div>
+</div>
+
+<%- include('partials/footer') %>
 </div>
 
 <%- include('partials/footer') %>

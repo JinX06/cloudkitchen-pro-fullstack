@@ -121,6 +121,23 @@ const inventoryItem10 = new inventoryItem(
     9.00,
 );
 
+// for testing smart inventory alert (always < 3 days left)
+const currentDate = new Date();
+const expiryDate = new Date(currentDate.getTime() + 3 * 24 * 60 * 60 * 1000); // 3 days from now
+const expiryString = expiryDate.toISOString().split("T")[0];
+
+const inventoryItem11 = new inventoryItem(
+    "OngJinXiang-34076352",
+    "Apple Jam",
+    1.5,
+    "spoonful",
+    "Fruits",
+    "2025-07-09",
+    expiryString,
+    "Fridge",
+    5.00,
+);
+
 const inventoryItemDB = [
     inventoryItem1,
     inventoryItem2,
@@ -131,7 +148,8 @@ const inventoryItemDB = [
     inventoryItem7,
     inventoryItem8,
     inventoryItem9,
-    inventoryItem10
+    inventoryItem10,
+    inventoryItem11
 ];
 
 const sortedInventoryItemDB = sortInventoryByCategoryAndStorage(inventoryItemDB);

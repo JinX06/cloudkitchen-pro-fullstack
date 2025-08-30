@@ -47,7 +47,7 @@ router.post("/api/inventory/add-34076352", (req, res) => {
   }
 });
 
-// New: delete inventory item
+// delete inventory item
 router.post("/api/inventory/delete-34076352", (req, res) => {
   const { itemID } = req.query;
   const list = req.app.locals.inventoryItemDB;

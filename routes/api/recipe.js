@@ -89,4 +89,36 @@ router.post("/api/recipes-suggestions-34076352", (req, res) => {
 //   res.send(req.app.locals.suggestedRecipes);
 });
 
+// Add a review/rating to a recipe and recompute its average rating
+router.post("/api/recipes/add-review-34076352", (req, res) => {
+    const { recipeID, reviewer, rating, comment } = req.body;
+    const list = req.app.locals.recipeDB;
+    const recipe = list.find(recipe => recipe.recipeID === recipeID);
+
+    if (!recipe) {
+        req.app.locals.errorOBJ = { status: 400, message: "Recipe not found." };
+        return res.redirect("/error-34076352");
+    }
+
+    const numericRating = Number(rating);
+    if (!Number.isFinite(numericRating) || numericRating < 1 || numericRating > 5) {
+        req.app.locals.errorOBJ = { status: 400, message: "Invalid rating. Rating must be within 1-5." };
+        return res.redirect("/error-34076352");
+    }
+
+    recipe.ratings.push(numericRating);
+    recipe.reviews.push({
+        reviewer: (reviewer || "Anonymous").trim(), //either use provided reviewer name or default to "Anonymous"
+        rating: numericRating,
+        comment: (comment || "").trim(), //either use provided comment or default to empty string
+        date: new Date().toISOString().split("T")[0]
+    });
+
+    recipe.recalcAverageRating();
+
+    return res.redirect("/recipes-34076352");
+});
+
 module.exports = router;
+
+

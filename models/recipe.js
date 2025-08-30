@@ -43,9 +43,9 @@ class Recipe {
         this.weight = 0; //Used for HD++ tasks for recipe suggestions
 
         // HD task for Ratings & Reviews (for user feedback)
-        this.ratings = [];           // numbers 1–5
-        this.reviews = [];           // { reviewer, rating, comment, date }
-        this.avgRating = 0;          // computed average rating (rounded to 2dp)
+        this.ratings = []; // numbers 1–5
+        this.reviews = [];// { reviewer, rating, comment, date }
+        this.avgRating = 0;// average rating
     }
 
     recalcAverageRating() {

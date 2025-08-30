@@ -20,15 +20,22 @@ function sortInventoryByCategoryAndStorage(inventory) {
 
       // If categories are equal, sort by storage location
     } else {
-        if (firstItem.location < secondItem.location) {
-          return -1;
-        } else if (firstItem.location > secondItem.location) {
-          return 1;
-        }
+      if (firstItem.location < secondItem.location) {
+        return -1;
+      } else if (firstItem.location > secondItem.location) {
+        return 1;
       }
     }
+  }
   )
 }
 
+function uniqueCategoryList(inventory) {
+  const categories = new Set();
+  for (const item of inventory) {
+    categories.add(item.category);
+  }
+  return Array.from(categories);
+}
 
-module.exports = { calculateInventoryValue, sortInventoryByCategoryAndStorage };
+module.exports = { calculateInventoryValue, sortInventoryByCategoryAndStorage, uniqueCategoryList };

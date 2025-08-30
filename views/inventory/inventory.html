@@ -88,11 +88,11 @@
                                     <td>
                                         <% const daysLeft = tempItem.daysLeft; %>
                                         <% if (daysLeft < 0) { %>
-                                            <span class="badge bg-danger">Expired</span>
+                                            <span class="badge bg-danger">Expired (<%= Math.abs(daysLeft) %> days ago)</span>
                                         <% } else if (daysLeft <= 7) { %>
                                             <span class="badge bg-warning text-dark">Expiring Soon (<%= daysLeft %> days)</span>
                                         <% } else { %>
-                                            <span class="badge bg-success">OK (<%= daysLeft %> days)</span>
+                                            <span class="badge bg-success">Fresh (<%= daysLeft %> days)</span>
                                         <% } %>
                                     </td>
 

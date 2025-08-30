@@ -85,7 +85,7 @@ router.post("/api/recipes-suggestions-34076352", (req, res) => {
   req.app.locals.suggestedRecipes = getRecipeSuggestions(userResponse);
 
 
-  res.redirect("/recipes/recipe-suggestion-results-34076352.html");
+  res.redirect("/recipes/recipe-suggestion-results-34076352");
 //   res.send(req.app.locals.suggestedRecipes);
 });
 

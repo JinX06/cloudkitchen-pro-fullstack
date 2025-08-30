@@ -94,13 +94,21 @@ router.get("/recipes-suggestions-34076352", (req,res) =>{
     });
 });
 
-router.get("/recipes/recipe-suggestion-results-34076352.html", (req, res) => {
+router.get("/recipes/recipe-suggestion-results-34076352", (req, res) => {
     let results = req.app.locals.suggestedRecipes;
     results = results.slice(0, 3);
     let r1 = results[0]
     console.log(r1)
 
     res.render("recipes/recipe-suggestion-results.html", { suggestions: results });
+});
+
+router.get("/recipes/recipe-search-scale-34076352", (req, res) => {
+    res.render("recipes/recipe-search-scale.html", {
+        searchQuery: req.query.searchQuery || "",
+        scaleFactor: req.query.scaleFactor || 1,
+        searchResults: req.app.locals.searchResults || []
+    });
 });
 
 module.exports = router;

@@ -39,6 +39,7 @@
             <th>Recipe ID</th>
             <th>Title</th>
             <th>Chef</th>
+            <th>Rating</th>
             <th>Ingredients</th>
             <th>Instructions</th>
             <th>Meal Type</th>
@@ -55,29 +56,49 @@
             <% const tempRecipe = myRecipe[i]; %>
             <% const difficulty = myRecipe[i].difficulty; %>
             <tr class="text-center">
+
+              <!-- RecipeID -->
               <td><%= tempRecipe.recipeID %></td>
+
+              <!-- Title -->
               <td class="text-middle fw-semibold"><%= tempRecipe.title %></td>
+
+              <!-- Chef -->
               <td><%= tempRecipe.chef %></td>
-              
+
+              <!-- Rating -->
+              <td>
+                <% if (tempRecipe.ratings.length > 0) { %>
+                  <span class="badge bg-warning text-dark"><%= tempRecipe.avgRating %> ✧</span>
+                  <div style="font-size:.6rem; color:#ddd;"><%= tempRecipe.reviewCount %> reviews</div>
+                <% } else { %>
+                  <small style="font-size: 1.2rem;">-</small>
+                <% } %>
+              </td>
+
+              <!-- Ingredients -->
               <td class="text-start">
                 <% for(let i = 0; i < tempRecipe.ingredients.length; i++) { %>
                   <div style="font-size: 0.6rem; padding: 2px 0;"><%= tempRecipe.ingredients[i] %></div>
                 <% } %>
               </td>
-              
-              <td class="text-start">  
-                 <% for(let i = 0; i < tempRecipe.instructions.length; i++) { %>
-                   <div style="font-size: 0.6rem; padding: 2px 0;"><%= tempRecipe.instructions[i] %></div>
-                 <% } %>
+
+              <!-- Instructions -->
+              <td class="text-start">
+                <% for(let i = 0; i < tempRecipe.instructions.length; i++) { %>
+                  <div style="font-size: 0.6rem; padding: 2px 0;"><%= i+1%>. <%= tempRecipe.instructions[i] %></div>
+                <% } %>
               </td>
-              
-              
+
+              <!-- Meal Type -->
               <td>
                 <span class="badge text-white" style="background-color: darkcyan;"><%= tempRecipe.mealType %></span>
               </td>
-              
+
+              <!-- Cuisine Type -->
               <td><%= tempRecipe.cuisineType %></td>
-              
+
+              <!-- Difficulty -->
               <td>
                 <% if (difficulty === "Easy") { %>
                   <span class="badge badge-pill" style="background:#4CAF50;">Easy</span>
@@ -89,13 +110,53 @@
                   <span class="badge badge-pill bg-secondary"><%= difficulty %></span>
                 <% } %>
               </td>
+
+              <!-- Prep Time -->
               <td><%= tempRecipe.prepTime %> min</td>
+
+              <!-- Servings -->
               <td><%= tempRecipe.servings %></td>
+
+              <!-- Created Date -->
               <td><%= tempRecipe.createdDate %></td>
               <td class="py-2">
                 <div class="d-flex justify-content-center gap-2">
                   <a href="recipes-view-34076352?recipeID=<%= tempRecipe.recipeID %>" class="btn btn-sm btn-primary">View</a>
                   <a href="recipes-remove-34076352?recipeID=<%= tempRecipe.recipeID %>" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+                
+                <!-- Add Review -->
+                  <a class="btn btn-primary btn-sm mt-2" data-bs-toggle="collapse" href="#collapse<%= tempRecipe.recipeID %>" role="button">+ Add Review</a>
+                  <form method="post" action="/api/recipes/add-review-34076352" class="pt-2">
+                    <div class="collapse" id="collapse<%= tempRecipe.recipeID %>">
+                    <input type="hidden" name="recipeID" value="<%= tempRecipe.recipeID %>">
+                    <div class="col">
+                      <input type="text" name="reviewer" class="form-control form-control-sm" placeholder="Your name (optional)" style="font-size: 0.7rem;">
+                    </div>
+                    
+
+                    <!-- Rating -->
+                    <div class="col">
+                      <select name="rating" class="form-select form-select-sm" required style="font-size: 0.7rem;">
+                        <option value="" disabled selected>Rate (1-5)</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                      </select>
+                    </div>
+
+                    <!-- Comment -->
+                    <div class="col mb-2">
+                      <input type="text" name="comment" class="form-control form-control-sm" style="font-size: 0.7rem;" placeholder="Short comment (optional)">
+                    </div>
+
+                    <!-- Submit -->
+                    <div>
+                      <button type="submit" class="btn btn-success btn-sm">Submit</button>
+                    </div>
+                  </form>
                 </div>
               </td>
             </tr>

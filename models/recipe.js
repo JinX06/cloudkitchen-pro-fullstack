@@ -1,5 +1,5 @@
 const {
-assert, assertString, assertArray, assertNonNegativeNumber, assertPositiveInt, assertEnum, validateIngredientEntry, trimStringsInArray
+assert, assertString, assertArray, assertNonNegativeNumber, assertPositiveInt, assertEnum, validateIngredientEntry, trimStringsInArray, assertNonNumericString
 } = require("./validate");
 
 class Recipe {
@@ -12,8 +12,8 @@ class Recipe {
         Recipe.recipeID++;
 
 
-        this.title = assertString(title, "Title");
-        this.chef = assertString(chef, "Chef");
+        this.title = assertNonNumericString(title, "Title");
+        this.chef = assertNonNumericString(chef, "Chef");
 
         // Validate ingredients array
         assert(ingredients, "Ingredients");
@@ -30,8 +30,8 @@ class Recipe {
         assertArray(instructions, "instructions");
         this.instructions = trimStringsInArray(instructions, "instructions");
 
-        this.mealType = assertString(mealType, "Meal Type");
-        this.cuisineType = assertString(cuisineType, "Cuisine Type");
+        this.mealType = assertNonNumericString(mealType, "Meal Type");
+        this.cuisineType = assertNonNumericString(cuisineType, "Cuisine Type");
         this.prepTime = assertPositiveInt(prepTime, "Prep Time");
         this.difficulty = assertEnum(difficulty, ["Easy", "Medium", "Hard"], "Difficulty");
         this.servings = assertPositiveInt(servings, "Servings");

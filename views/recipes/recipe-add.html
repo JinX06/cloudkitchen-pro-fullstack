@@ -48,7 +48,7 @@
                 <strong>Recipe Form</strong>
             </div>
             <div class="card-body">
-                <form action="/api/recipes/add-34076352" method="POST">
+                <form action="/api/recipes/add-34076352" method="POST" class="was-validated">
                     <!-- Basic Info -->
                     <div class="mb-4">
                         <div class="div-title mb-2"><span>🧾 </span>Basic Information</div>
@@ -96,9 +96,9 @@
                                 <div class="col">
                                     <select name="cuisine1" class="form-select">
                                         <option value="" selected>Select existing…</option>
-                                        <% (cuisines).forEach(c=> { %>
-                                            <option value="<%= c %>">
-                                                <%= c %>
+                                        <% (cuisines).forEach(cuisine => { %>
+                                            <option value="<%= cuisine %>">
+                                                <%= cuisine %>
                                             </option>
                                             <% }) %>
                                     </select>
@@ -169,7 +169,7 @@
                         <textarea id="instructions" name="instructions" class="form-control" rows="7" placeholder="1) Preheat oven to 180°C
 2) Mix dry ingredients
 3) Add wet ingredients and combine
-4) Bake for 12–15 minutes" required></textarea>
+4) Bake for 12-15 minutes" required></textarea>
                         <div class="invalid-feedback">Please provide instructions.</div>
                     </div>
 

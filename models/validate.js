@@ -142,6 +142,14 @@ function validateIngredientEntry(entry, index, fieldName = "ingredients") {
     return { name, quantity }; // return object
 }
 
+function assertNonNumericString(str, field) {
+    const trimmed = assertString(str, field);
+    // Require at least one non-digit character
+    assert(/[a-zA-Z0-9]/.test(trimmed), `${field} cannot be only symbols`);
+    assert(/[^0-9]/.test(trimmed), `${field} cannot be only numbers`);
+    return trimmed;
+}
+
 module.exports = {
     // error + assert
     error, assert,
@@ -153,4 +161,5 @@ module.exports = {
     assertEnum, assertDate,
     // helpers
     trimStringsInArray, validateIngredientEntry,
+    assertNonNumericString,
 };

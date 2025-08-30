@@ -1,5 +1,5 @@
 const {
-    assertString, assertNonNegativeNumber, assertDate
+    assertString, assertNonNegativeNumber, assertDate, assertNonNumericString
 } = require("./validate");
 
 class inventoryItem {
@@ -9,14 +9,14 @@ class inventoryItem {
         this.itemID = `I-${String(inventoryItem.itemID).padStart(5, "0")}`;
         inventoryItem.itemID++;
 
-        this.userId = assertString(userId, "User ID");;
-        this.ingredientName = assertString(ingredientName, "Ingredient Name");
+        this.userId = assertNonNumericString(userId, "User ID");
+        this.ingredientName = assertNonNumericString(ingredientName, "Ingredient Name");
         this.quantity = assertNonNegativeNumber(quantity, "Quantity");
-        this.unit = assertString(unit, "Unit");
-        this.category = assertString(category, "Category");
+        this.unit = assertNonNumericString(unit, "Unit");
+        this.category = assertNonNumericString(category, "Category");
         this.purchaseDate = assertDate(purchaseDate, "Purchase Date");
         this.expiryDate = assertDate(expiryDate, "Expiry Date");
-        this.location = assertString(location, "Location");
+        this.location = assertNonNumericString(location, "Location");
         this.cost = assertNonNegativeNumber(cost, "Cost");
 
         this.dateObj = new Date(); // Format: "YYYY-MM-DDTHH:mm:ss.sssZ"

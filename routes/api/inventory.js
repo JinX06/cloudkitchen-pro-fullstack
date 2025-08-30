@@ -18,7 +18,7 @@ router.post("/api/inventory/add-34076352", (req, res) => {
   } = req.body;
 
   try {
-    // Construct item (constructor validates; adjust Number(...) as needed)
+    // Construct item object
     const item = new inventoryItem(
       userId,
       ingredientName,

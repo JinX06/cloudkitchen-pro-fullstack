@@ -19,7 +19,36 @@
           <div><strong>Created:</strong> <%= selectedRecipe.createdDate %></div>
           <div><strong>Ingredients:</strong> <%= selectedRecipe.ingredients %></div>
           <div><strong>Instructions:</strong> <%= selectedRecipe.instructions.join(", ") %></div>
+          
           <hr>
+          <!-- Ratings details box -->
+          <div class="border rounded p-3 bg-light text-dark">
+            <h5 class="mb-2">Ratings</h5>
+            <% if (selectedRecipe.ratings.length > 0) { %>
+              <strong>Average:</strong> <%= selectedRecipe.avgRating %> / 5
+              <br>
+              <strong>Total reviews:</strong> <%= selectedRecipe.ratings.length %>
+              <% if (selectedRecipe.reviews && selectedRecipe.reviews.length > 0) { %>
+                <ul>
+                  <% selectedRecipe.reviews.forEach(function(r){ %>
+                    <li>
+                      <strong>Reviewer: <%= r.reviewer %> |</strong> Rating: <%= r.rating %>/5
+                      <% if (r.date) { %>
+                        <strong style="font-size: 1rem; color: black;">|</strong> <%= r.date %>
+                      <% } %>
+                      <% if (r.comment) { %>
+                        <div>Additional comments: <%= r.comment %></div>
+                      <% } %>
+                    </li>
+                  <% }) %>
+                </ul>
+              <% } %>
+            <% } else { %>
+              <div class="text-muted">No ratings yet.</div>
+            <% } %>
+          </div>
+          <hr>
+
           <button type="button" class="btn btn-primary" onclick="window.history.back();">Back</button>
         </div>
       </div>

@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router();
 const { uniqueCuisineList, uniqueMealTypeList } = require("../../utils/recipeUtils.js");
+const { computeAvailability } = require("../../utils/availability.js");
 
 router.get("/recipes-34076352", (req, res) => {
     res.render("recipe.html", {
@@ -107,12 +108,12 @@ router.get("/recipes-suggestion-results-34076352", (req, res) => {
 });
 
 router.get("/recipes-search-scale-34076352", (req, res) => {
-    
+
     const searchQuery = (req.query.search || "").trim();
     let scaleFactor = parseFloat(req.query.scaleFactor) || 1;
     scaleFactor = Math.max(1, Math.min(scaleFactor, 10));
-    
-    
+
+
     function scaleIngredientLine(ingredient, factor) {
         if (typeof ingredient !== "string" || ingredient.trim() === "") {
             return ingredient;
@@ -124,25 +125,25 @@ router.get("/recipes-search-scale-34076352", (req, res) => {
 
         // Case 1: quantity sticking to unit
         // Example: "200g pancetta"
-        const compact = text.match(/^(\d+(?:\.\d+)?)([a-zA-Z]+)(.*)$/);
+        const mergedIngredient = text.match(/^(\d+(?:\.\d+)?)([a-zA-Z]+)(.*)$/);
         // (\d+(?:\.\d+)?) = 200
         // ([a-zA-Z]+) = g
         // (.*) = pancetta
 
-        if (compact) {
-            const [, qtyStr, unit, item] = compact;     // [200g pancetta, 200, g, pancetta]
+        if (mergedIngredient) {
+            const [, qtyStr, unit, item] = mergedIngredient;     // [200g pancetta, 200, g, pancetta]
             const scaled = parseFloat(qtyStr) * factor;
             return `${scaled}${unit}${item}`;
         }
 
         // Case 2: quantity + space+ text/item
         // Example: "200 g pancetta" or "8 large eggs"
-        const spaced = text.match(/^(\d+(?:\.\d+)?)(\s+)(.*)$/);
+        const spaceIngredient = text.match(/^(\d+(?:\.\d+)?)(\s+)(.*)$/);
         // (\d+(?:\.\d+)?) = 200    |   8
         // (\s+) = " "              |   " "
         // (.*) = g pancetta        |   large eggs
-        if (spaced) {
-            const [, qtyStr, space, item] = spaced;     // [200 g pancetta, 200,  , g pancetta]
+        if (spaceIngredient) {
+            const [, qtyStr, space, item] = spaceIngredient;     // [200 g pancetta, 200,  , g pancetta]
             const scaled = parseFloat(qtyStr) * factor;
             return `${scaled}${space}${item}`;
         }
@@ -226,6 +227,29 @@ router.get("/recipes-search-scale-34076352", (req, res) => {
     });
 });
 
+
+router.get("/recipes-availability-34076352", (req, res) => {
+    const recipeDB = req.app.locals.recipeDB;
+    const inventory = req.app.locals.inventoryItemDB;
+
+    // Compute availability for every recipe
+    const rows = [];
+    for (let i = 0; i < recipeDB.length; i++) {
+        const recipe = recipeDB[i];
+        rows.push({
+            recipe: recipe,
+            availability: computeAvailability(recipe, inventory)
+        });
+    }
+
+    // Sort by availability percent (ascending)
+    rows.sort((recipeA, recipeB) => {
+        return recipeB.availability.percent - recipeA.availability.percent;
+    });
+
+    res.render("recipe-availability.html", {
+        rows,
+    });
+});
+
 module.exports = router;
-
-

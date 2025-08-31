@@ -44,7 +44,7 @@ const myRecipe3 = new Recipe(
 const myRecipe4 = new Recipe(
     "Egg Fried Rice",
     "OngJinXiang-34076352",
-    ["Cooked rice", "2 Eggs", "Spring onion", "Soy sauce", "Oil"],
+    ["Rice", "2 Eggs", "Spring onion", "Soy sauce", "Oil"],
     ["Heat oil in pan","Add beaten eggs and scramble in pan","Add rice and stir-fry","Add soy sauce","Mix in chopped spring onion"],
     "Lunch",
     "Chinese",
@@ -83,7 +83,7 @@ const myRecipe6 = new Recipe(
 const myRecipe7 = new Recipe(
     "Fruit Yogurt Bowl",
     "OngJinXiang-34076352",
-    ["Greek yogurt", "Honey", "Strawberries", "Blueberries"],
+    ["Yogurt", "Honey", "Strawberries", "Blueberries"],
     ["Add yogurt into bowl", "Add fruit and drizzle honey"],
     "Breakfast",
     "General",
@@ -109,7 +109,7 @@ const myRecipe8 = new Recipe(
 const myRecipe9 = new Recipe(
     "Beef Stew",
     "OngJinXiang-34076352",
-    ["Beef chuck", "Potatoes", "Carrots", "Celery", "Onion", "Garlic", "Tomato paste", "Beef broth", "Bay leaf", "Thyme", "Salt", "Pepper"],
+    ["Beef", "Potatoes", "Carrots", "Celery", "Onion", "Garlic", "Tomato paste", "Beef broth", "Bay leaf", "Thyme", "Salt", "Pepper"],
     ["Cut beef into cubes","Season beef with salt and pepper","Brown beef in pot","Remove beef and set aside","Saute onion, garlic, celery, and carrots","Add tomato paste and cook briefly","Add beef back to pot","Add potatoes, broth, bay leaf, and thyme","Bring to boil","Reduce heat and simmer","Cook for 90 minutes","Remove bay leaf and serve"],
     "Dinner",
     "European",
@@ -122,7 +122,7 @@ const myRecipe9 = new Recipe(
 const myRecipe10 = new Recipe(
     "Chicken Tikka Wrap",
     "OngJinXiang-34076352",
-    ["Chicken breast", "Yogurt", "Lemon juice", "Garam masala", "Cumin", "Coriander", "Paprika", "Garlic", "Ginger", "Salt", "Pepper", "Tortilla wraps", "Lettuce", "Tomato"],
+    ["Chicken breast", "Yogurt", "Lemon juice", "Cumin", "Coriander", "Paprika", "Garlic", "Ginger", "Salt", "Pepper", "Tortilla wraps", "Lettuce", "Tomato"],
     ["Mix yogurt, lemon juice, and spices","Marinate chicken in mixture","Grill chicken until cooked","Slice chicken","Warm tortilla wraps","Fill with lettuce, tomato, and chicken","Roll up and serve"],
     "Lunch",
     "Indian",

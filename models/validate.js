@@ -153,7 +153,7 @@ function assertNonNumericString(str, field) {
 module.exports = {
     // error + assert
     error, assert,
-    // type guards
+    // type checks
     isString, isNumber, isArray, isObject,
     // assertions
     assertString, assertNumber, assertInteger,

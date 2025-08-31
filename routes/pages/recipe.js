@@ -20,7 +20,12 @@ router.get("/recipes-remove-34076352", (req, res) => {
     let selected = null;
 
     if (recipeID) {
-        selected = recipeDB.find(recipe => recipe.recipeID === recipeID) || null;
+        selected = recipeDB.find(recipe => recipe.recipeID === recipeID);
+    }
+
+    if (selected === null) {
+        req.app.locals.errorOBJ = { status: 400, message: "Recipe not found." };
+        return res.redirect("/error-34076352");
     }
 
     res.render("recipes/recipe-remove.html", {

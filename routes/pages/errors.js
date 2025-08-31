@@ -18,7 +18,7 @@ router.get("/error-34076352", (req, res) => {
       message = errorOBJ.message || message;
   }
 
-  res.status(400).render("error.html", { code, message });
+  res.status(code).render("error.html", { code, message });
 });
 
 router.get(/.*/, (req, res) => {

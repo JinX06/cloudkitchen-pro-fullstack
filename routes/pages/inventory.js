@@ -22,6 +22,11 @@ router.get("/inventory-remove-34076352", (req, res) => {
         selected = list.find(it => it.itemID === itemID) || null;
     }
 
+    if (selected === null) {
+        req.app.locals.errorOBJ = { status: 400, message: "Item not found." };
+        return res.redirect("/error-34076352");
+    }
+
     res.render("inventory/inventory-remove.html", {
         myInventory: list,
         selectedItem: selected,

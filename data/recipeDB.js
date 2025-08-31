@@ -57,7 +57,7 @@ const myRecipe4 = new Recipe(
 const myRecipe5 = new Recipe(
     "Vegetable Stir Fry",
     "OngJinXiang-34076352",
-    ["Broccoli", "Carrot", "Bell pepper", "Snow peas", "Garlic", "Ginger", "Soy sauce", "Sesame oil", "Water"],
+    ["Broccoli", "Carrot", "Bell pepper", "peas", "Garlic", "Ginger", "Soy sauce", "Sesame oil", "Water"],
     ["Chop all vegetables","Heat oil in wok","Add garlic and ginger","Add vegetables and stir-fry","Mix soy sauce and water","Pour sauce into wok","Stir until thick","Add sesame oil before serving"],
     "Dinner",
     "Asian",
@@ -84,7 +84,7 @@ const myRecipe7 = new Recipe(
     "Fruit Yogurt Bowl",
     "OngJinXiang-34076352",
     ["Greek yogurt", "Honey", "Strawberries", "Blueberries"],
-    ["Spoon yogurt into bowl", "Top with fruit and drizzle honey"],
+    ["Add yogurt into bowl", "Add fruit and drizzle honey"],
     "Breakfast",
     "General",
     4,

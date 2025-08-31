@@ -51,11 +51,7 @@ router.get("/inventory-view-34076352", (req, res) => {
 
 
 
-
-module.exports = router;
-
 router.get("/inventory-alerts-34076352", (req, res) => {
-
     let expiringItems = [];
     for (const item of req.app.locals.inventoryItemDB) {
         if (item.daysLeft <= 3 && item.daysLeft > 0) { // Alert for items expiring in 3 days or less

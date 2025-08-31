@@ -1,18 +1,6 @@
 <%- include('partials/header', {title: 'Recipe Hub - Recipe Suggestions Results' }) %>
     <h1 class="text-white">Recipe Suggestions Results:</h1>
 
-    <!-- <div class="container mt-4">
-        <% for (let i = 0; i < Math.min(3, suggestions.length); i++) { %>
-            <div class="card mb-3 bg-dark text-white">
-                <div class="card-body">
-                    <h5 class="card-title">Top <%= i + 1 %>: <%= suggestions[i].name %></h5>
-                    <p class="card-text"><%= suggestions[i].description %></p>
-                    <a href="/recipe/<%= suggestions[i].id %>" class="btn btn-primary">View Recipe</a>
-                </div>
-            </div>
-        <% } %>
-    </div> -->
-
     <div class="mt-4">
         <h2 style="color: white;"></h2>
         <% if (suggestions && suggestions.length > 0) { %>

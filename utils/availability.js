@@ -32,7 +32,7 @@ function findInventoryForItem(inventory, itemName) {
     return null;
 }
 
-function computeAvailability(recipe, inventory) {
+function getAvailability(recipe, inventory) {
     const available = [];
     const missing = [];
 
@@ -69,6 +69,6 @@ function computeAvailability(recipe, inventory) {
 
 module.exports = {
     parseIngredient,
-    computeAvailability,
+    getAvailability,
     findInventoryForItem
 };

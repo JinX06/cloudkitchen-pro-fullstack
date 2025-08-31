@@ -20,18 +20,19 @@ router.get("/recipes-remove-34076352", (req, res) => {
     const { recipeID } = req.query;
     let selected = null;
 
-    if (recipeID) {
+    if (typeof recipeID !== "undefined" && recipeID !== "") {
         selected = recipeDB.find(recipe => recipe.recipeID === recipeID);
-    }
 
-    if (selected === null) {
-        req.app.locals.errorOBJ = { status: 400, message: "Recipe not found." };
-        return res.redirect("/error-34076352");
+        // treat both null and undefined as "not found" when an ID was provided
+        if (!selected) {
+            req.app.locals.errorOBJ = { status: 400, message: "Recipe not found." };
+            return res.redirect("/error-34076352");
+        }
     }
 
     res.render("recipes/recipe-remove.html", {
         myRecipe: recipeDB,
-        selectedRecipe: selected,
+        selectedRecipe: selected || null,
         selectedRecipeId: recipeID
     });
 });

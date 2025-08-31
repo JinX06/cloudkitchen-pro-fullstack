@@ -19,7 +19,7 @@ router.post("/api/recipes/delete-34076352", (req, res) => {
     const { recipeID } = req.query;
     const list = req.app.locals.recipeDB;
     const index = list.findIndex(recipe => recipe.recipeID === recipeID);
-
+    
     if (index !== -1) {
         list.splice(index, 1);
         return res.redirect("/recipes-34076352");
@@ -40,7 +40,7 @@ router.post("/api/recipes-suggestions-34076352", (req, res) => {
   };
 
   req.app.locals.suggestedRecipes = getRecipeSuggestions(userResponse);
-  res.redirect("/recipe-suggestion-results-34076352");
+  res.redirect("/recipes-suggestion-results-34076352");
 });
 
 // Add a review/rating to a recipe and recompute its average rating

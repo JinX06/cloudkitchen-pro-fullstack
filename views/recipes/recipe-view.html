@@ -1,0 +1,64 @@
+<%- include('partials/header', {title: 'Recipe Hub - View Recipe' }) %>
+
+<div>
+  <div class="card bg-dark text-white" style="margin: 20px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8)">
+    <h2>📖 View Recipe</h2>
+    <% if (selectedRecipe) { %>
+      <h4>Recipe Details:</h4>
+      <div class="card bg-white text-dark" style="margin-top: 20px; border-radius: 6px;">
+        <div class="card-header bg-secondary text-white fw-bold" style="padding: 20px;">
+          <h4 style="margin-bottom: 0;"><%= selectedRecipe.title %></h4>
+          <small style="font-weight: lighter; margin-top: 0;">By: <%= selectedRecipe.chef %></small>
+        </div>
+        <div class="card-body">
+          <div><strong>Meal Type:</strong> <%= selectedRecipe.mealType %></div>
+          <div><strong>Cuisine:</strong> <%= selectedRecipe.cuisineType %></div>
+          <div><strong>Difficulty:</strong> <%= selectedRecipe.difficulty %></div>
+          <div><strong>Prep Time:</strong> <%= selectedRecipe.prepTime %> min</div>
+          <div><strong>Servings:</strong> <%= selectedRecipe.servings %></div>
+          <div><strong>Created:</strong> <%= selectedRecipe.createdDate %></div>
+          <div><strong>Ingredients:</strong> <%= selectedRecipe.ingredients %></div>
+          <div><strong>Instructions:</strong> <%= selectedRecipe.instructions.join(", ") %></div>
+          
+          <hr>
+          <!-- Ratings details box -->
+          <div class="border rounded p-3 bg-light text-dark">
+            <h5 class="mb-2">Ratings</h5>
+            <% if (selectedRecipe.ratings.length > 0) { %>
+              <strong>Average:</strong> <%= selectedRecipe.avgRating %> / 5
+              <br>
+              <strong>Total reviews:</strong> <%= selectedRecipe.ratings.length %>
+              <% if (selectedRecipe.reviews && selectedRecipe.reviews.length > 0) { %>
+                <ul>
+                  <% selectedRecipe.reviews.forEach(function(r){ %>
+                    <li>
+                      <strong>Reviewer: <%= r.reviewer %> |</strong> Rating: <%= r.rating %>/5
+                      <% if (r.date) { %>
+                        <strong style="font-size: 1rem; color: black;">|</strong> <%= r.date %>
+                      <% } %>
+                      <% if (r.comment) { %>
+                        <div>Additional comments: <%= r.comment %></div>
+                      <% } %>
+                    </li>
+                  <% }) %>
+                </ul>
+              <% } %>
+            <% } else { %>
+              <div class="text-muted">No ratings yet.</div>
+            <% } %>
+          </div>
+          <hr>
+
+          <button type="button" class="btn btn-primary" onclick="window.history.back();">Back</button>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="alert alert-warning" style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; margin-top: 20px;">
+        Recipe not found.
+      </div>
+      <button type="button" class="btn btn-secondary" onclick="window.history.back();">Back</button>
+    <% } %>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

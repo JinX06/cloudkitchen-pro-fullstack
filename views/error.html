@@ -1,0 +1,28 @@
+<%- include("partials/header", {title: "Recipe Hub -  Error 400"}) %>
+
+<div class="row justify-content-center">
+<div style="width: 70%; padding-top: 90px;">
+    <div class="card border-danger">
+    <div class="card-body bg-dark text-white" style="border-radius: 5px;">
+        <div class="d-flex align-items-start gap-3 mb-3">
+        <div>
+            <h1 class="h3 mb-1 fw-semibold">⚠️  Uh oh, an error occurred!</h1>
+            <p class="mb-0 text-white-50">Your form submission wasn't valid. Please review the details below.</p>
+        </div>
+        </div>
+
+        <div class="alert alert-danger mb-4">
+        <strong class="me-2">Code:</strong><span class="badge border border-danger" style="color: red;"><%= code %></span><br/>
+        <strong class="me-2">Message:</strong> <span><%= message %></span>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 mb-3">
+        <button type="button" class="btn btn-primary" onclick="window.history.back();">Back</button>
+        <a href="/" class="btn btn-outline-light">Back to Home</a>
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+
+<%- include("partials/footer") %>

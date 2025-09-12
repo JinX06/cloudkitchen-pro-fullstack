@@ -17,17 +17,17 @@ function sortInventoryByCategoryAndStorage(inventory) {
       return -1;
     } else if (firstItem.category > secondItem.category) {
       return 1;
-
-      // If categories are equal, sort by storage location
-    } else {
-      if (firstItem.location < secondItem.location) {
-        return -1;
-      } else if (firstItem.location > secondItem.location) {
-        return 1;
-      }
     }
-  }
-  )
+
+    // If categories are equal, sort by storage location
+    if (firstItem.location < secondItem.location) {
+      return -1;
+    } else if (firstItem.location > secondItem.location) {
+      return 1;
+    }
+
+    return 0;
+  });
 }
 
 function uniqueCategoryList(inventory) {

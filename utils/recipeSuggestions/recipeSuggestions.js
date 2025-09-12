@@ -4,8 +4,7 @@ const { recipeDB } = require("../../data/recipeDB.js");
 
 function getRecipeSuggestions(userResponse) {
     const user = buildUserBuckets(userResponse);
-
-    const recipes = recipeDB.slice();
+    const recipes = JSON.parse(JSON.stringify(recipeDB));
 
     for (const recipe of recipes) {
         let totalScore = 0;

@@ -72,7 +72,7 @@
               <td>
                 <% if (tempRecipe.ratings.length > 0) { %>
                   <span class="badge bg-warning text-dark"><%= tempRecipe.avgRating %> ✧</span>
-                  <div style="font-size:.6rem; color:#ddd;"><%= tempRecipe.reviewCount %> reviews</div>
+                  <div style="font-size:.6rem; color:#ddd;"><%= tempRecipe.reviews.length %> reviews</div>
                 <% } else { %>
                   <small style="font-size: 1.2rem;">-</small>
                 <% } %>

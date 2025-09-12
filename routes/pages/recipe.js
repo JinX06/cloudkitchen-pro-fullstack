@@ -44,7 +44,7 @@ router.get("/recipes-view-34076352", (req, res) => {
     let selected = null;
 
     if (recipeID === "RANDOM") {
-        randomIndex = Math.floor(Math.random() * recipeDB.length);
+        const randomIndex = Math.floor(Math.random() * recipeDB.length);
         selected = recipeDB[randomIndex];
     } else if (recipeID) {
         selected = recipeDB.find(recipe => recipe.recipeID === recipeID);

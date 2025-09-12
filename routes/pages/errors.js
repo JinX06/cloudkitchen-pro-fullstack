@@ -10,7 +10,7 @@ router.get("/error-34076352", (req, res) => {
   const errorOBJ = req.app.locals.errorOBJ;
   req.app.locals.errorOBJ = null;
 
-  let code = "ERROR";
+  let code = 400;
   let message = "An unexpected error occurred.";
 
   if (typeof errorOBJ === "object" && errorOBJ !== null) {
@@ -27,4 +27,3 @@ router.get(/.*/, (req, res) => {
 
 
 module.exports = router;
-

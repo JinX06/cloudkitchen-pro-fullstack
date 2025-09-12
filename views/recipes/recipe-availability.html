@@ -58,25 +58,34 @@
                                 <ul class="list-group mb-3">
                                     <% if (availability.available.length===0) { %>
                                         <li class="list-group-item text-muted">None</li>
-                                        <% } %>
-                                            <% availability.available.forEach(a=> { %>
-                                                <li class="list-group-item">
-                                                    <span class="list-icon">✅</span>
-                                                    <%= a.display %>
-                                                </li>
-                                                <% }) %>
+                                    <% } %>
+                                    <% availability.available.forEach(availableItem => { %>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span class="list-icon">✅</span>
+                                                <%= availableItem.display %>
+                                            </div>
+                                            <small class="text-muted">
+                                                In stock: <%= availableItem.invQty %> <%= availableItem.invUnit %> (<%= availableItem.matchName %>)
+                                            </small>
+                                        </li>
+                                    <% }) %>
                                 </ul>
 
                                 <h6>❌ Missing Ingredients</h6>
                                 <ul class="list-group">
                                     <% if (availability.missing.length===0) { %>
                                         <li class="list-group-item text-success">All ingredients available 🎉</li>
-                                        <% } %>
-                                            <% availability.missing.forEach(m=> { %>
-                                                <li class="list-group-item"><span class="list-icon">❌</span>
-                                                    <%= m.display %>
-                                                </li>
-                                                <% }) %>
+                                    <% } %>
+                                    <% availability.missing.forEach(missingItem => { %>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span class="list-icon">❌</span>
+                                                <%= missingItem.display %>
+                                            </div>
+                                            <small class="text-muted">Not found in inventory</small>
+                                        </li>
+                                    <% }) %>
                                 </ul>
                             </div>
 

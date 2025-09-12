@@ -24,8 +24,10 @@ function parseIngredient(ingredient) {
 }
 
 function findInventoryForItem(inventory, itemName) {
+    const target = String(itemName || "").trim().toLowerCase();
     for (const item of inventory) {
-        if (item.ingredientName === itemName) {
+        const invName = String(item.ingredientName || "").trim().toLowerCase();
+        if (invName === target) {
             return item;
         }
     }

@@ -47,11 +47,8 @@ const validateInventoryReqBody = (req, res, next) => {
 
         next();
     } catch (err) {
-        req.app.locals.errorOBJ = {
-            status: 400,
-            message: err.message
-        };
-        return res.redirect("/error-34076352");
+        err.status = err.status || 400;
+        return next(err);
     }
 };
 

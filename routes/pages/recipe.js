@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router();
 const { uniqueCuisineList, uniqueMealTypeList, searchAndScaleRecipes } = require("../../utils/recipeUtils.js");
 const { getAvailability } = require("../../utils/availability.js");
+const { validateRecipeID } = require("../../middleware/validation/idValidation.js");
 
 router.get("/recipes-34076352", (req, res) => {
     res.render("recipe.html", {
@@ -15,25 +16,12 @@ router.get("/recipes-add-34076352", (req, res) => {
     });
 });
 
-router.get("/recipes-remove-34076352", (req, res) => {
+router.get("/recipes-remove-34076352", validateRecipeID, (req, res) => {
     const recipeDB = req.app.locals.recipeDB;
-    const { recipeID } = req.query;
-    let selected = null;
-
-    if (typeof recipeID !== "undefined" && recipeID !== "") {
-        selected = recipeDB.find(recipe => recipe.recipeID === recipeID);
-
-        // treat both null and undefined as "not found" when an ID was provided
-        if (!selected) {
-            req.app.locals.errorOBJ = { status: 400, message: "Recipe not found." };
-            return res.redirect("/error-34076352");
-        }
-    }
-
     res.render("recipes/recipe-remove.html", {
         myRecipe: recipeDB,
-        selectedRecipe: selected || null,
-        selectedRecipeId: recipeID
+        selectedRecipe: req.selectedRecipe || null,
+        selectedRecipeId: req.selectedRecipeId
     });
 });
 

@@ -77,11 +77,9 @@ const validateRecipeReqBody = (req, res, next) => {
 
         next();
     } catch (err) {
-        req.app.locals.errorOBJ = {
-            status: 400,
-            message: err.message
-        };
-        return res.redirect("/error-34076352");
+        // Let the global error handler render the error page
+        err.status = err.status || 400;
+        return next(err);
     }
 };
 
@@ -108,11 +106,8 @@ const validateReviewReqBody = (req, res, next) => {
         next();
         
     } catch (err) {
-        req.app.locals.errorOBJ = {
-            status: 400,
-            message: err.message
-        };
-        return res.redirect("/error-34076352");
+        err.status = err.status || 400;
+        return next(err);
     }
 };
 

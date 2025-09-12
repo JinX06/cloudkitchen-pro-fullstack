@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const { calculateInventoryValue, uniqueCategoryList } = require("../../utils/inventoryUtils.js")
+const { validateItemID } = require("../../middleware/validation/idValidation.js")
 
 router.get("/inventory-34076352", (req, res) => {
     res.render("inventory/inventory.html", { 
@@ -13,25 +14,12 @@ router.get("/inventory-add-34076352", (req, res) => {
     res.render("inventory/inventory-add.html")
 })
 
-router.get("/inventory-remove-34076352", (req, res) => {
+router.get("/inventory-remove-34076352", validateItemID, (req, res) => {
     const list = req.app.locals.inventoryItemDB;
-    const { itemID } = req.query;
-    let selected = null;
-
-    if (typeof itemID !== "undefined" && itemID !== "") {
-        selected = list.find(it => it.itemID === itemID) || null;
-        
-        if (selected === null) {
-            req.app.locals.errorOBJ = { status: 400, message: "Item not found." };
-            return res.redirect("/error-34076352");
-        }
-    }
-
-
     res.render("inventory/inventory-remove.html", {
         myInventory: list,
-        selectedItem: selected,
-        selectedItemId: itemID
+        selectedItem: req.selectedItem || null,
+        selectedItemId: req.selectedItemId
     });
 })
 

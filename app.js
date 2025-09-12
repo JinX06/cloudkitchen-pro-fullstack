@@ -17,7 +17,6 @@ app.engine("html", ejs.renderFile);
 app.locals.recipeDB = recipeDB;
 app.locals.inventoryItemDB = inventoryItemDB;
 
-app.locals.errorOBJ = null;
 app.locals.suggestedRecipes = [];
 
 // Set Express to look for views in multiple directories
@@ -57,6 +56,21 @@ app.use("/", require(path.join(__dirname, "routes/pages/inventory")));
 app.use("/", require(path.join(__dirname, "routes/api/inventory")))
 
 app.use("/", require("./routes/pages/errors"));
+
+// ============ Error Handling Middleware ============
+app.use((req, res, next) => {
+    console.log(`404 Error: ${req.method} ${req.originalUrl} not found`);
+    res.status(404).render("404.html");
+});
+
+app.use((err, req, res, next) => {
+    console.error("Error:", err.message);
+    const status = err.status || 500;
+    res.status(status).render("error.html", {
+        code: status,
+        message: status === 500 ? "Something went wrong on our end." : err.message,
+    });
+});
 
 app.listen(port_number, () => {
     console.log(`Server is running on http://localhost:${port_number}`);

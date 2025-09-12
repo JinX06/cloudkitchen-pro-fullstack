@@ -3,6 +3,7 @@ const router = express.Router();
 const { inventoryItem } = require("../../models/inventoryItem");
 const { sortInventoryByCategoryAndStorage } = require("../../utils/inventoryUtils");
 const { validateInventoryReqBody } = require("../../middleware/validation/inventoryValidation");
+const { validateItemIDQuery } = require("../../middleware/validation/idValidation.js");
 
 router.post("/api/inventory/add-34076352", validateInventoryReqBody, (req, res) => {
   // Use validated data from middleware
@@ -20,20 +21,11 @@ router.post("/api/inventory/add-34076352", validateInventoryReqBody, (req, res) 
 });
 
 // delete inventory item
-router.post("/api/inventory/delete-34076352", (req, res) => {
-  const { itemID } = req.query;
+router.post("/api/inventory/delete-34076352", validateItemIDQuery, (req, res) => {
   const list = req.app.locals.inventoryItemDB;
-  const index = list.findIndex(item => item.itemID === itemID);
-
-  if (index !== -1) {
-    list.splice(index, 1);
-    req.app.locals.inventoryItemDB = sortInventoryByCategoryAndStorage(req.app.locals.inventoryItemDB);
-    return res.redirect("/inventory-34076352");
-
-  } else {
-    req.app.locals.errorOBJ = { status: 400, message: "Inventory item not found." };
-    return res.redirect("/error-34076352");
-  }
+  list.splice(req.itemIndex, 1);
+  req.app.locals.inventoryItemDB = sortInventoryByCategoryAndStorage(req.app.locals.inventoryItemDB);
+  return res.redirect("/inventory-34076352");
 });
 
 module.exports = router;

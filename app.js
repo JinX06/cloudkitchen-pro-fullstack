@@ -50,10 +50,10 @@ app.get("/", (req, res) => {
 app.use("/", require(path.join(__dirname, "routes/pages/home")));
 
 app.use("/", require(path.join(__dirname, "routes/pages/recipe")));
-app.use("/", require(path.join(__dirname, "routes/api/recipe")))
+app.use("/api", require(path.join(__dirname, "routes/api/recipe")))
 
 app.use("/", require(path.join(__dirname, "routes/pages/inventory")));
-app.use("/", require(path.join(__dirname, "routes/api/inventory")))
+app.use("/api", require(path.join(__dirname, "routes/api/inventory")))
 
 app.use("/", require("./routes/pages/errors"));
 

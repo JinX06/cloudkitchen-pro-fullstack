@@ -5,6 +5,7 @@ const path = require("path");
 const app = express();
 const {recipeDB} = require("./data/recipeDB")
 const {inventoryItemDB} = require("./data/inventoryItemDB")
+const { connectToMongoDB } = require('./db/connection');
 
 // Set the port number
 const port_number = 8080;
@@ -72,6 +73,17 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(port_number, () => {
-    console.log(`Server is running on http://localhost:${port_number}`);
-});
+// Connect to MongoDB and start server
+async function startServer() {
+    try {
+        await connectToMongoDB();
+        app.listen(port_number, () => {
+            console.log(`Server is running on http://localhost:${port_number}`);
+        });
+    } catch (error) {
+        console.error('Failed to start server:', error);
+        process.exit(1);
+    }
+}
+
+startServer();

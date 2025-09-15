@@ -3,9 +3,8 @@ const ejs = require("ejs");
 const morgan = require("morgan")
 const path = require("path");
 const app = express();
-const {recipeDB} = require("./data/recipeDB")
-const {inventoryItemDB} = require("./data/inventoryItemDB")
 const { connectToMongoDB } = require('./db/connection');
+const { attachCurrentUser } = require('./middleware/auth');
 
 // Set the port number
 const port_number = 8080;
@@ -14,10 +13,7 @@ const port_number = 8080;
 app.set("view engine", "ejs");
 app.engine("html", ejs.renderFile);
 
-// Make *.app.locals available as a "global" variable for routes to access
-app.locals.recipeDB = recipeDB;
-app.locals.inventoryItemDB = inventoryItemDB;
-
+// App locals (ask if can use list as this is a HD+++ task in AS1 just not maintained for AS2)
 app.locals.suggestedRecipes = [];
 
 // Set Express to look for views in multiple directories
@@ -42,12 +38,17 @@ app.use("/bootstrap", express.static(path.join(__dirname, "node_modules", "boots
 // Serve static files from the public/images directory
 app.use("/images", express.static(path.join(__dirname, "public", "images")));
 
+// Attach current user from query string (if any)
+app.use(attachCurrentUser);
+
 // ================== Routes ==================
 
 app.get("/", (req, res) => {
-    res.redirect("/home-34076352")
+    res.redirect("/welcome-34076352")
 });
 
+app.use("/", require(path.join(__dirname, "routes/pages/auth")));
+app.use("/", require(path.join(__dirname, "routes/pages/welcome")));
 app.use("/", require(path.join(__dirname, "routes/pages/home")));
 
 app.use("/", require(path.join(__dirname, "routes/pages/recipe")));

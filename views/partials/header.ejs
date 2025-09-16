@@ -13,7 +13,9 @@
 
         <div class="container-fluid justify-content-start" style="margin-left:10px;">
 
-            <a class="navbar-brand d-flex align-items-center" href="/">
+            <% const userQuery = (currentUser && currentUser.userId) ? ('?userId=' + currentUser.userId) : ''; %>
+            <% const role = (currentUser && currentUser.role) || null; %>
+            <a class="navbar-brand d-flex align-items-center" href="/<%= userQuery %>">
                 <img src="/images/logo.png" alt="Recipe Hub logo" style="height:45px; width:auto; margin-right:5px;">
                 <strong>Recipe Hub</strong>
             </a>
@@ -21,19 +23,21 @@
             <ul class="navbar-nav flex-row ms-3 gap-1.4 align-items-center">
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/home-34076352">Home</a>
+                    <a class="nav-link" href="/home-34076352<%= userQuery %>">Home</a>
                 </li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="recipesDropdown" role="button"
-                        data-bs-toggle="dropdown">
-                        Recipes
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item" href="/recipes-34076352">View Recipes</a></li>
-                        <li><a class="dropdown-item" href="/recipes-add-34076352">Add Recipe</a></li>
-                    </ul>
-                </li>
+                <% if (role === 'chef') { %>
+                  <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="recipesDropdown" role="button"
+                          data-bs-toggle="dropdown">
+                          Recipes
+                      </a>
+                      <ul class="dropdown-menu dropdown-menu-dark">
+                          <li><a class="dropdown-item" href="/recipes-34076352<%= userQuery %>">View Recipes</a></li>
+                          <li><a class="dropdown-item" href="/recipes-add-34076352<%= userQuery %>">Add Recipe</a></li>
+                      </ul>
+                  </li>
+                <% } %>
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="inventoryDropdown" role="button"
@@ -41,8 +45,8 @@
                         Inventory
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item" href="/inventory-34076352">View Inventory</a></li>
-                        <li><a class="dropdown-item" href="/inventory-add-34076352">Add Inventory</a></li>
+                        <li><a class="dropdown-item" href="/inventory-34076352<%= userQuery %>">View Inventory</a></li>
+                        <li><a class="dropdown-item" href="/inventory-add-34076352<%= userQuery %>">Add Inventory</a></li>
                     </ul>
                 </li>
 
@@ -52,26 +56,20 @@
                         HD Tasks
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item" href="/recipes-filter-34076352">Filter Recipes</a></li>
-                        <li><a class="dropdown-item" href="/recipes-search-scale-34076352">Search & Scale Recipes</a></li>
-                        <li><a class="dropdown-item" href="/inventory-alerts-34076352">Inventory Alerts</a></li>
-                        <li><a class="dropdown-item" href="/recipes-availability-34076352">Recipe Availability</a></li>
-                    </ul>
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="hdppTasksDropdown" role="button"
-                        data-bs-toggle="dropdown">
-                        HD++ Task
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item" href="/recipes-suggestions-34076352">Smart Recipe Suggestions</a></li>
+                        <li><a class="dropdown-item" href="/recipes-filter-34076352<%= userQuery %>">HD Task 1</a></li>
                     </ul>
                 </li>
 
             </ul>
 
-            <small style="color: rgb(111, 111, 111); margin-left: auto; margin-right: 20px; font-size: 0.8rem;">Welcome, Ong Jin Xiang (34076352)</small>
+            <div class="d-flex align-items-center ms-auto me-3" style="color: rgb(180, 180, 180); font-size: 0.85rem;">
+              <% if (currentUser) { %>
+                <span class="me-2">Welcome, <strong><%= currentUser.fullname %></strong> (<%= currentUser.email %>)</span>
+                <a class="btn btn-sm btn-outline-light" href="/logout-34076352<%= userQuery %>">Logout</a>
+              <% } else { %>
+                <a class="btn btn-sm btn-outline-light" href="/login-34076352">Login</a>
+              <% } %>
+            </div>
         </div>
     </nav>
 

@@ -1,86 +1,105 @@
 const { calculateInventoryValue, uniqueCategoryList } = require("../../utils/inventoryUtils.js");
+const Inventory = require("../../models/Inventory");
+
+function daysLeft(expiryDateStr) {
+  const expiryDate = new Date(expiryDateStr);
+  const today = new Date();
+  return Math.floor((expiryDate - today) / (1000 * 60 * 60 * 24));
+}
 
 // GET /inventory-34076352
-function getInventoryPage(req, res) {
-  res.render("inventory/inventory.html", {
-    myInventory: req.app.locals.inventoryItemDB,
-    inventoryValue: calculateInventoryValue(req.app.locals.inventoryItemDB),
-  });
+async function getInventoryPage(req, res, next) {
+  try {
+    // Use .lean() to get plain JS objects instead of Mongoose functions
+    let myInventory = await Inventory.find({}).lean();
+
+    // Add daysLeft field to each item for display whilst keeping original data using spread (...it)
+    myInventory = myInventory.map(it => ({ ...it, daysLeft: daysLeft(it.expirationDate)}));
+    const inventoryValue = calculateInventoryValue(myInventory);
+
+    res.render("inventory/inventory.html", { myInventory, inventoryValue });
+  } catch (err) { 
+    return next(err); 
+  }
 }
 
 // GET /inventory-add-34076352
 function getAddInventoryPage(req, res) {
-  res.render("inventory/inventory-add.html");
+  res.render("inventory/inventory-add.html", { error: null, form: {} });
 }
 
 // GET /inventory-remove-34076352
 // Assumes validateItemID middleware populates req.selectedItem and req.selectedItemId
-function getRemoveInventoryPage(req, res) {
-  const list = req.app.locals.inventoryItemDB;
-  res.render("inventory/inventory-remove.html", {
-    myInventory: list,
-    selectedItem: req.selectedItem || null,
-    selectedItemId: req.selectedItemId,
-  });
+async function getRemoveInventoryPage(req, res, next) {
+  try {
+    const myInventory = await Inventory.find({})
+    res.render("inventory/inventory-remove.html", {
+      myInventory,
+      selectedItem: req.selectedItem || null,
+      selectedItemId: req.selectedItemId,
+    });
+  } catch (err) { 
+    return next(err); 
+  }
 }
 
 // GET /inventory-view-34076352
-function getInventoryViewPage(req, res) {
-  const list = req.app.locals.inventoryItemDB;
-  const { itemID } = req.query;
-  let selected = null;
-
-  if (itemID) {
-    selected = list.find((it) => it.itemID === itemID) || null;
+async function getInventoryViewPage(req, res, next) {
+  try {
+    const { itemID } = req.query;
+    const selected = await Inventory.findOne({ inventoryId: itemID });
+    res.render("inventory/inventory-view.html", { selectedItem: selected });
+  } catch (err) { 
+    return next(err); 
   }
-
-  res.render("inventory/inventory-view.html", {
-    selectedItem: selected,
-  });
 }
 
 // GET /inventory-alerts-34076352
-function getInventoryAlertsPage(req, res) {
-  let expiringItems = [];
-  for (const item of req.app.locals.inventoryItemDB) {
-    if (item.daysLeft <= 3 && item.daysLeft > 0) {
-      expiringItems.push(item);
+async function getInventoryAlertsPage(req, res, next) {
+  try {
+    const items = await Inventory.find({}).lean();
+
+    // Add daysLeft field to each item for display
+    const itemsDaysLeft = items.map(it => ({ ...it, daysLeft: daysLeft(it.expirationDate) }));
+
+    // Get expiring items (<= 3 days) and not already expired (> 0 days)
+    const expiringItems = itemsDaysLeft.filter(it => it.daysLeft <= 3 && it.daysLeft > 0);
+
+    // Get items which has low stock (< 2 quantity)
+    const lowStock = itemsDaysLeft.filter(it => it.quantity < 2);
+
+    // Group items by category for summary
+    const uniqueCategories = uniqueCategoryList(items);
+
+    // Calculate item count and total value per category
+    const categoryGroups = [];
+
+    for (const category of uniqueCategories) {
+        categoryGroups.push({
+            category: category,
+            itemCount: 0,
+            value: 0
+        });
     }
-  }
 
-  let lowStock = [];
-  for (const item of req.app.locals.inventoryItemDB) {
-    if (item.quantity < 2) {
-      lowStock.push(item);
+    for (const item of items) {
+        const group = categoryGroups.find(g => g.category === item.category);
+        if (group) {
+            group.itemCount++;
+            group.value += item.cost;
+        }
     }
-  }
 
-  const uniqueCategories = uniqueCategoryList(req.app.locals.inventoryItemDB);
-  const categoryGroups = [];
-
-  for (const category of uniqueCategories) {
-    categoryGroups.push({
-      category: category,
-      itemCount: 0,
-      value: 0,
+    res.render("inventory/inventory-alerts.html", {
+      expiringItems,
+      lowStock,
+      myInventoryValue: calculateInventoryValue(items),
+      totalItems: items.length,
+      categoryGroups,
     });
+  } catch (err) { 
+    return next(err); 
   }
-
-  for (const item of req.app.locals.inventoryItemDB) {
-    const group = categoryGroups.find((g) => g.category === item.category);
-    if (group) {
-      group.itemCount++;
-      group.value += item.cost;
-    }
-  }
-
-  res.render("inventory/inventory-alerts.html", {
-    expiringItems: expiringItems,
-    lowStock: lowStock,
-    myInventoryValue: calculateInventoryValue(req.app.locals.inventoryItemDB),
-    totalItems: req.app.locals.inventoryItemDB.length,
-    categoryGroups: categoryGroups,
-  });
 }
 
 module.exports = {

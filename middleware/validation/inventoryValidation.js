@@ -1,4 +1,4 @@
-const {assertNonNumericString,assertNonNegativeNumber,assertDate} = require("../../models/validate");
+const {assertNonNumericString,assertNonNegativeNumber,assertDate, assertEnum} = require("../../models/validate");
 
 /**
  * Middleware to validate inventory item
@@ -18,11 +18,15 @@ const validateInventoryReqBody = (req, res, next) => {
         } = req.body;
 
         // Validate string fields
-        const validatedUserId = assertNonNumericString(userId, "User ID");
         const validatedIngredientName = assertNonNumericString(ingredientName, "Ingredient Name");
-        const validatedUnit = assertNonNumericString(unit, "Unit");
-        const validatedCategory = assertNonNumericString(category, "Category");
-        const validatedLocation = assertNonNumericString(location, "Location");
+        // Enums
+        const allowedUnits = ["pieces","kg","g","liters","ml","cups","tbsp","tsp","dozen"];
+        const allowedCategories = ["Vegetables","Fruits","Meat","Dairy","Grains","Spices","Beverages","Frozen","Canned","Other"];
+        const allowedLocations = ["Fridge","Freezer","Pantry","Counter","Cupboard"];
+
+        const validatedUnit = assertEnum(unit, allowedUnits, "Unit").toLowerCase();
+        const validatedCategory = assertEnum(category, allowedCategories, "Category");
+        const validatedLocation = assertEnum(location, allowedLocations, "Location");
 
         // Validate numeric fields
         const validatedQuantity = assertNonNegativeNumber(Number(quantity), "Quantity");
@@ -34,7 +38,6 @@ const validateInventoryReqBody = (req, res, next) => {
 
         // Store validated data for use in the route handler
         req.validated = {
-            userId: validatedUserId,
             ingredientName: validatedIngredientName,
             quantity: validatedQuantity,
             unit: validatedUnit,

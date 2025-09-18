@@ -1,6 +1,7 @@
-// Validation helpers for ID query params used in pages and API routes
+const Recipe = require('../../models/Recipe');
+const Inventory = require('../../models/Inventory');
 
-function validateRecipeID(req, res, next) {
+async function validateRecipeID(req, res, next) {
   try {
     const { recipeID } = req.query;
     if (typeof recipeID === 'undefined' || recipeID === '') {
@@ -8,10 +9,8 @@ function validateRecipeID(req, res, next) {
       req.selectedRecipeId = undefined;
       return next();
     }
-
-    const list = req.app.locals.recipeDB;
-    const selected = list.find(r => r.recipeID === recipeID) || null;
-    if (selected === null) {
+    const selected = await Recipe.findOne({ recipeId: recipeID });
+    if (!selected) {
       const err = new Error('Recipe not found.');
       err.status = 404;
       throw err;
@@ -26,7 +25,7 @@ function validateRecipeID(req, res, next) {
   }
 }
 
-function validateItemID(req, res, next) {
+async function validateItemID(req, res, next) {
   try {
     const { itemID } = req.query;
     if (typeof itemID === 'undefined' || itemID === '') {
@@ -34,10 +33,8 @@ function validateItemID(req, res, next) {
       req.selectedItemId = undefined;
       return next();
     }
-
-    const list = req.app.locals.inventoryItemDB;
-    const selected = list.find(it => it.itemID === itemID) || null;
-    if (selected === null) {
+    const selected = await Inventory.findOne({ inventoryId: itemID });
+    if (!selected) {
       const err = new Error('Item not found.');
       err.status = 404;
       throw err;
@@ -52,7 +49,7 @@ function validateItemID(req, res, next) {
   }
 }
 
-function validateRecipeIDQuery(req, res, next) {
+async function validateRecipeIDQuery(req, res, next) {
   try {
     const { recipeID } = req.query;
     if (!recipeID) {
@@ -60,14 +57,13 @@ function validateRecipeIDQuery(req, res, next) {
       err.status = 400;
       throw err;
     }
-    const list = req.app.locals.recipeDB;
-    const index = list.findIndex(r => r.recipeID === recipeID);
-    if (index === -1) {
+    const recipe = await Recipe.findOne({ recipeId: recipeID });
+    if (!recipe) {
       const err = new Error('Recipe not found.');
       err.status = 404;
       throw err;
     }
-    req.recipeIndex = index;
+    req.recipe = recipe;
     return next();
   } catch (err) {
     err.status = err.status || 400;
@@ -75,7 +71,7 @@ function validateRecipeIDQuery(req, res, next) {
   }
 }
 
-function validateItemIDQuery(req, res, next) {
+async function validateItemIDQuery(req, res, next) {
   try {
     const { itemID } = req.query;
     if (!itemID) {
@@ -83,14 +79,13 @@ function validateItemIDQuery(req, res, next) {
       err.status = 400;
       throw err;
     }
-    const list = req.app.locals.inventoryItemDB;
-    const index = list.findIndex(it => it.itemID === itemID);
-    if (index === -1) {
+    const item = await Inventory.findOne({ inventoryId: itemID });
+    if (!item) {
       const err = new Error('Inventory item not found.');
       err.status = 404;
       throw err;
     }
-    req.itemIndex = index;
+    req.item = item;
     return next();
   } catch (err) {
     err.status = err.status || 400;

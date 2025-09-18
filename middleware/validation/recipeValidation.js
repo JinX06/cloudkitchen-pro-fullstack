@@ -10,21 +10,11 @@ const {
  */
 const validateRecipeReqBody = (req, res, next) => {
     try {
-        const { title, chef, mealType, cuisine1, cuisine2, prepTime, difficulty, servings, ingredients, instructions } = req.body;
+        const { title, mealType, cuisineType, prepTime, difficulty, servings, ingredients, instructions } = req.body;
 
         const validatedTitle = assertNonNumericString(title, "Title");
-        const validatedChef = assertNonNumericString(chef, "Chef");
-        const validatedMealType = assertNonNumericString(mealType, "Meal Type");
-        
-        // Handle cuisine selection (either cuisine1 (select from existing) or cuisine2 (create new))
-        let finalCuisine = "";
-        if (cuisine2) {
-            finalCuisine = assertNonNumericString(cuisine2.trim(), "Cuisine Type");
-        } else if (cuisine1) {
-            finalCuisine = assertNonNumericString(cuisine1.trim(), "Cuisine Type");
-        } else {
-            throw new Error("Cuisine Type is required");
-        }
+        const validatedMealType = assertEnum(mealType, ["Breakfast","Lunch","Dinner","Snack"], "Meal Type");
+        const finalCuisine = assertEnum(cuisineType, ["Italian","Asian","Mexican","American","French","Indian","Mediterranean","Other"], "Cuisine Type");
 
         const validatedPrepTime = assertPositiveInt(Number(prepTime), "Prep Time");
         const validatedServings = assertPositiveInt(Number(servings), "Servings");
@@ -65,7 +55,6 @@ const validateRecipeReqBody = (req, res, next) => {
         // Store validated data
         req.validated = {
             title: validatedTitle,
-            chef: validatedChef,
             mealType: validatedMealType,
             cuisineType: finalCuisine,
             prepTime: validatedPrepTime,
@@ -77,7 +66,6 @@ const validateRecipeReqBody = (req, res, next) => {
 
         next();
     } catch (err) {
-        // Let the global error handler render the error page
         err.status = err.status || 400;
         return next(err);
     }

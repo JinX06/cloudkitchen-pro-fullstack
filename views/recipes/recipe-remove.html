@@ -3,11 +3,11 @@
 <div>
     <div class="card bg-dark text-white" style="margin: 20px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8)">
         <h2>📖 Remove Recipe</h2>
-        <form action="/api/recipes/delete-34076352?recipeID=<%= selectedRecipeId %>" method="POST">
+        <form action="/api/recipes/delete-34076352?recipeID=<%= selectedRecipeId %>&userId=<%= currentUser.userId %>" method="POST">
             <label for="recipeId">Select from list:</label>
 
             <!-- check whether required is needed later -->
-            <select class="form-select" onchange="window.location='/recipes-remove-34076352' + ('?recipeID=' + this.value)">
+            <select class="form-select" onchange="window.location='/recipes-remove-34076352?recipeID=' + this.value + '&userId=<%= currentUser.userId %>'">
 
             <!-- Placeholder option -->
             <option value="" selected>Select a recipe</option>
@@ -16,11 +16,11 @@
                 <% for (let i = 0; i < myRecipe.length; i++) { 
                     const r = myRecipe[i]; 
                     let selected = '';
-                    if (selectedRecipeId === r.recipeID) {
+                    if (selectedRecipeId === r.recipeId) {
                         selected = 'selected';
                     }
                 %>
-                    <option value="<%= r.recipeID %>" <%= selected %>><%= r.recipeID %> | <%= r.title %> </option>
+                    <option value="<%= r.recipeId %>" <%= selected %>><%= r.recipeId %> | <%= r.title %> </option>
                 <% } %>
             </select>
 
@@ -39,7 +39,7 @@
                         <div><strong>Difficulty:</strong> <%= selectedRecipe.difficulty %></div>
                         <div><strong>Prep Time:</strong> <%= selectedRecipe.prepTime %> min</div>
                         <div><strong>Servings:</strong> <%= selectedRecipe.servings %></div>
-                        <div><strong>Created:</strong> <%= selectedRecipe.createdDate %></div>
+                        <div><strong>Created:</strong> <%= selectedRecipe.createdAt %></div>
                         <div><strong>Ingredients:</strong> <%= selectedRecipe.ingredients %></div>
                         <div><strong>Instructions:</strong> <%= selectedRecipe.instructions.join(", ") %></div>
                         <div>
@@ -51,7 +51,7 @@
                                     I understand that this action is irreversible and deleting this recipe cannot be undone.
                                 </small>
                             </div>
-                            <button type="submit" class="btn btn-danger" id="removeBtn" disabled>Remove Recipe</button>
+                            <button type="submit" class="btn btn-danger" id="removeBtn" disabled onclick="return confirm('Are you sure you want to permanently delete this recipe? This action cannot be undone.')">Remove Recipe</button>
                             <button type="button" class="btn btn-secondary" id="cancelBtn" onclick="window.history.back();">Back</button>
                         </div>
                     </div>

@@ -8,16 +8,16 @@
       <div class="card bg-white text-dark" style="margin-top: 20px; border-radius: 6px;">
         <div class="card-header bg-primary text-white fw-bold" style="padding: 20px;">
           <h4 style="margin-bottom: 0;"><%= selectedItem.ingredientName %></h4>
-          <small style="font-weight: lighter; margin-top: 0;">Item ID: <%= selectedItem.itemID %></small>
+          <small style="font-weight: lighter; margin-top: 0;">Item ID: <%= selectedItem.inventoryId %></small>
         </div>
         <div class="card-body">
           <div><strong>Category:</strong> <%= selectedItem.category %></div>
           <div><strong>Quantity:</strong> <%= selectedItem.quantity %> <%= selectedItem.unit %></div>
           <div><strong>Location:</strong> <%= selectedItem.location %></div>
           <div><strong>Purchase Date:</strong> <%= selectedItem.purchaseDate %></div>
-          <div><strong>Expiry Date:</strong> <%= selectedItem.expiryDate %></div>
+          <div><strong>Expiry Date:</strong> <%= new Date(selectedItem.expirationDate).toISOString().split('T')[0] %></div>
           <div><strong>Cost:</strong> <%= selectedItem.cost %></div>
-          <div><strong>Added:</strong> <%= selectedItem.createdDate %></div>
+          <div><strong>Added:</strong> <%= selectedItem.createdAt %></div>
           <hr>
           <button type="button" class="btn btn-secondary" onclick="window.history.back();">Back</button>
         </div>

@@ -23,8 +23,8 @@
 
         <!-- Toolbar -->
         <div class="d-flex gap-2 mb-4" style="border-radius: 10px;">
-            <a href="/inventory-add-34076352" class="btn btn-primary">+ Add New Item</a>
-            <a href="/inventory-remove-34076352" class="btn btn-danger">🗑️ Delete Item</a>
+            <a href="/inventory-add-34076352?userId=<%= currentUser.userId %>" class="btn btn-primary">+ Add New Item</a>
+            <a href="/inventory-remove-34076352?userId=<%= currentUser.userId %>" class="btn btn-danger">🗑️ Delete Item</a>
         </div>
 
         <!-- Table Card -->
@@ -55,7 +55,7 @@
                             <% const tempItem = myInventory[i]; %>
                                 <tr class="text-center">
                                     <td>
-                                        <%= tempItem.itemID %>
+                                        <%= tempItem.inventoryId %>
                                     </td>
                                     <td class="text-middle fw-semibold">
                                         <%= tempItem.ingredientName %>
@@ -75,10 +75,10 @@
                                         <%= tempItem.location %>
                                     </td>
                                     <td>
-                                        <%= tempItem.expiryDate %>
+                                        <%= new Date(tempItem.expirationDate).toISOString().split('T')[0] %>
                                     </td>
                                     <td>
-                                        <%= tempItem.createdDate %>
+                                        <%= new Date(tempItem.createdAt).toISOString().split('T')[0] %>
                                     </td>
 
                                     <td>
@@ -98,8 +98,8 @@
 
                                     <td class="py-2">
                                         <div class="d-flex justify-content-center gap-2">
-                                            <a href="/inventory-view-34076352?itemID=<%= tempItem.itemID %>" class="btn btn-sm btn-primary">View</a>
-                                            <a href="/inventory-remove-34076352?itemID=<%= tempItem.itemID %>" class="btn btn-sm btn-danger">Delete</a>
+                                            <a href="/inventory-view-34076352?itemID=<%= tempItem.inventoryId %>&userId=<%= currentUser.userId %>" class="btn btn-sm btn-primary">View</a>
+                                            <a href="/inventory-remove-34076352?itemID=<%= tempItem.inventoryId %>&userId=<%= currentUser.userId %>" class="btn btn-sm btn-danger">Delete</a>
                                         </div>
                                     </td>
                                 </tr>

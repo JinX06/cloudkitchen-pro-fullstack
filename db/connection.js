@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const User = require('../models/User');
 
 const mongoURI = 'mongodb://localhost:27017/cloud_kitchen_pro-34076352';
 
@@ -27,6 +28,12 @@ mongoose.connection.on('disconnected', () => {
 
 // Graceful shutdown
 process.on('SIGINT', async () => {
+    try {
+        await User.updateMany({ loggedIn: true }, { $set: { loggedIn: false } });
+        console.log("Logged out all users.");
+    } catch (e) {
+        console.warn('ERROR! Could not log out all users:', e.message);
+    }
     await mongoose.connection.close();
     console.log('Mongoose connection closed due to app termination');
     process.exit(0);

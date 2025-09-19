@@ -20,7 +20,7 @@
                                     <p><span class="fw-bolder">Prep Time:</span> <%= suggestion.prepTime %> min</p>
                                     <p><span class="fw-bolder">Ingredients Needed:</span> <%= suggestion.ingredients.length %> items</p>
                                 </div>
-                                <a href="/recipes-view-34076352?recipeID=<%= suggestion.recipeID %>" class="btn btn-light">View Recipe</a>
+                                <a href="/recipes-view-34076352?recipeID=<%= suggestion.recipeId %>&userId=<%= currentUser.userId %>" class="btn btn-light">View Recipe</a>
                             </div>
                         </div>
                     </div>

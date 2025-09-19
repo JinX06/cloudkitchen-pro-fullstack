@@ -32,8 +32,7 @@ function requireAuth(req, res, next) {
 // Middleware to require specific user role
 function requireRole(role) {
   return (req, res, next) => {
-    if (!req.currentUser) return res.redirect('/login-34076352?notice=login-required');
-    if (req.currentUser.role !== role) {
+    if (!req.currentUser || req.currentUser.role !== role) {
       const err = new Error('Forbidden: insufficient permissions');
       err.status = 403;
       return next(err);

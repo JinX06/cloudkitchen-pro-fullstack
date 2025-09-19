@@ -33,9 +33,9 @@
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <div class="fw-semibold">
-                                    <%= recipe.title %> | <%= recipe.recipeID %>
+                                    <%= recipe.title %> | <%= recipe.recipeId %>
                                 </div>
-                                <small class="text-muted">by: <%= recipe.chef %> </small>
+                                <small class="text-muted">by: <%= recipe.chef %> (ID: <%= recipe.userId %>)</small>
                             </div>
                             <span class="badge text-bg-<%= availability.percent === 100 ? 'success' : 'secondary' %>">
                                 <%= availability.percent===100 ? 'Ready to Cook!' : 'Missing Items' %>
@@ -114,7 +114,7 @@
                                                 available
                                     </div>
                                 </div>
-                                <a href="/recipes-view-34076352?recipeID=<%= recipe.recipeID %>"
+                                <a href="/recipes-view-34076352?recipeID=<%= recipe.recipeId %>&userId=<%= currentUser.userId %>"
                                     class="btn btn-outline-primary btn-sm mt-3">View Recipe</a>
                             </div>
                         </div>

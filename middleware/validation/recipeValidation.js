@@ -80,15 +80,14 @@ const validateReviewReqBody = (req, res, next) => {
         
         // Validate rating
         const numericRating = Number(rating);
-        assert(!isNaN(numericRating) && numericRating >= 1 && numericRating <= 5, // prevent user devtools manipulation
-            "Rating must be a number between 1 and 5");
+        assert(!isNaN(numericRating) && numericRating >= 1 && numericRating <= 5, "Rating must be a number between 1 and 5");  // prevent user devtools manipulation
         
         // Store validated data
         req.validated = {
             recipeID,
-            reviewer: (reviewer || "Anonymous").trim(), // use Anonymous if reviewer is not provided
+            reviewer: reviewer, // use mongoose model defaults "Anonymous" if reviewer is not provided
             rating: numericRating,
-            comment: (comment || "").trim()  //leave comment as empty string if not provided
+            comment: comment  //use mongoose model defaults for empty string if not provided
         };
         
         next();

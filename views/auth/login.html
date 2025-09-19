@@ -6,6 +6,9 @@
       Login
     </div>
     <div class="card-body">
+      <% if (notice) { %>
+        <div class="alert alert-warning" role="alert"><%= notice %></div>
+      <% } %>
       <% if (typeof error !== 'undefined' && error) { %>
         <div class="alert alert-danger" role="alert"><%= error %></div>
       <% } %>

@@ -1,8 +1,12 @@
 const User = require('../../models/User');
-const { nextID, incrementID } = require('../../utils/id');
+const { peekNextID, incrementID } = require('../../utils/id');
 
 function getLoginPage(req, res) {
-  res.render('auth/login.html', { error: null, form: {} });
+  let notice = "";
+  if (req.query.notice === "login-required") {
+    notice = "Please log in to continue.";
+  }
+  res.render("auth/login.html", { error: null, form: {}, notice });
 }
 
 async function postLogin(req, res, next) {
@@ -18,7 +22,7 @@ async function postLogin(req, res, next) {
     const user = await User.findOne({ email: cleanedEmail });
     if (!user || user.password !== password) {
       const message = 'Invalid email or password';
-      return res.status(401).render('auth/login.html', { error: message, form: { email: cleanedEmail } });
+      return res.status(401).render('auth/login.html', { error: message, form: { email: cleanedEmail }, notice: null });
     }
 
     // If found the user, log them in
@@ -28,7 +32,7 @@ async function postLogin(req, res, next) {
   } catch (err) {
 
     const status = err.status || 400;
-    return res.status(status).render('auth/login.html', { error: err.message, form: { email: req.body.email } });
+    return res.status(status).render('auth/login.html', { error: err.message, form: { email: req.body.email }, notice: null });
   }
 }
 
@@ -93,7 +97,7 @@ async function postSignup(req, res, next) {
     }
 
     // Create the user and log them in
-    const userId = await nextID('user');
+    const userId = await peekNextID('user');
     const user = await User.create({ userId, email, password, fullname, role, phone, loggedIn: false });
     
     // Increment ID and log in

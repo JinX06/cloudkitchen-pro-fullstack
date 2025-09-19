@@ -11,12 +11,13 @@
           <small style="font-weight: lighter; margin-top: 0;">By: <%= selectedRecipe.chef %></small>
         </div>
         <div class="card-body">
+          <div><strong>User ID:</strong> <%= selectedRecipe.userId %></div>
           <div><strong>Meal Type:</strong> <%= selectedRecipe.mealType %></div>
           <div><strong>Cuisine:</strong> <%= selectedRecipe.cuisineType %></div>
           <div><strong>Difficulty:</strong> <%= selectedRecipe.difficulty %></div>
           <div><strong>Prep Time:</strong> <%= selectedRecipe.prepTime %> min</div>
           <div><strong>Servings:</strong> <%= selectedRecipe.servings %></div>
-          <div><strong>Created:</strong> <%= selectedRecipe.createdDate %></div>
+          <div><strong>Created:</strong> <%= new Date(selectedRecipe.createdAt).toISOString().split('T')[0] %></div>
           <div><strong>Ingredients:</strong> <%= selectedRecipe.ingredients %></div>
           <div><strong>Instructions:</strong> <%= selectedRecipe.instructions.join(", ") %></div>
           

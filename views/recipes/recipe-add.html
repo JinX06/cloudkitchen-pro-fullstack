@@ -48,7 +48,10 @@
                 <strong>Recipe Form</strong>
             </div>
             <div class="card-body">
-                <form action="/api/recipes/add-34076352" method="POST" class="was-validated">
+                <form action="/api/recipes/add-34076352?userId=<%= currentUser.userId %>" method="POST" class="was-validated">
+                    <% if (typeof error !== 'undefined' && error) { %>
+                      <div class="alert alert-danger" role="alert"><%= error %></div>
+                    <% } %>
                     <!-- Basic Info -->
                     <div class="mb-4">
                         <div class="div-title mb-2"><span>🧾 </span>Basic Information</div>
@@ -56,14 +59,14 @@
                             <div class="col-md-8">
                                 <label class="required" for="title">Recipe Title</label>
                                 <input id="title" name="title" type="text" class="form-control"
-                                    placeholder="e.g., Chocolate Chip Cookies" required>
+                                    placeholder="e.g., Chocolate Chip Cookies" value="<%= form?.title || '' %>" required>
                                 <div class="invalid-feedback">Please enter a recipe title.</div>
                             </div>
                             <div class="col-4">
-                                <label class="required" for="chef">Chef Name</label>
-                                <input id="chef" name="chef" type="text" class="form-control"
-                                    placeholder="YourName-12345678" required>
-                                <div class="invalid-feedback">Chef name (with ID) is required.</div>
+                                <label class="required" for="chefDisplay">Chef Name</label>
+                                <input id="chefDisplay" type="text" class="form-control"
+                                    value="<%= currentUser.fullname %>" disabled>
+                                <div class="hintText">Saved automatically from your account.</div>
                             </div>
                         </div>
                     </div>
@@ -76,47 +79,25 @@
                             <div class="col-4">
                                 <label class="required" for="mealType">Meal Type</label>
                                 <select id="mealType" name="mealType" class="form-select" required>
-                                    <option value="" selected disabled>Select meal type…</option>
-                                    <option>Breakfast</option>
-                                    <option>Lunch</option>
-                                    <option>Dinner</option>
-                                    <option>Snack</option>
-                                    <option>Dessert</option>
+                                    <option value="" disabled <%= !form?.mealType ? 'selected' : '' %>>Select meal type…</option>
+                                    <option <%= form?.mealType === 'Breakfast' ? 'selected' : '' %>>Breakfast</option>
+                                    <option <%= form?.mealType === 'Lunch' ? 'selected' : '' %>>Lunch</option>
+                                    <option <%= form?.mealType === 'Dinner' ? 'selected' : '' %>>Dinner</option>
+                                    <option <%= form?.mealType === 'Snack' ? 'selected' : '' %>>Snack</option>
                                 </select>
                                 <div class="invalid-feedback">Select a meal type.</div>
                             </div>
 
-                        <!-- Cuisine Type (either/or handled in backend) -->
+                        <!-- Cuisine Type -->
                         <div class="col-8">
-                            <label class="required">Cuisine Type</label>
-
-                            <div class="row g-2 align-items-center">
-
-                                <!-- existing options -->
-                                <div class="col">
-                                    <select name="cuisine1" class="form-select">
-                                        <option value="" selected>Select existing…</option>
-                                        <% (cuisines).forEach(cuisine => { %>
-                                            <option value="<%= cuisine %>">
-                                                <%= cuisine %>
-                                            </option>
-                                            <% }) %>
-                                    </select>
-                                </div>
-
-                                <div class="col-auto text-center text-white-50">or</div>
-
-                                <div class="col">
-                                    <!-- new cuisine -->
-                                    <input name="cuisine2" type="text" class="form-control"
-                                        placeholder="Type a new cuisine">
-                                </div>
-
-                            </div>
-
-                            <div class="form-text text-white-50 mt-1" style="font-weight: bold;">
-                                Select an existing cuisine or type a new one. If you enter a custom cuisine, it will override the dropdown selection.
-                            </div>
+                            <label class="required" for="cuisineType">Cuisine Type</label>
+                            <select id="cuisineType" name="cuisineType" class="form-select" required>
+                                <option value="" disabled <%= !form?.cuisineType ? 'selected' : '' %>>Select cuisine…</option>
+                                <% (cuisines || []).forEach(cuisine => { %>
+                                    <option value="<%= cuisine %>" <%= form?.cuisineType === cuisine ? 'selected' : '' %>><%= cuisine %></option>
+                                <% }) %>
+                            </select>
+                            <div class="invalid-feedback">Select a cuisine type.</div>
                         </div>
 
                         <!-- Prep Time -->
@@ -125,7 +106,7 @@
                         <div class="col-4">
                             <label class="required" for="prepTime">Prep Time (min)</label>
                             <input id="prepTime" name="prepTime" type="number" min="0" step="1" class="form-control"
-                                value="30" required>
+                                value="<%= form?.prepTime || '30' %>" required>
                             <div class="invalid-feedback">Enter minutes.</div>
                         </div>
 
@@ -133,10 +114,10 @@
                         <div class="col-4">
                             <label class="required" for="difficulty">Difficulty</label>
                             <select id="difficulty" name="difficulty" class="form-select" required>
-                                <option value="" selected disabled>Select…</option>
-                                <option>Easy</option>
-                                <option>Medium</option>
-                                <option>Hard</option>
+                                <option value="" disabled <%= !form?.difficulty ? 'selected' : '' %>>Select…</option>
+                                <option <%= form?.difficulty === 'Easy' ? 'selected' : '' %>>Easy</option>
+                                <option <%= form?.difficulty === 'Medium' ? 'selected' : '' %>>Medium</option>
+                                <option <%= form?.difficulty === 'Hard' ? 'selected' : '' %>>Hard</option>
                             </select>
                             <div class="invalid-feedback">Select difficulty.</div>
                         </div>
@@ -145,7 +126,7 @@
                         <div class="col-4">
                             <label class="required" for="servings">Servings</label>
                             <input id="servings" name="servings" type="number" min="1" step="1" class="form-control"
-                                value="2" required>
+                                value="<%= form?.servings || '2' %>" required>
                             <div class="invalid-feedback">Enter servings.</div>
                         </div>
                     </div>
@@ -158,7 +139,7 @@
                         <textarea id="ingredients" name="ingredients" class="form-control" rows="6" placeholder="2 cups all-purpose flour
 1 cup sugar
 2 eggs
-1 tsp vanilla extract" required></textarea>
+1 tsp vanilla extract" required><%= form?.ingredients || '' %></textarea>
                         <div class="invalid-feedback">Please add at least one ingredient.</div>
                     </div>
 
@@ -169,7 +150,7 @@
                         <textarea id="instructions" name="instructions" class="form-control" rows="7" placeholder="Preheat oven to 180°C
 Mix dry ingredients
 Add wet ingredients and combine
-Bake for 12-15 minutes" required></textarea>
+Bake for 12-15 minutes" required><%= form?.instructions || '' %></textarea>
                         <div class="invalid-feedback">Please provide instructions.</div>
                     </div>
 
@@ -178,8 +159,8 @@ Bake for 12-15 minutes" required></textarea>
                     <!-- Actions -->
                     <div class="d-flex flex-wrap gap-2 justify-content-between">
                         <div class="d-flex gap-2">
-                            <a href="/recipes-34076352" class="btn btn-outline-light">← View Recipes</a>
-                            <button type="reset" class="btn btn-danger">Reset</button>
+                            <a href="/recipes-34076352?userId=<%= currentUser.userId %>" class="btn btn-outline-light">View Recipes</a>
+                            <a href="/recipes-add-34076352?userId=<%= currentUser.userId %>" class="btn btn-danger">Reset</a>
                         </div>
                         <button type="submit" class="btn btn-primary px-4">Add Recipe</button>
                     </div>

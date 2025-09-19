@@ -1,7 +1,7 @@
 <%- include("partials/header", {title: "Recipe Hub -  Smart Recipe Suggestions" }) %>
 
 <div class="container" style="max-width: 760px; margin: 32px auto;">
-  <form action="/api/recipes-suggestions-34076352" method="POST" class="shadow card p-4" style="background:#3b4349;color:#fff;border-radius:12px">
+  <form action="/api/recipes-suggestions-34076352?userId=<%= currentUser.userId %>" method="POST" class="shadow card p-4" style="background:#3b4349;color:#fff;border-radius:12px">
 
     <!-- Q1: Cuisine Type-->
     <div>
@@ -75,13 +75,12 @@
         <label><input type="radio" name="mealType" value="Lunch"> Lunch</label>
         <label><input type="radio" name="mealType" value="Dinner"> Dinner</label>
         <label><input type="radio" name="mealType" value="Snack"> Snack</label>
-        <label><input type="radio" name="mealType" value="Dessert"> Dessert</label>
       </div>
       <hr>
     </div>
 
     <div class="d-flex justify-content-between">
-      <a href="/recipes-34076352" class="btn btn-outline-light">← Back</a>
+      <a href="/recipes-34076352?userId=<%= currentUser.userId %>" class="btn btn-outline-light">Back</a>
       <button type="submit" class="btn btn-primary px-4">Get Suggestions</button>
     </div>
   </div>

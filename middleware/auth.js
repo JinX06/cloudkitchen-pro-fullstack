@@ -24,7 +24,7 @@ async function attachCurrentUser(req, res, next) {
 // Middleware to require authentication
 function requireAuth(req, res, next) {
   if (!req.currentUser) {
-    return res.redirect('/login-34076352');
+    return res.redirect('/login-34076352?notice=login-required');
   }
   return next();
 }
@@ -32,7 +32,7 @@ function requireAuth(req, res, next) {
 // Middleware to require specific user role
 function requireRole(role) {
   return (req, res, next) => {
-    if (!req.currentUser) return res.redirect('/login-34076352');
+    if (!req.currentUser) return res.redirect('/login-34076352?notice=login-required');
     if (req.currentUser.role !== role) {
       const err = new Error('Forbidden: insufficient permissions');
       err.status = 403;

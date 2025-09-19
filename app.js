@@ -13,7 +13,7 @@ const port_number = 8080;
 app.set("view engine", "ejs");
 app.engine("html", ejs.renderFile);
 
-// App locals (ask if can use list as this is a HD+++ task in AS1 just not maintained for AS2)
+// App locals
 app.locals.suggestedRecipes = [];
 
 // Set Express to look for views in multiple directories

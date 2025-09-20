@@ -16,6 +16,12 @@ async function validateRecipeID(req, res, next) {
       throw err;
     }
 
+    if (req.currentUser && selected.userId !== req.currentUser.userId) {
+      const err = new Error("Forbidden: you cannot access this recipe.");
+      err.status = 403;
+      throw err;
+    }
+
     req.selectedRecipe = selected;
     req.selectedRecipeId = recipeID;
     return next();
@@ -61,6 +67,11 @@ async function validateRecipeIDQuery(req, res, next) {
     if (!recipe) {
       const err = new Error("Recipe not found.");
       err.status = 404;
+      throw err;
+    }
+    if (req.currentUser && recipe.userId !== req.currentUser.userId) {
+      const err = new Error("Forbidden: you cannot access this recipe.");
+      err.status = 403;
       throw err;
     }
     req.recipe = recipe;

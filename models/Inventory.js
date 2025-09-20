@@ -1,14 +1,17 @@
 const mongoose = require("mongoose");
 
 const InventorySchema = new mongoose.Schema({
-  inventoryId: { 
-    type: String, 
-    required: true, 
-    unique: true 
+  inventoryId: {
+    type: String,
+    required: true,
+    unique: true,
+    match: [/^I-\d{5}$/, "Inventory ID must follow the format I-00000"],
   },
-  userId: { 
-    type: String, 
-    required: true 
+  userId: {
+    type: String,
+    ref: "User",
+    required: true,
+    match: [/^U-\d{5}$/, "User ID must follow the format U-00000"],
   },
   
   ingredientName: {
@@ -59,11 +62,15 @@ const InventorySchema = new mongoose.Schema({
       message: "purchaseDate cannot be in the future"
     }
   },
-  expirationDate: { 
-    type: Date, 
+  expirationDate: {
+    type: Date,
     required: true,
     validate: {
       validator: function(value) {
+        if (!value || !this.purchaseDate) {
+          return true;
+        } // findOneAndUpdate validation runs before purchaseDate is attached to the query, so use controller-level check
+
         return value > this.purchaseDate;
       },
       message: "expirationDate must be after purchaseDate"
@@ -90,5 +97,8 @@ const InventorySchema = new mongoose.Schema({
     },
   },
 }, { timestamps: true }); // use mongoose createdAt, updatedAt timestamps
+
+InventorySchema.index({ inventoryId: 1 }, { unique: true });
+InventorySchema.index({ userId: 1 });
 
 module.exports = mongoose.model("Inventory", InventorySchema);

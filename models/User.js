@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-  userId: { type: String, required: true, unique: true },
+  userId: {
+    type: String,
+    required: true,
+    unique: true,
+    match: [/^U-\d{5}$/, "userId must follow the format U-00000"],
+  },
 
   email: {
     type: String,

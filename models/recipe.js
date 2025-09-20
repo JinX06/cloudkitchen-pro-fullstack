@@ -26,8 +26,18 @@ const ReviewSchema = new mongoose.Schema({
 }, { _id: false });
 
 const RecipeSchema = new mongoose.Schema({
-  recipeId: { type: String, required: [true, "Recipe ID is required."], unique: true },
-  userId: { type: String, required: [true, "User ID is required."] },
+  recipeId: {
+    type: String,
+    required: [true, "Recipe ID is required."],
+    unique: true,
+    match: [/^R-\d{5}$/, "Recipe ID must follow the format R-00000."],
+  },
+  userId: {
+    type: String,
+    ref: "User",
+    required: [true, "User ID is required."],
+    match: [/^U-\d{5}$/, "User ID must follow the format U-00000."],
+  },
   title: {
     type: String,
     required: [true, "Title is required."],

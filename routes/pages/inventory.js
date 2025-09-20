@@ -13,6 +13,9 @@ router.get("/inventory-add-34076352", requireAuth, inventoryController.getAddInv
 // Remove inventory item page
 router.get("/inventory-remove-34076352", requireAuth, validateItemID, inventoryController.getRemoveInventoryPage)
 
+// Edit inventory item page
+router.get("/inventory-edit-34076352", requireAuth, validateItemID, inventoryController.getEditInventoryPage)
+
 // View inventory item details
 router.get("/inventory-view-34076352", requireAuth, inventoryController.getInventoryViewPage)
 

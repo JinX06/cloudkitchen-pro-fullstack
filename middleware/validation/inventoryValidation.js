@@ -6,7 +6,6 @@ const {assertNonNumericString,assertNonNegativeNumber,assertDate, assertEnum} = 
 const validateInventoryReqBody = (req, res, next) => {
     try {
         const {
-            userId,
             ingredientName,
             quantity,
             unit,
@@ -35,6 +34,14 @@ const validateInventoryReqBody = (req, res, next) => {
         // Validate date fields using the existing assertDate function
         const validatedPurchaseDate = assertDate(purchaseDate, "Purchase Date");
         const validatedExpiryDate = assertDate(expiryDate, "Expiry Date");
+
+        const purchaseDateObj = new Date(validatedPurchaseDate);
+        const expiryDateObj = new Date(validatedExpiryDate);
+        if (expiryDateObj <= purchaseDateObj) {
+            const err = new Error("Expiry Date must be after Purchase Date");
+            err.status = 400;
+            throw err;
+        }
 
         // Store validated data for use in the route handler
         req.validated = {

@@ -14,5 +14,8 @@ router.post("/inventory/add-34076352", validateInventoryReqBody, inventoryApiCon
 // Delete inventory item
 router.post("/inventory/delete-34076352", validateItemIDQuery, inventoryApiController.deleteInventoryItem);
 
+// Update inventory item
+router.post("/inventory/update-34076352", validateInventoryReqBody, inventoryApiController.updateInventoryItem);
+
 
 module.exports = router;

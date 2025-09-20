@@ -1,12 +1,12 @@
-const Counter = require('../models/Counter');
+const Counter = require("../models/Counter");
 
 function prefixFor(pre) {
-  if (pre === 'user') {
-    return 'U-';
-  } else if (pre === 'recipe') {
-    return 'R-';
-  } else if (pre === 'inventory') {
-    return 'I-';
+  if (pre === "user") {
+    return "U-";
+  } else if (pre === "recipe") {
+    return "R-";
+  } else if (pre === "inventory") {
+    return "I-";
   } else {
     throw new Error(`Unknown id prefix: ${pre}`);
   }
@@ -26,7 +26,7 @@ async function peekNextID(pre) {
   
   }
   const prefix = prefixFor(pre);
-  return `${prefix}${String(nextnumber).padStart(5, '0')}`;
+  return `${prefix}${String(nextnumber).padStart(5, "0")}`;
 }
 
 // Increment the ID counter for next use.

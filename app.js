@@ -3,8 +3,8 @@ const ejs = require("ejs");
 const morgan = require("morgan")
 const path = require("path");
 const app = express();
-const { connectToMongoDB } = require('./db/connection');
-const { attachCurrentUser } = require('./middleware/auth');
+const { connectToMongoDB } = require("./db/connection");
+const { attachCurrentUser } = require("./middleware/auth");
 
 // Set the port number
 const port_number = 8080;
@@ -82,7 +82,7 @@ async function startServer() {
             console.log(`Server is running on http://localhost:${port_number}`);
         });
     } catch (error) {
-        console.error('Failed to start server:', error);
+        console.error("Failed to start server:", error);
         process.exit(1);
     }
 }

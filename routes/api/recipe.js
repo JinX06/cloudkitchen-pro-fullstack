@@ -9,7 +9,7 @@ const { validateRecipeIDQuery } = require("../../middleware/validation/idValidat
 router.use(requireAuth);
 
 // Add recipe
-router.post("/recipes/add-34076352", requireRole('chef'), validateRecipeReqBody, recipeApiController.addRecipe);
+router.post("/recipes/add-34076352", requireRole("chef"), validateRecipeReqBody, recipeApiController.addRecipe);
 
 // Delete recipe
 router.post("/recipes/delete-34076352", validateRecipeIDQuery, recipeApiController.deleteRecipe);

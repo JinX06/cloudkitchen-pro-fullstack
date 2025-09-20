@@ -1,10 +1,12 @@
 const { buildRecipeBuckets } = require("./recipeBuckets.js");
 const { buildUserBuckets } = require("./userBuckets.js");
-const { recipeDB } = require("../../data/recipeDB.js");
 
-function getRecipeSuggestions(userResponse) {
+function getRecipeSuggestions(userResponse, recipesInput) {
     const user = buildUserBuckets(userResponse);
-    const recipes = JSON.parse(JSON.stringify(recipeDB));
+    let recipes = [];
+    if (Array.isArray(recipesInput)) {
+        recipes = JSON.parse(JSON.stringify(recipesInput));
+    }
 
     for (const recipe of recipes) {
         let totalScore = 0;

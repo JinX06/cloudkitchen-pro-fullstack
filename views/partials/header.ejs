@@ -13,7 +13,7 @@
 
         <div class="container-fluid justify-content-start" style="margin-left:10px;">
 
-            <% const userQuery = (currentUser && currentUser.userId) ? ('?userId=' + currentUser.userId) : ''; %>
+            <% const userQuery = (currentUser && currentUser.userId) ? ("?userId=" + currentUser.userId) : ""; %>
             <% const role = (currentUser && currentUser.role) || null; %>
             <a class="navbar-brand d-flex align-items-center" href="/home-34076352<%= userQuery %>">
                 <img src="/images/logo.png" alt="Recipe Hub logo" style="height:45px; width:auto; margin-right:5px;">
@@ -26,7 +26,7 @@
                     <a class="nav-link" href="/home-34076352<%= userQuery %>">Home</a>
                 </li>
 
-                <% if (role === 'chef') { %>
+                <% if (role === "chef") { %>
                   <li class="nav-item dropdown">
                       <a class="nav-link dropdown-toggle" href="#" id="recipesDropdown" role="button"
                           data-bs-toggle="dropdown">
@@ -56,13 +56,13 @@
                           HD Task
                       </a>
                       <ul class="dropdown-menu dropdown-menu-dark">
-                        <% if (role === 'chef') { %>
+                        <% if (role === "chef") { %>
                         <li><a class="dropdown-item" href="#">Placeholder for Chef</a></li>
                         <% } %>
-                        <% if (role === 'admin') { %>
+                        <% if (role === "admin") { %>
                         <li><a class="dropdown-item" href="#">Placeholder for Admin</a></li>
                         <% } %>
-                        <% if (role === 'manager') { %>
+                        <% if (role === "manager") { %>
                         <li><a class="dropdown-item" href="#">Placeholder for Manager</a></li>
                         <% } %>
                       </ul>

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
   userId: { type: String, required: true, unique: true },
@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
     validate: {
       // password REGEX from: https://ihateregex.io/expr/password/
       validator: (v) => /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/.test(v),
-      message: 'Password must be 8+ chars and include uppercase, lowercase, number, and special character.'
+      message: "Password must be 8+ chars and include uppercase, lowercase, number, and special character."
     }
   },
 
@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
     match: [/^[A-Za-z][A-Za-z\s\-']{1,99}$/, "Full name must start with a letter and contain only letters, spaces, hyphens, or apostrophes (2-100 characters)."],
   },
 
-  role: { type: String, enum: ['admin', 'chef', 'manager'], required: true },
+  role: { type: String, enum: ["admin", "chef", "manager"], required: true },
 
   phone: {
     type: String,
@@ -47,4 +47,4 @@ const UserSchema = new mongoose.Schema({
   loggedIn: { type: Boolean, default: false },
 }, { timestamps: true });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model("User", UserSchema);

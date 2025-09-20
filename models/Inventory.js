@@ -31,7 +31,7 @@ const InventorySchema = new mongoose.Schema({
     type: String,
     required: [true, "Unit must be exactly one of: 'pieces', 'kg', 'g', 'liters', 'ml', 'cups', 'tbsp', 'tsp', 'dozen'"],
     enum: {
-      values: ['pieces','kg','g','liters','ml','cups','tbsp','tsp','dozen'],
+      values: ["pieces", "kg", "g", "liters", "ml", "cups", "tbsp", "tsp", "dozen"],
       message: "Unit must be exactly one of: 'pieces', 'kg', 'g', 'liters', 'ml', 'cups', 'tbsp', 'tsp', 'dozen'"
     }
   },
@@ -56,7 +56,7 @@ const InventorySchema = new mongoose.Schema({
         today.setHours(0, 0, 0, 0);
         return date_given <= today;
       },
-      message: 'purchaseDate cannot be in the future'
+      message: "purchaseDate cannot be in the future"
     }
   },
   expirationDate: { 
@@ -66,13 +66,13 @@ const InventorySchema = new mongoose.Schema({
       validator: function(value) {
         return value > this.purchaseDate;
       },
-      message: 'expirationDate must be after purchaseDate'
+      message: "expirationDate must be after purchaseDate"
     }
   },
   location: { 
     type: String, 
     enum: { 
-      values: ['Fridge','Freezer','Pantry','Counter','Cupboard'], 
+      values: ["Fridge","Freezer","Pantry","Counter","Cupboard"], 
       message: 'Location must be one of: "Fridge", "Freezer", "Pantry", "Counter", "Cupboard"' 
     }, 
     required: true 
@@ -80,14 +80,15 @@ const InventorySchema = new mongoose.Schema({
   cost: {
     type: Number,
     required: true,
-    min: [0.01, 'Cost must be at least 0.01'],
-    max: [999.99, 'Cost must be at most 999.99'],
-    validate: { 
-      validator: function(cost) { 
+    min: [0.01, "Cost must be at least 0.01"],
+    max: [999.99, "Cost must be at most 999.99"],
+    validate: {
+      validator: function(cost) {
         return Number.isFinite(cost) && Math.round(cost * 100) === cost * 100;
       },
-      message: 'cost must have max 2 decimal places' 
-  }},
+      message: "cost must have max 2 decimal places",
+    },
+  },
 }, { timestamps: true }); // use mongoose createdAt, updatedAt timestamps
 
-module.exports = mongoose.model('Inventory', InventorySchema);
+module.exports = mongoose.model("Inventory", InventorySchema);

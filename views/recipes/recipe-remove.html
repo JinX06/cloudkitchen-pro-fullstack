@@ -1,4 +1,4 @@
-<%- include('partials/header', {title: 'Recipe Hub -  Remove Recipe' }) %>
+<%- include("partials/header", {title: "Recipe Hub -  Remove Recipe" }) %>
 
 <div>
     <div class="card bg-dark text-white" style="margin: 20px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8)">
@@ -15,9 +15,9 @@
             <!-- Create options for each recipe -->
                 <% for (let i = 0; i < myRecipe.length; i++) { 
                     const r = myRecipe[i]; 
-                    let selected = '';
+                    let selected = "";
                     if (selectedRecipeId === r.recipeId) {
-                        selected = 'selected';
+                        selected = "selected";
                     }
                 %>
                     <option value="<%= r.recipeId %>" <%= selected %>><%= r.recipeId %> | <%= r.title %> </option>

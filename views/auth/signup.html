@@ -6,32 +6,32 @@
       Sign Up
     </div>
     <div class="card-body">
-      <% if (typeof error !== 'undefined' && error) { %>
+      <% if (typeof error !== "undefined" && error) { %>
         <div class="alert alert-danger" role="alert"><%= error %></div>
       <% } %>
       <form method="POST" action="/signup-34076352">
         <div class="row g-3">
           <div class="col-md-6">
             <label class="form-label">Full Name</label>
-            <input type="text" name="fullname" class="form-control" placeholder="Golden Ramsing" value="<%= form?.fullname || '' %>" required/>
+            <input type="text" name="fullname" class="form-control" placeholder="Golden Ramsing" value="<%= form?.fullname || "" %>" required/>
             <div class="form-text text-white">Letters, spaces, hyphens, apostrophes only.</div>
           </div>
           <div class="col-md-6">
             <label class="form-label">Phone</label>
-            <input type="text" name="phone" class="form-control" placeholder="+61-111-111-111" value="<%= form?.phone || '' %>" required />
+            <input type="text" name="phone" class="form-control" placeholder="+61-111-111-111" value="<%= form?.phone || "" %>" required />
           </div>
           <div class="col-md-6">
             <label class="form-label">Role</label>
             <select name="role" class="form-select" required>
-              <option value="" disabled <%= !form?.role ? 'selected' : '' %>>Select role…</option>
-              <option value="chef" <%= form?.role === 'chef' ? 'selected' : '' %>>Chef</option>
-              <option value="manager" <%= form?.role === 'manager' ? 'selected' : '' %>>Manager</option>
-              <option value="admin" <%= form?.role === 'admin' ? 'selected' : '' %>>Admin</option>
+              <option value="" disabled <%= !form?.role ? "selected" : "" %>>Select role…</option>
+              <option value="chef" <%= form?.role === "chef" ? "selected" : "" %>>Chef</option>
+              <option value="manager" <%= form?.role === "manager" ? "selected" : "" %>>Manager</option>
+              <option value="admin" <%= form?.role === "admin" ? "selected" : "" %>>Admin</option>
             </select>
           </div>
           <div class="col-md-6">
             <label class="form-label">Email</label>
-            <input type="email" name="email" class="form-control" placeholder="you@example.com" value="<%= form?.email || '' %>" required />
+            <input type="email" name="email" class="form-control" placeholder="you@example.com" value="<%= form?.email || "" %>" required />
           </div>
           <div class="col-12">
             <label class="form-label">Password</label>
@@ -44,25 +44,25 @@
               <span id="pw-special">❌</span> Special character
             </div>
             <script>
-              const pwInput = document.getElementById('pw-field');
-              const pwLength = document.getElementById('pw-length');
-              const pwUpper = document.getElementById('pw-upper');
-              const pwLower = document.getElementById('pw-lower');
-              const pwNumber = document.getElementById('pw-number');
-              const pwSpecial = document.getElementById('pw-special');
+              const pwInput = document.getElementById("pw-field");
+              const pwLength = document.getElementById("pw-length");
+              const pwUpper = document.getElementById("pw-upper");
+              const pwLower = document.getElementById("pw-lower");
+              const pwNumber = document.getElementById("pw-number");
+              const pwSpecial = document.getElementById("pw-special");
 
-              pwInput.addEventListener('input', function() {
+              pwInput.addEventListener("input", function() {
                 const val = pwInput.value;
                 // Length
-                pwLength.textContent = val.length >= 8 ? '✅' : '❌';
+                pwLength.textContent = val.length >= 8 ? "✅" : "❌";
                 // Uppercase
-                pwUpper.textContent = /[A-Z]/.test(val) ? '✅' : '❌';
+                pwUpper.textContent = /[A-Z]/.test(val) ? "✅" : "❌";
                 // Lowercase
-                pwLower.textContent = /[a-z]/.test(val) ? '✅' : '❌';
+                pwLower.textContent = /[a-z]/.test(val) ? "✅" : "❌";
                 // Number
-                pwNumber.textContent = /\d/.test(val) ? '✅' : '❌';
+                pwNumber.textContent = /\d/.test(val) ? "✅" : "❌";
                 // Special char
-                pwSpecial.textContent = /[^A-Za-z0-9]/.test(val) ? '✅' : '❌';
+                pwSpecial.textContent = /[^A-Za-z0-9]/.test(val) ? "✅" : "❌";
               });
             </script>
             

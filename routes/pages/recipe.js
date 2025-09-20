@@ -6,13 +6,13 @@ const { requireAuth, requireRole } = require("../../middleware/auth");
 const { validateRecipeID } = require("../../middleware/validation/idValidation.js");
 
 // Recipes list page (chef only)
-router.get("/recipes-34076352", requireAuth, requireRole('chef'), recipeController.getRecipesPage);
+router.get("/recipes-34076352", requireAuth, requireRole("chef"), recipeController.getRecipesPage);
 
 // Add recipe page (chef only)
-router.get("/recipes-add-34076352", requireAuth, requireRole('chef'), recipeController.getAddRecipePage);
+router.get("/recipes-add-34076352", requireAuth, requireRole("chef"), recipeController.getAddRecipePage);
 
 // Remove recipe page (chef only)
-router.get("/recipes-remove-34076352", requireAuth, requireRole('chef'), validateRecipeID, recipeController.getRemoveRecipePage);
+router.get("/recipes-remove-34076352", requireAuth, requireRole("chef"), validateRecipeID, recipeController.getRemoveRecipePage);
 
 // View recipe details
 router.get("/recipes-view-34076352", requireAuth, recipeController.getRecipeView);
@@ -30,6 +30,6 @@ router.get("/recipes-suggestion-results-34076352", requireAuth, recipeController
 router.get("/recipes-search-scale-34076352", requireAuth, recipeController.getSearchScale);
 
 // Recipe availability overview (chef only)
-router.get("/recipes-availability-34076352", requireAuth, requireRole('chef'), recipeController.getAvailabilityPage);
+router.get("/recipes-availability-34076352", requireAuth, requireRole("chef"), recipeController.getAvailabilityPage);
 
 module.exports = router;

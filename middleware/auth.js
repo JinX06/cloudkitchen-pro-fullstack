@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require("../models/User");
 
 // Middleware to attach current user to req and res.locals if userId is in query string
 async function attachCurrentUser(req, res, next) {
@@ -24,7 +24,7 @@ async function attachCurrentUser(req, res, next) {
 // Middleware to require authentication
 function requireAuth(req, res, next) {
   if (!req.currentUser) {
-    return res.redirect('/login-34076352?notice=login-required');
+    return res.redirect("/login-34076352?notice=login-required");
   }
   return next();
 }
@@ -33,7 +33,7 @@ function requireAuth(req, res, next) {
 function requireRole(role) {
   return (req, res, next) => {
     if (!req.currentUser || req.currentUser.role !== role) {
-      const err = new Error('Forbidden: insufficient permissions');
+      const err = new Error("Forbidden: insufficient permissions");
       err.status = 403;
       return next(err);
     }

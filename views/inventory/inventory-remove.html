@@ -1,4 +1,4 @@
-<%- include('partials/header', {title: 'Recipe Hub -  Remove Inventory Item' }) %>
+<%- include("partials/header", {title: "Recipe Hub -  Remove Inventory Item" }) %>
 
 <div>
   <div class="card bg-dark text-white" style="margin: 20px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8)">
@@ -14,7 +14,7 @@
         <% for (let i = 0; i < myInventory.length; i++) { 
              const r = myInventory[i]; 
              if (selectedItemId === r.inventoryId) { 
-              selected = 'selected'; 
+              selected = "selected"; 
             }
         %>
           <option value="<%= r.inventoryId %>" <%= selected %>><%= r.inventoryId %> | <%= r.ingredientName %></option>
@@ -37,7 +37,7 @@
             <div><strong>Quantity:</strong> <%= selectedItem.quantity %> <%= selectedItem.unit %></div>
             <div><strong>Location:</strong> <%= selectedItem.location %></div>
             <div><strong>Purchase Date:</strong> <%= selectedItem.purchaseDate %></div>
-            <div><strong>Expiry Date:</strong> <%= new Date(selectedItem.expirationDate).toISOString().split('T')[0] %></div>
+            <div><strong>Expiry Date:</strong> <%= new Date(selectedItem.expirationDate).toISOString().split("T")[0] %></div>
             <div><strong>Cost:</strong> <%= selectedItem.cost %></div>
             <div><strong>Added:</strong> <%= selectedItem.createdAt %></div>
             <div>
@@ -63,4 +63,4 @@
   </div>
 </div>
 
-<%- include('partials/footer') %>
+<%- include("partials/footer") %>

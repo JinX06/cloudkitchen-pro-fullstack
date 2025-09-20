@@ -17,6 +17,6 @@ router.get("/inventory-remove-34076352", requireAuth, validateItemID, inventoryC
 router.get("/inventory-view-34076352", requireAuth, inventoryController.getInventoryViewPage)
 
 // Inventory alerts (expiring/low stock) - admin only
-router.get("/inventory-alerts-34076352", requireAuth, requireRole('admin'), inventoryController.getInventoryAlertsPage)
+router.get("/inventory-alerts-34076352", requireAuth, requireRole("admin"), inventoryController.getInventoryAlertsPage)
 
 module.exports = router

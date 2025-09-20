@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const ReviewSchema = new mongoose.Schema({
   reviewer: { 
     type: String, 
     trim: true, 
-    default: 'Anonymous' 
+    default: "Anonymous" 
   },
 
   rating: { 
@@ -17,7 +17,7 @@ const ReviewSchema = new mongoose.Schema({
   comment: { 
     type: String, 
     trim: true, 
-    default: '' 
+    default: "" 
   },
   date: { 
     type: String, 
@@ -58,13 +58,13 @@ const RecipeSchema = new mongoose.Schema({
 
         for (let i = 0; i < size; i++) {
           const ingredient = ingredientsArray[i];
-          if (typeof ingredient !== 'string') return false;
+          if (typeof ingredient !== "string") return false;
           if (ingredient.trim().length < 3) return false;
         }
 
         return true;
       },
-      message: 'Ingredients must be an array of 1-20 strings; each at least 3 characters.'
+      message: "Ingredients must be an array of 1-20 strings each with at least 3 characters."
     }
   },
   instructions: {
@@ -78,29 +78,29 @@ const RecipeSchema = new mongoose.Schema({
 
         for (let i = 0; i < size; i++) {
           const step = stepsArray[i];
-          if (typeof step !== 'string') return false;
+          if (typeof step !== "string") return false;
           if (String(step).trim().length < 10) return false;
         }
 
         return true;
       },
-      message: 'Instructions must be 1-15 steps; each >= 10 chars.'
+      message: "Instructions must be 1-15 steps; each >= 10 chars."
     }
   },
   mealType: { 
     type: String, 
     required: true,
     enum: { 
-      values: ['Breakfast', 'Lunch', 'Dinner', 'Snack'], 
-    message: 'Meal Type must be one of: Breakfast, Lunch, Dinner, Snack.' 
+      values: ["Breakfast", "Lunch", "Dinner", "Snack"], 
+    message: "Meal Type must be one of: Breakfast, Lunch, Dinner, Snack." 
     }
 },
 
   cuisineType: { 
     type: String, 
     enum: { 
-      values: ['Italian', 'Asian', 'Mexican', 'American', 'French', 'Indian', 'Mediterranean', 'Other'],
-      message: 'Cuisine Type must be one of: Italian, Asian, Mexican, American, French, Indian, Mediterranean, Other.' 
+      values: ["Italian", "Asian", "Mexican", "American", "French", "Indian", "Mediterranean", "Other"],
+      message: "Cuisine Type must be one of: Italian, Asian, Mexican, American, French, Indian, Mediterranean, Other." 
     },
     required: true
   },
@@ -108,19 +108,19 @@ const RecipeSchema = new mongoose.Schema({
   prepTime: { 
     type: Number, 
     required: true, 
-    min: [1, 'Prep Time must be between 1 and 480 minutes.'], 
-    max: [480, 'Prep Time must be between 1 and 480 minutes.'], 
+    min: [1, "Prep Time must be between 1 and 480 minutes."], 
+    max: [480, "Prep Time must be between 1 and 480 minutes."], 
     validate: { 
       validator: Number.isInteger, 
-      message: 'prepTime must be an integer' 
+      message: "prepTime must be an integer" 
     } 
   },
 
   difficulty: { 
     type: String, 
     enum: { 
-      values: ['Easy', 'Medium', 'Hard'], 
-      message: 'Difficulty must be one of: Easy, Medium, Hard.' 
+      values: ["Easy", "Medium", "Hard"], 
+      message: "Difficulty must be one of: Easy, Medium, Hard." 
     }, 
     required: true 
   },
@@ -128,11 +128,11 @@ const RecipeSchema = new mongoose.Schema({
   servings: { 
     type: Number, 
     required: true, 
-    min: [1, 'Servings must be between 1 and 20.'], 
-    max: [20, 'Servings must be between 1 and 20.'], 
+    min: [1, "Servings must be between 1 and 20."], 
+    max: [20, "Servings must be between 1 and 20."], 
     validate: { 
       validator: Number.isInteger, 
-      message: 'servings must be an integer' 
+      message: "servings must be an integer" 
     } 
   },
   ratings: { type: [Number], default: [] },
@@ -143,4 +143,4 @@ const RecipeSchema = new mongoose.Schema({
 
 RecipeSchema.index({ userId: 1, title: 1 }, { unique: true });
 
-module.exports = mongoose.model('Recipe', RecipeSchema);
+module.exports = mongoose.model("Recipe", RecipeSchema);

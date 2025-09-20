@@ -120,7 +120,7 @@
               <td><%= tempRecipe.servings %></td>
 
               <!-- Created Date -->
-              <td><%= new Date(tempRecipe.createdAt).toISOString().split('T')[0] %></td>
+              <td><%= new Date(tempRecipe.createdAt).toISOString().split("T")[0] %></td>
               <td class="py-2">
                 <div class="d-flex justify-content-center gap-2">
                   <a href="recipes-view-34076352?recipeID=<%= tempRecipe.recipeId %>&userId=<%= currentUser.userId %>" class="btn btn-sm btn-primary">View</a>
@@ -173,7 +173,7 @@
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
       <h1 style="color: white; font-weight: bolder;">📖 Recipes From Other Chefs</h1>
-      <div style="color: #ffffff;">Discover and View other chef's recipe collection</div>
+      <div style="color: #ffffff;">Discover and view other chef recipe collections</div>
     </div>
     <span class="badge bg-dark fs-6 px-2 py-3"> Total Recipes: <%= otherRecipes.length %></span>
   </div>
@@ -270,7 +270,7 @@
                   <td><%= tempRecipe.servings %></td>
                   
                   <!-- Created Date -->
-                  <td><%= new Date(tempRecipe.createdAt).toISOString().split('T')[0] %></td>
+                  <td><%= new Date(tempRecipe.createdAt).toISOString().split("T")[0] %></td>
 
                   <td class="py-2">
                     <div class="d-flex justify-content-center gap-2">

@@ -1,4 +1,4 @@
-<%- include('partials/header', {title: 'Recipe Hub -  Add Recipe' }) %>
+<%- include("partials/header", {title: "Recipe Hub -  Add Recipe" }) %>
 
 
     <!-- Page Styles -->
@@ -49,7 +49,7 @@
             </div>
             <div class="card-body">
                 <form action="/api/recipes/add-34076352?userId=<%= currentUser.userId %>" method="POST" class="was-validated">
-                    <% if (typeof error !== 'undefined' && error) { %>
+                    <% if (typeof error !== "undefined" && error) { %>
                       <div class="alert alert-danger" role="alert"><%= error %></div>
                     <% } %>
                     <!-- Basic Info -->
@@ -59,7 +59,7 @@
                             <div class="col-md-8">
                                 <label class="required" for="title">Recipe Title</label>
                                 <input id="title" name="title" type="text" class="form-control"
-                                    placeholder="e.g., Chocolate Chip Cookies" value="<%= form?.title || '' %>" required>
+                                    placeholder="e.g., Chocolate Chip Cookies" value="<%= form?.title || "" %>" required>
                                 <div class="invalid-feedback">Please enter a recipe title.</div>
                             </div>
                             <div class="col-4">
@@ -79,11 +79,11 @@
                             <div class="col-4">
                                 <label class="required" for="mealType">Meal Type</label>
                                 <select id="mealType" name="mealType" class="form-select" required>
-                                    <option value="" disabled <%= !form?.mealType ? 'selected' : '' %>>Select meal type…</option>
-                                    <option <%= form?.mealType === 'Breakfast' ? 'selected' : '' %>>Breakfast</option>
-                                    <option <%= form?.mealType === 'Lunch' ? 'selected' : '' %>>Lunch</option>
-                                    <option <%= form?.mealType === 'Dinner' ? 'selected' : '' %>>Dinner</option>
-                                    <option <%= form?.mealType === 'Snack' ? 'selected' : '' %>>Snack</option>
+                                    <option value="" disabled <%= !form?.mealType ? "selected" : "" %>>Select meal type…</option>
+                                    <option <%= form?.mealType === "Breakfast" ? "selected" : "" %>>Breakfast</option>
+                                    <option <%= form?.mealType === "Lunch" ? "selected" : "" %>>Lunch</option>
+                                    <option <%= form?.mealType === "Dinner" ? "selected" : "" %>>Dinner</option>
+                                    <option <%= form?.mealType === "Snack" ? "selected" : "" %>>Snack</option>
                                 </select>
                                 <div class="invalid-feedback">Select a meal type.</div>
                             </div>
@@ -92,9 +92,9 @@
                         <div class="col-8">
                             <label class="required" for="cuisineType">Cuisine Type</label>
                             <select id="cuisineType" name="cuisineType" class="form-select" required>
-                                <option value="" disabled <%= !form?.cuisineType ? 'selected' : '' %>>Select cuisine…</option>
+                                <option value="" disabled <%= !form?.cuisineType ? "selected" : "" %>>Select cuisine…</option>
                                 <% (cuisines || []).forEach(cuisine => { %>
-                                    <option value="<%= cuisine %>" <%= form?.cuisineType === cuisine ? 'selected' : '' %>><%= cuisine %></option>
+                                    <option value="<%= cuisine %>" <%= form?.cuisineType === cuisine ? "selected" : "" %>><%= cuisine %></option>
                                 <% }) %>
                             </select>
                             <div class="invalid-feedback">Select a cuisine type.</div>
@@ -106,7 +106,7 @@
                         <div class="col-4">
                             <label class="required" for="prepTime">Prep Time (min)</label>
                             <input id="prepTime" name="prepTime" type="number" min="0" step="1" class="form-control"
-                                value="<%= form?.prepTime || '30' %>" required>
+                                value="<%= form?.prepTime || "30" %>" required>
                             <div class="invalid-feedback">Enter minutes.</div>
                         </div>
 
@@ -114,10 +114,10 @@
                         <div class="col-4">
                             <label class="required" for="difficulty">Difficulty</label>
                             <select id="difficulty" name="difficulty" class="form-select" required>
-                                <option value="" disabled <%= !form?.difficulty ? 'selected' : '' %>>Select…</option>
-                                <option <%= form?.difficulty === 'Easy' ? 'selected' : '' %>>Easy</option>
-                                <option <%= form?.difficulty === 'Medium' ? 'selected' : '' %>>Medium</option>
-                                <option <%= form?.difficulty === 'Hard' ? 'selected' : '' %>>Hard</option>
+                                <option value="" disabled <%= !form?.difficulty ? "selected" : "" %>>Select…</option>
+                                <option <%= form?.difficulty === "Easy" ? "selected" : "" %>>Easy</option>
+                                <option <%= form?.difficulty === "Medium" ? "selected" : "" %>>Medium</option>
+                                <option <%= form?.difficulty === "Hard" ? "selected" : "" %>>Hard</option>
                             </select>
                             <div class="invalid-feedback">Select difficulty.</div>
                         </div>
@@ -126,7 +126,7 @@
                         <div class="col-4">
                             <label class="required" for="servings">Servings</label>
                             <input id="servings" name="servings" type="number" min="1" step="1" class="form-control"
-                                value="<%= form?.servings || '2' %>" required>
+                                value="<%= form?.servings || "2" %>" required>
                             <div class="invalid-feedback">Enter servings.</div>
                         </div>
                     </div>
@@ -139,18 +139,18 @@
                         <textarea id="ingredients" name="ingredients" class="form-control" rows="6" placeholder="2 cups all-purpose flour
 1 cup sugar
 2 eggs
-1 tsp vanilla extract" required><%= form?.ingredients || '' %></textarea>
+1 tsp vanilla extract" required><%= form?.ingredients || "" %></textarea>
                         <div class="invalid-feedback">Please add at least one ingredient.</div>
                     </div>
 
                     <!-- Instructions -->
                     <div class="mb-4">
                         <div class="div-title mb-2 required"><span>👩‍🍳 </span>Instructions</div>
-                        <div class="mb-2 hintText">Provide clear, step-by-step cooking instructions. <br> Don't include numbers or bullet points.</div>
+                        <div class="mb-2 hintText">Provide clear, step-by-step cooking instructions. <br> Do not include numbers or bullet points.</div>
                         <textarea id="instructions" name="instructions" class="form-control" rows="7" placeholder="Preheat oven to 180°C
 Mix dry ingredients
 Add wet ingredients and combine
-Bake for 12-15 minutes" required><%= form?.instructions || '' %></textarea>
+Bake for 12-15 minutes" required><%= form?.instructions || "" %></textarea>
                         <div class="invalid-feedback">Please provide instructions.</div>
                     </div>
 
@@ -169,4 +169,4 @@ Bake for 12-15 minutes" required><%= form?.instructions || '' %></textarea>
         </div>
     </div>
 
-    <%- include('partials/footer') %>
+    <%- include("partials/footer") %>

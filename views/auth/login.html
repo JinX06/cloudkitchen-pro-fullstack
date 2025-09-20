@@ -9,13 +9,13 @@
       <% if (notice) { %>
         <div class="alert alert-warning" role="alert"><%= notice %></div>
       <% } %>
-      <% if (typeof error !== 'undefined' && error) { %>
+      <% if (typeof error !== "undefined" && error) { %>
         <div class="alert alert-danger" role="alert"><%= error %></div>
       <% } %>
       <form method="POST" action="/login-34076352">
         <div class="mb-3">
           <label class="form-label">Email</label>
-          <input type="email" name="email" class="form-control" placeholder="chef@example.com" value="<%= form?.email || '' %>" required />
+          <input type="email" name="email" class="form-control" placeholder="chef@example.com" value="<%= form?.email || "" %>" required />
         </div>
         <div class="mb-3">
           <label class="form-label">Password</label>

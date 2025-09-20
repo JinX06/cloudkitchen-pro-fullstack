@@ -1,4 +1,4 @@
-<%- include('partials/header', {title: 'Recipe Hub - View Recipe' }) %>
+<%- include("partials/header", {title: "Recipe Hub - View Recipe" }) %>
 
 <div>
   <div class="card bg-dark text-white" style="margin: 20px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8)">
@@ -17,7 +17,7 @@
           <div><strong>Difficulty:</strong> <%= selectedRecipe.difficulty %></div>
           <div><strong>Prep Time:</strong> <%= selectedRecipe.prepTime %> min</div>
           <div><strong>Servings:</strong> <%= selectedRecipe.servings %></div>
-          <div><strong>Created:</strong> <%= new Date(selectedRecipe.createdAt).toISOString().split('T')[0] %></div>
+          <div><strong>Created:</strong> <%= new Date(selectedRecipe.createdAt).toISOString().split("T")[0] %></div>
           <div><strong>Ingredients:</strong> <%= selectedRecipe.ingredients %></div>
           <div><strong>Instructions:</strong> <%= selectedRecipe.instructions.join(", ") %></div>
           
@@ -62,4 +62,4 @@
   </div>
 </div>
 
-<%- include('partials/footer') %>
+<%- include("partials/footer") %>

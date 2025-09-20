@@ -1,90 +1,106 @@
-const { uniqueCuisineList, uniqueMealTypeList, searchAndScaleRecipes } = require("../../utils/recipeUtils.js");
+const { searchAndScaleRecipes } = require("../../utils/recipeUtils.js");
 const { getAvailability } = require("../../utils/availability.js");
+const Recipe = require("../../models/Recipe");
+const Inventory = require("../../models/Inventory");
 
 // GET /recipes-34076352
-function getRecipesPage(req, res) {
-  res.render("recipe.html", {
-    myRecipe: req.app.locals.recipeDB,
-  });
+async function getRecipesPage(req, res, next) {
+  try {
+    if (!req.currentUser) return res.redirect("/login-34076352?notice=login-required");
+    const myRecipe = await Recipe.find({ userId: req.currentUser.userId });
+    const otherRecipes = await Recipe.find({ userId: { $ne: req.currentUser.userId } });
+    res.render("recipe.html", { myRecipe, otherRecipes });
+  } catch (err) { return next(err); }
 }
 
 // GET /recipes-add-34076352
-function getAddRecipePage(req, res) {
-  res.render("recipes/recipe-add.html", {
-    cuisines: uniqueCuisineList(req.app.locals.recipeDB),
-  });
+async function getAddRecipePage(req, res, next) {
+  try {
+    if (!req.currentUser) {
+      return res.redirect("/login-34076352?notice=login-required");
+    }
+
+    const cuisines = ["Italian","Asian","Mexican","American","French","Indian","Mediterranean","Other"];
+    res.render("recipes/recipe-add.html", { cuisines, form: {}, error: null });
+  } catch (err) { 
+    return next(err); 
+  }
 }
 
 // GET /recipes-remove-34076352
-// Assumes validateRecipeID middleware populates req.selectedRecipe and req.selectedRecipeId
-function getRemoveRecipePage(req, res) {
-  const recipeDB = req.app.locals.recipeDB;
-  res.render("recipes/recipe-remove.html", {
-    myRecipe: recipeDB,
-    selectedRecipe: req.selectedRecipe || null,
-    selectedRecipeId: req.selectedRecipeId,
-  });
+async function getRemoveRecipePage(req, res, next) {
+  try {
+    if (!req.currentUser){ 
+      return res.redirect("/login-34076352?notice=login-required");
+    }
+    const myRecipe = await Recipe.find({ userId: req.currentUser.userId });
+    res.render("recipes/recipe-remove.html", {
+      myRecipe,
+      selectedRecipe: req.selectedRecipe || null,
+      selectedRecipeId: req.selectedRecipeId,
+    });
+  } catch (err) { return next(err); }
 }
 
 // GET /recipes-view-34076352
-function getRecipeView(req, res) {
-  const recipeDB = req.app.locals.recipeDB;
-  const { recipeID } = req.query;
-  let selected = null;
-
-  if (recipeID === "RANDOM") {
-    const randomIndex = Math.floor(Math.random() * recipeDB.length);
-    selected = recipeDB[randomIndex];
-  } else if (recipeID) {
-    selected = recipeDB.find((recipe) => recipe.recipeID === recipeID);
-  }
-
-  res.render("recipes/recipe-view.html", {
-    selectedRecipe: selected,
-  });
+async function getRecipeView(req, res, next) {
+  try {
+    if (!req.currentUser) return res.redirect("/login-34076352?notice=login-required");
+    const { recipeID } = req.query;
+    let selected = null;
+    if (recipeID) {
+      selected = await Recipe.findOne({ recipeId: recipeID });
+    }
+    res.render("recipes/recipe-view.html", { selectedRecipe: selected });
+  } catch (err) { return next(err); }
 }
 
 // GET /recipes-filter-34076352
-function getFilterPage(req, res) {
-  const { mealType, cuisineType, difficulty } = req.query;
-  const recipeDB = req.app.locals.recipeDB;
-  let filteredRecipes = recipeDB;
+async function getFilterPage(req, res, next) {
+  try {
+    if (!req.currentUser){
+      return res.redirect("/login-34076352?notice=login-required")
+    };
+    const { mealType, cuisineType, difficulty } = req.query;
+    const query = { userId: req.currentUser.userId };
 
-  if (mealType) {
-    filteredRecipes = filteredRecipes.filter(
-      (recipe) => recipe.mealType && recipe.mealType.toLowerCase().includes(mealType.toLowerCase())
-    );
+    if (mealType) query.mealType = mealType.trim();
+    if (cuisineType) query.cuisineType = cuisineType.trim();
+    if (difficulty) query.difficulty = difficulty.trim();
+    
+    const filteredRecipes = await Recipe.find(query);
+    const uniqueCuisines = await Recipe.distinct("cuisineType", { userId: req.currentUser.userId });
+    const uniqueMealTypes = ["Breakfast", "Lunch", "Dinner", "Snack"];
+    
+    res.render("recipe-filter.html", {
+      filteredRecipes,
+      uniqueCuisines,
+      uniqueMealTypes,
+      mealType,
+      cuisineType,
+      difficulty,
+    });
+  } catch (err) { 
+    return next(err); 
   }
-
-  if (cuisineType) {
-    filteredRecipes = filteredRecipes.filter(
-      (recipe) => recipe.cuisineType && recipe.cuisineType.toLowerCase().includes(cuisineType.toLowerCase())
-    );
-  }
-
-  if (difficulty) {
-    filteredRecipes = filteredRecipes.filter(
-      (recipe) => recipe.difficulty && recipe.difficulty.toLowerCase().includes(difficulty.toLowerCase())
-    );
-  }
-
-  res.render("recipe-filter.html", {
-    filteredRecipes,
-    uniqueCuisines: uniqueCuisineList(recipeDB),
-    uniqueMealTypes: uniqueMealTypeList(recipeDB),
-    mealType,
-    cuisineType,
-    difficulty,
-  });
 }
 
 // GET /recipes-suggestions-34076352
-function getSuggestionsPage(req, res) {
-  res.render("recipes/recipe-suggestion.html", {
-    myRecipe: req.app.locals.recipeDB,
-    uniqueCuisines: uniqueCuisineList(req.app.locals.recipeDB),
-    uniqueMealTypes: uniqueMealTypeList(req.app.locals.recipeDB),
-  });
+async function getSuggestionsPage(req, res, next) {
+  try {
+    if (!req.currentUser){
+       return res.redirect("/login-34076352?notice=login-required");
+    }
+    const myRecipe = await Recipe.find({ userId: req.currentUser.userId });
+
+    const uniqueCuisines = await Recipe.distinct("cuisineType", { userId: req.currentUser.userId });
+
+    const uniqueMealTypes = await Recipe.distinct("mealType", { userId: req.currentUser.userId });
+
+    res.render("recipes/recipe-suggestion.html", { myRecipe, uniqueCuisines, uniqueMealTypes });
+  } catch (err) { 
+    return next(err); 
+  }
 }
 
 // GET /recipes-suggestion-results-34076352
@@ -95,41 +111,39 @@ function getSuggestionResults(req, res) {
 }
 
 // GET /recipes-search-scale-34076352
-function getSearchScale(req, res) {
-  const searchQuery = (req.query.search || "").trim();
-  let scaleFactor = parseFloat(req.query.scaleFactor) || 1;
-  scaleFactor = Math.max(1, Math.min(scaleFactor, 10));
+async function getSearchScale(req, res, next) {
+  try {
+    if (!req.currentUser) {
+      return res.redirect("/login-34076352?notice=login-required");
+    }
+    const searchQuery = (req.query.search || "").trim();
 
-  const searchResults = searchAndScaleRecipes(req.app.locals.recipeDB, searchQuery, scaleFactor);
+    let scaleFactor = parseFloat(req.query.scaleFactor) || 1;
 
-  res.render("recipe-search-scale.html", {
-    searchQuery,
-    scaleFactor,
-    searchResults,
-  });
+    scaleFactor = Math.max(1, Math.min(scaleFactor, 10));
+    const data = await Recipe.find({ userId: req.currentUser.userId });
+    const searchResults = searchAndScaleRecipes(data, searchQuery, scaleFactor);
+    res.render("recipe-search-scale.html", { searchQuery, scaleFactor, searchResults });
+  } catch (err) { 
+    return next(err); 
+  }
 }
 
 // GET /recipes-availability-34076352
-function getAvailabilityPage(req, res) {
-  const recipeDB = req.app.locals.recipeDB;
-  const inventory = req.app.locals.inventoryItemDB;
+async function getAvailabilityPage(req, res, next) {
+  try {
+    if (!req.currentUser) {
+      return res.redirect("/login-34076352?notice=login-required");
+    }
+    const recipeDB = await Recipe.find({});
+    const inventory = await Inventory.find({});
+    const rows = recipeDB.map(r => ({ recipe: r, availability: getAvailability(r, inventory) }));
+    rows.sort((a,b) => b.availability.percent - a.availability.percent);
+    res.render("recipe-availability.html", { rows });
+  } catch (err) { 
+    return next(err); 
 
-  const rows = [];
-  for (let i = 0; i < recipeDB.length; i++) {
-    const recipe = recipeDB[i];
-    rows.push({
-      recipe: recipe,
-      availability: getAvailability(recipe, inventory),
-    });
   }
-
-  rows.sort((recipeA, recipeB) => {
-    return recipeB.availability.percent - recipeA.availability.percent;
-  });
-
-  res.render("recipe-availability.html", {
-    rows,
-  });
 }
 
 module.exports = {

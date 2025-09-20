@@ -9,39 +9,39 @@ const ReviewSchema = new mongoose.Schema({
 
   rating: { 
     type: Number, 
-    min: 1, 
-    max: 5, 
-    required: true 
+    min: [1, "Rating must be between 1 and 5."],
+    max: [5, "Rating must be between 1 and 5."],
+    required: [true, "Rating is required."]
   },
 
   comment: { 
     type: String, 
-    trim: true, 
+    trim: true,
     default: "" 
   },
-  date: { 
+  date: {
     type: String, 
-    required: true 
+    required: [true, "Review date is required."]
   }
 }, { _id: false });
 
 const RecipeSchema = new mongoose.Schema({
-  recipeId: { type: String, required: true, unique: true },
-  userId: { type: String, required: true },
+  recipeId: { type: String, required: [true, "Recipe ID is required."], unique: true },
+  userId: { type: String, required: [true, "User ID is required."] },
   title: {
     type: String,
-    required: true,
+    required: [true, "Title is required."],
     trim: true,
-    minlength: 3,
-    maxlength: 100
+    minlength: [3, "Title must be at least 3 characters."],
+    maxlength: [100, "Title must be at most 100 characters."]
   },
   chef: {
     type: String,
-    required: true,
+    required: [true, "Chef name is required."],
     trim: true,
-    minlength: 2,
-    maxlength: 100,
-    match: /^[A-Za-z][A-Za-z\s\-']{1,99}$/,
+    minlength: [2, "Chef name must be at least 2 characters."],
+    maxlength: [100, "Chef name must be at most 100 characters."],
+    match: [/^[A-Za-z][A-Za-z\s\-\u0027]{1,99}$/, "Chef name must start with a letter and include only letters, spaces, hyphens, or apostrophes (2-100 characters)."],
   },
   ingredients: {
     type: [String],
@@ -89,7 +89,7 @@ const RecipeSchema = new mongoose.Schema({
   },
   mealType: { 
     type: String, 
-    required: true,
+    required: [true, "Meal type is required."],
     enum: { 
       values: ["Breakfast", "Lunch", "Dinner", "Snack"], 
     message: "Meal Type must be one of: Breakfast, Lunch, Dinner, Snack." 
@@ -102,12 +102,12 @@ const RecipeSchema = new mongoose.Schema({
       values: ["Italian", "Asian", "Mexican", "American", "French", "Indian", "Mediterranean", "Other"],
       message: "Cuisine Type must be one of: Italian, Asian, Mexican, American, French, Indian, Mediterranean, Other." 
     },
-    required: true
+    required: [true, "Cuisine type is required."]
   },
 
   prepTime: { 
     type: Number, 
-    required: true, 
+    required: [true, "Prep time is required."],
     min: [1, "Prep Time must be between 1 and 480 minutes."], 
     max: [480, "Prep Time must be between 1 and 480 minutes."], 
     validate: { 
@@ -122,12 +122,12 @@ const RecipeSchema = new mongoose.Schema({
       values: ["Easy", "Medium", "Hard"], 
       message: "Difficulty must be one of: Easy, Medium, Hard." 
     }, 
-    required: true 
+    required: [true, "Difficulty is required."]
   },
   
   servings: { 
     type: Number, 
-    required: true, 
+    required: [true, "Servings is required."],
     min: [1, "Servings must be between 1 and 20."], 
     max: [20, "Servings must be between 1 and 20."], 
     validate: { 

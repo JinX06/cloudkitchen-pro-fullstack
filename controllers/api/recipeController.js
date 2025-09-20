@@ -5,8 +5,6 @@ const { getRecipeSuggestions } = require("../../utils/recipeSuggestions/recipeSu
 // POST /api/recipes/add-34076352
 async function addRecipe(req, res, next) {
   try {
-    if (!req.currentUser) {return res.redirect("/login-34076352?notice=login-required")
-    };
     const { title, ingredients, instructions, mealType, cuisineType, prepTime, difficulty, servings } = req.validated;
     const chef = req.currentUser.fullname || req.currentUser.userId;
     const recipeId = await peekNextID("recipe");
@@ -59,7 +57,6 @@ async function addRecipe(req, res, next) {
 // POST /api/recipes/delete-34076352
 async function deleteRecipe(req, res, next) {
   try {
-    if (!req.currentUser) return res.redirect("/login-34076352?notice=login-required");
     const recipe = req.recipe; // from validateRecipeIDQuery
     // Only the owning chef can delete per spec
     if (req.currentUser.role !== "chef" || recipe.userId !== req.currentUser.userId) {
@@ -78,10 +75,6 @@ async function deleteRecipe(req, res, next) {
 // POST /api/recipes-suggestions-34076352
 async function postRecipeSuggestions(req, res, next) {
   try {
-    if (!req.currentUser) {
-      return res.redirect("/login-34076352?notice=login-required")
-    };
-
     const userResponse = {
       cuisineType: req.body.cuisineType,
       prepBucket: req.body.prepBucket,
@@ -102,9 +95,6 @@ async function postRecipeSuggestions(req, res, next) {
 // POST /api/recipes/add-review-34076352
 async function addReview(req, res, next) {
   try {
-    if (!req.currentUser) {
-      return res.redirect("/login-34076352?notice=login-required");
-    }
     const { recipeID, reviewer, rating, comment } = req.validated;
     const recipe = await Recipe.findOne({ recipeId: recipeID });
     if (!recipe) {
@@ -124,9 +114,101 @@ async function addReview(req, res, next) {
   }
 }
 
+// POST /api/recipes/update-34076352
+async function updateRecipe(req, res, next) {
+  try {
+    if (req.currentUser.role !== "chef") {
+      const err = new Error("Forbidden: you do not have permission to update recipes.");
+      err.status = 403;
+      throw err;
+    }
+
+    const { recipeId, title, ingredients, instructions, mealType, cuisineType, prepTime, difficulty, servings } = req.validated;
+
+    const updateDoc = {
+      title,
+      ingredients,
+      instructions,
+      mealType,
+      cuisineType,
+      prepTime,
+      difficulty,
+      servings,
+    };
+
+    const updated = await Recipe.findOneAndUpdate(
+      { recipeId, userId: req.currentUser.userId },
+      { $set: updateDoc },
+      { new: true, runValidators: true }
+    );
+
+    if (!updated) {
+      const err = new Error("Recipe not found or you do not have permission to modify it.");
+      err.status = 404;
+      throw err;
+    }
+
+    return res.redirect(`/recipes-edit-34076352?recipeID=${recipeId}&userId=${req.currentUser.userId}&notice=updated`);
+  } catch (err) {
+    if (err.name === "ValidationError" || err.status === 400) {
+      try {
+        const recipeId = req.body?.recipeID || req.body?.recipeId || "";
+        const myRecipe = await Recipe.find({ userId: req.currentUser.userId });
+        
+        const selectedRecipe = myRecipe.find((r) => r.recipeId === recipeId) || null;
+        const cuisinesList = await Recipe.distinct("cuisineType", { userId: req.currentUser.userId });
+
+        let ingredientsValue = "";
+        if (Array.isArray(req.body?.ingredients)) {
+          ingredientsValue = req.body.ingredients.join("\n");
+        } else if (typeof req.body?.ingredients === "string" && req.body.ingredients.trim().length > 0) {
+          ingredientsValue = req.body.ingredients;
+        } else if (selectedRecipe) {
+          ingredientsValue = (selectedRecipe.ingredients || []).join("\n");
+        }
+
+        let instructionsValue = "";
+        if (Array.isArray(req.body?.instructions)) {
+          instructionsValue = req.body.instructions.join("\n");
+        } else if (typeof req.body?.instructions === "string" && req.body.instructions.trim().length > 0) {
+          instructionsValue = req.body.instructions;
+        } else if (selectedRecipe) {
+          instructionsValue = (selectedRecipe.instructions || []).join("\n");
+        }
+
+        return res.status(400).render("recipes/recipe-edit.html", {
+          myRecipe,
+          selectedRecipe,
+          selectedRecipeId: recipeId,
+          cuisines: cuisinesList,
+          error: err.message,
+          notice: null,
+          form: {
+            recipeId,
+            title: req.body?.title || selectedRecipe?.title || "",
+            mealType: req.body?.mealType || selectedRecipe?.mealType || "",
+            cuisineType: req.body?.cuisineType || selectedRecipe?.cuisineType || "",
+            prepTime: req.body?.prepTime || selectedRecipe?.prepTime || "",
+            difficulty: req.body?.difficulty || selectedRecipe?.difficulty || "",
+            servings: req.body?.servings || selectedRecipe?.servings || "",
+            ingredients: ingredientsValue,
+            instructions: instructionsValue,
+          },
+        });
+      } catch (renderError) {
+        return next(renderError);
+      }
+    }
+
+    err.status = err.status || 400;
+    return next(err);
+  }
+}
+
 module.exports = {
   addRecipe,
   deleteRecipe,
   postRecipeSuggestions,
   addReview,
+  updateRecipe,
 };

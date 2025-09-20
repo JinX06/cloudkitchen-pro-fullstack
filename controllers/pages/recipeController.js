@@ -6,7 +6,6 @@ const Inventory = require("../../models/Inventory");
 // GET /recipes-34076352
 async function getRecipesPage(req, res, next) {
   try {
-    if (!req.currentUser) return res.redirect("/login-34076352?notice=login-required");
     const myRecipe = await Recipe.find({ userId: req.currentUser.userId });
     const otherRecipes = await Recipe.find({ userId: { $ne: req.currentUser.userId } });
     res.render("recipe.html", { myRecipe, otherRecipes });
@@ -16,10 +15,6 @@ async function getRecipesPage(req, res, next) {
 // GET /recipes-add-34076352
 async function getAddRecipePage(req, res, next) {
   try {
-    if (!req.currentUser) {
-      return res.redirect("/login-34076352?notice=login-required");
-    }
-
     const cuisines = ["Italian","Asian","Mexican","American","French","Indian","Mediterranean","Other"];
     res.render("recipes/recipe-add.html", { cuisines, form: {}, error: null });
   } catch (err) { 
@@ -27,12 +22,49 @@ async function getAddRecipePage(req, res, next) {
   }
 }
 
+// GET /recipes-edit-34076352
+async function getEditRecipePage(req, res, next) {
+  try {
+    const cuisines = ["Italian","Asian","Mexican","American","French","Indian","Mediterranean","Other"];
+    const myRecipe = await Recipe.find({ userId: req.currentUser.userId });
+    let selectedRecipe = req.selectedRecipe || null;
+
+    const form = selectedRecipe ? {
+      recipeId: selectedRecipe.recipeId,
+      title: selectedRecipe.title,
+      mealType: selectedRecipe.mealType,
+      cuisineType: selectedRecipe.cuisineType,
+      prepTime: selectedRecipe.prepTime,
+      difficulty: selectedRecipe.difficulty,
+      servings: selectedRecipe.servings,
+      ingredients: Array.isArray(selectedRecipe.ingredients) ? selectedRecipe.ingredients.join("\n") : "",
+      instructions: Array.isArray(selectedRecipe.instructions) ? selectedRecipe.instructions.join("\n") : "",
+    } : {};
+
+    let notice;
+    if (req.query.notice === "updated") {
+      notice = "Recipe updated successfully.";
+    } else {
+      notice = null;
+    }
+
+    res.render("recipes/recipe-edit.html", {
+      cuisines,
+      myRecipe,
+      selectedRecipe,
+      selectedRecipeId: req.selectedRecipeId,
+      error: null,
+      notice,
+      form,
+    });
+  } catch (err) {
+    return next(err);
+  }
+}
+
 // GET /recipes-remove-34076352
 async function getRemoveRecipePage(req, res, next) {
   try {
-    if (!req.currentUser){ 
-      return res.redirect("/login-34076352?notice=login-required");
-    }
     const myRecipe = await Recipe.find({ userId: req.currentUser.userId });
     res.render("recipes/recipe-remove.html", {
       myRecipe,
@@ -45,7 +77,6 @@ async function getRemoveRecipePage(req, res, next) {
 // GET /recipes-view-34076352
 async function getRecipeView(req, res, next) {
   try {
-    if (!req.currentUser) return res.redirect("/login-34076352?notice=login-required");
     const { recipeID } = req.query;
     let selected = null;
     if (recipeID) {
@@ -58,9 +89,6 @@ async function getRecipeView(req, res, next) {
 // GET /recipes-filter-34076352
 async function getFilterPage(req, res, next) {
   try {
-    if (!req.currentUser){
-      return res.redirect("/login-34076352?notice=login-required")
-    };
     const { mealType, cuisineType, difficulty } = req.query;
     const query = { userId: req.currentUser.userId };
 
@@ -88,9 +116,6 @@ async function getFilterPage(req, res, next) {
 // GET /recipes-suggestions-34076352
 async function getSuggestionsPage(req, res, next) {
   try {
-    if (!req.currentUser){
-       return res.redirect("/login-34076352?notice=login-required");
-    }
     const myRecipe = await Recipe.find({ userId: req.currentUser.userId });
 
     const uniqueCuisines = await Recipe.distinct("cuisineType", { userId: req.currentUser.userId });
@@ -113,9 +138,6 @@ function getSuggestionResults(req, res) {
 // GET /recipes-search-scale-34076352
 async function getSearchScale(req, res, next) {
   try {
-    if (!req.currentUser) {
-      return res.redirect("/login-34076352?notice=login-required");
-    }
     const searchQuery = (req.query.search || "").trim();
 
     let scaleFactor = parseFloat(req.query.scaleFactor) || 1;
@@ -132,9 +154,6 @@ async function getSearchScale(req, res, next) {
 // GET /recipes-availability-34076352
 async function getAvailabilityPage(req, res, next) {
   try {
-    if (!req.currentUser) {
-      return res.redirect("/login-34076352?notice=login-required");
-    }
     const recipeDB = await Recipe.find({});
     const inventory = await Inventory.find({});
     const rows = recipeDB.map(r => ({ recipe: r, availability: getAvailability(r, inventory) }));
@@ -149,6 +168,7 @@ async function getAvailabilityPage(req, res, next) {
 module.exports = {
   getRecipesPage,
   getAddRecipePage,
+  getEditRecipePage,
   getRemoveRecipePage,
   getRecipeView,
   getFilterPage,

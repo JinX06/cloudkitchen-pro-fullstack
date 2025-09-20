@@ -95,8 +95,8 @@ async function postRecipeSuggestions(req, res, next) {
 // POST /api/recipes/add-review-34076352
 async function addReview(req, res, next) {
   try {
-    const { recipeID, reviewer, rating, comment } = req.validated;
-    const recipe = await Recipe.findOne({ recipeId: recipeID });
+    const { recipeId, reviewer, rating, comment } = req.validated;
+    const recipe = await Recipe.findOne({ recipeId });
     if (!recipe) {
       const err = new Error("Recipe not found.");
       err.status = 400;
@@ -123,7 +123,9 @@ async function updateRecipe(req, res, next) {
       throw err;
     }
 
-    const { recipeId, title, ingredients, instructions, mealType, cuisineType, prepTime, difficulty, servings } = req.validated;
+    const recipeId = (req.body?.recipeId || "").trim();
+
+    const { title, ingredients, instructions, mealType, cuisineType, prepTime, difficulty, servings } = req.validated;
 
     const updateDoc = {
       title,
@@ -148,13 +150,13 @@ async function updateRecipe(req, res, next) {
       throw err;
     }
 
-    return res.redirect(`/recipes-edit-34076352?recipeID=${recipeId}&userId=${req.currentUser.userId}&notice=updated`);
+    return res.redirect(`/recipes-edit-34076352?recipeId=${recipeId}&userId=${req.currentUser.userId}&notice=updated`);
   } catch (err) {
     if (err.name === "ValidationError" || err.status === 400) {
       try {
-        const recipeId = req.body?.recipeID || req.body?.recipeId || "";
+        const recipeId = (req.body?.recipeId || "").trim();
         const myRecipe = await Recipe.find({ userId: req.currentUser.userId });
-        
+
         const selectedRecipe = myRecipe.find((r) => r.recipeId === recipeId) || null;
         const cuisinesList = await Recipe.distinct("cuisineType", { userId: req.currentUser.userId });
 

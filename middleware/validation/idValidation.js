@@ -3,13 +3,13 @@ const Inventory = require("../../models/Inventory");
 
 async function validateRecipeID(req, res, next) {
   try {
-    const { recipeID } = req.query;
-    if (typeof recipeID === "undefined" || recipeID === "") {
+    const { recipeId } = req.query;
+    if (typeof recipeId === "undefined" || recipeId === "") {
       req.selectedRecipe = null;
       req.selectedRecipeId = undefined;
       return next();
     }
-    const selected = await Recipe.findOne({ recipeId: recipeID });
+    const selected = await Recipe.findOne({ recipeId });
     if (!selected) {
       const err = new Error("Recipe not found.");
       err.status = 404;
@@ -23,7 +23,7 @@ async function validateRecipeID(req, res, next) {
     }
 
     req.selectedRecipe = selected;
-    req.selectedRecipeId = recipeID;
+    req.selectedRecipeId = recipeId;
     return next();
   } catch (err) {
     err.status = err.status || 400;
@@ -57,13 +57,13 @@ async function validateItemID(req, res, next) {
 
 async function validateRecipeIDQuery(req, res, next) {
   try {
-    const { recipeID } = req.query;
-    if (!recipeID) {
-      const err = new Error("recipeID is required");
+    const { recipeId } = req.query;
+    if (!recipeId) {
+      const err = new Error("recipeId is required");
       err.status = 400;
       throw err;
     }
-    const recipe = await Recipe.findOne({ recipeId: recipeID });
+    const recipe = await Recipe.findOne({ recipeId });
     if (!recipe) {
       const err = new Error("Recipe not found.");
       err.status = 404;

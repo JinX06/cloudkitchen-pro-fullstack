@@ -77,10 +77,10 @@ async function getRemoveRecipePage(req, res, next) {
 // GET /recipes-view-34076352
 async function getRecipeView(req, res, next) {
   try {
-    const { recipeID } = req.query;
+    const { recipeId } = req.query;
     let selected = null;
-    if (recipeID) {
-      selected = await Recipe.findOne({ recipeId: recipeID });
+    if (recipeId) {
+      selected = await Recipe.findOne({ recipeId });
     }
     res.render("recipes/recipe-view.html", { selectedRecipe: selected });
   } catch (err) { return next(err); }

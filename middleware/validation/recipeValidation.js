@@ -76,7 +76,7 @@ const validateRecipeReqBody = (req, res, next) => {
  */
 const validateReviewReqBody = (req, res, next) => {
     try {
-        const { recipeID, reviewer, rating, comment } = req.body;
+        const { recipeId, reviewer, rating, comment } = req.body;
         
         // Validate rating
         const numericRating = Number(rating);
@@ -84,7 +84,7 @@ const validateReviewReqBody = (req, res, next) => {
         
         // Store validated data
         req.validated = {
-            recipeID,
+            recipeId,
             reviewer: reviewer || "Anonymous", // use mongoose model defaults "Anonymous" if reviewer is not provided
             rating: numericRating,
             comment: comment  //use mongoose model defaults for empty string if not provided

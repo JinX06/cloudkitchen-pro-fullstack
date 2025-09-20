@@ -123,16 +123,16 @@
               <td><%= new Date(tempRecipe.createdAt).toISOString().split("T")[0] %></td>
               <td class="py-2">
                 <div class="d-flex justify-content-center gap-2">
-                  <a href="recipes-view-34076352?recipeID=<%= tempRecipe.recipeId %>&userId=<%= currentUser.userId %>" class="btn btn-sm btn-primary">View</a>
-                  <a href="recipes-edit-34076352?recipeID=<%= tempRecipe.recipeId %>&userId=<%= currentUser.userId %>" class="btn btn-sm btn-warning text-dark">Edit</a>
-                  <a href="recipes-remove-34076352?recipeID=<%= tempRecipe.recipeId %>&userId=<%= currentUser.userId %>" class="btn btn-sm btn-danger">Delete</a>
+                  <a href="recipes-view-34076352?recipeId=<%= tempRecipe.recipeId %>&userId=<%= currentUser.userId %>" class="btn btn-sm btn-primary">View</a>
+                  <a href="recipes-edit-34076352?recipeId=<%= tempRecipe.recipeId %>&userId=<%= currentUser.userId %>" class="btn btn-sm btn-warning text-dark">Edit</a>
+                  <a href="recipes-remove-34076352?recipeId=<%= tempRecipe.recipeId %>&userId=<%= currentUser.userId %>" class="btn btn-sm btn-danger">Delete</a>
                 </div>
                 
                 <!-- Add Review -->
                   <a class="btn btn-primary btn-sm mt-2" data-bs-toggle="collapse" href="#collapse<%= tempRecipe.recipeId %>" role="button">+ Add Review</a>
                   <form method="post" action="/api/recipes/add-review-34076352?userId=<%= currentUser.userId %>" class="pt-2">
                     <div class="collapse" id="collapse<%= tempRecipe.recipeId %>">
-                    <input type="hidden" name="recipeID" value="<%= tempRecipe.recipeId %>">
+                    <input type="hidden" name="recipeId" value="<%= tempRecipe.recipeId %>">
                     <div class="col">
                       <input type="text" name="reviewer" class="form-control form-control-sm" placeholder="Your name (optional)" style="font-size: 0.7rem;">
                     </div>
@@ -275,13 +275,13 @@
 
                   <td class="py-2">
                     <div class="d-flex justify-content-center gap-2">
-                      <a href="recipes-view-34076352?recipeID=<%= tempRecipe.recipeId %>&userId=<%= currentUser.userId %>" class="btn btn-sm btn-primary">View</a>
+                      <a href="recipes-view-34076352?recipeId=<%= tempRecipe.recipeId %>&userId=<%= currentUser.userId %>" class="btn btn-sm btn-primary">View</a>
                     </div>
                       <!-- Add Review -->
                       <a class="btn btn-primary btn-sm mt-1" style="font-size: small;" data-bs-toggle="collapse" href="#collapse<%= tempRecipe.recipeId %>" role="button">+ Add Review</a>
                       <form method="post" action="/api/recipes/add-review-34076352?userId=<%= currentUser.userId %>" class="pt-2">
                         <div class="collapse" id="collapse<%= tempRecipe.recipeId %>">
-                          <input type="hidden" name="recipeID" value="<%= tempRecipe.recipeId %>">
+                          <input type="hidden" name="recipeId" value="<%= tempRecipe.recipeId %>">
                           <div class="col">
                             <input type="text" name="reviewer" class="form-control form-control-sm" placeholder="Your name (optional)" style="font-size: 0.7rem;">
                           </div>

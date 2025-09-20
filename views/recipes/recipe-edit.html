@@ -14,7 +14,7 @@
     <div class="card-body">
       <label for="recipeEditSelect" class="form-label">Select a recipe to edit:</label>
       <select id="recipeEditSelect" class="form-select"
-              onchange="window.location='/recipes-edit-34076352?recipeID=' + this.value + '&userId=<%= currentUser && currentUser.userId %>'">
+              onchange="window.location='/recipes-edit-34076352?recipeId=' + this.value + '&userId=<%= currentUser && currentUser.userId %>'">
         <option value="">Select recipe…</option>
         <% for (let i = 0; i < myRecipe.length; i++) { %>
           <% const r = myRecipe[i]; %>
@@ -28,7 +28,7 @@
         <% const formData = form || {}; %>
         <hr class="border-light">
         <form action="/api/recipes/update-34076352?userId=<%= currentUser.userId %>" method="POST" class="was-validated">
-          <input type="hidden" name="recipeID" value="<%= formData.recipeId || selectedRecipe.recipeId %>">
+          <input type="hidden" name="recipeId" value="<%= formData.recipeId || selectedRecipe.recipeId %>">
 
           <div class="row g-3">
             <div class="col-md-8">

@@ -3,11 +3,11 @@
 <div>
     <div class="card bg-dark text-white" style="margin: 20px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8)">
         <h2>📖 Remove Recipe</h2>
-        <form action="/api/recipes/delete-34076352?recipeID=<%= selectedRecipeId %>&userId=<%= currentUser.userId %>" method="POST">
+        <form action="/api/recipes/delete-34076352?recipeId=<%= selectedRecipeId %>&userId=<%= currentUser.userId %>" method="POST">
             <label for="recipeId">Select from list:</label>
 
             <!-- check whether required is needed later -->
-            <select class="form-select" onchange="window.location='/recipes-remove-34076352?recipeID=' + this.value + '&userId=<%= currentUser.userId %>'">
+            <select class="form-select" onchange="window.location='/recipes-remove-34076352?recipeId=' + this.value + '&userId=<%= currentUser.userId %>'">
 
             <!-- Placeholder option -->
             <option value="" selected>Select a recipe</option>

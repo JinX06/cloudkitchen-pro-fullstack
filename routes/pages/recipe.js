@@ -5,31 +5,37 @@ const { requireAuth, requireRole } = require("../../middleware/auth");
 
 const { validateRecipeID } = require("../../middleware/validation/idValidation.js");
 
-// Recipes list page (chef only)
-router.get("/recipes-34076352", requireAuth, requireRole("chef"), recipeController.getRecipesPage);
+router.use(requireAuth);
+router.use(requireRole("chef"));
 
-// Add recipe page (chef only)
-router.get("/recipes-add-34076352", requireAuth, requireRole("chef"), recipeController.getAddRecipePage);
+// Recipes list page
+router.get("/recipes-34076352", recipeController.getRecipesPage);
 
-// Remove recipe page (chef only)
-router.get("/recipes-remove-34076352", requireAuth, requireRole("chef"), validateRecipeID, recipeController.getRemoveRecipePage);
+// Add recipe page
+router.get("/recipes-add-34076352", recipeController.getAddRecipePage);
+
+// Edit recipe page
+router.get("/recipes-edit-34076352", validateRecipeID, recipeController.getEditRecipePage);
+
+// Remove recipe page
+router.get("/recipes-remove-34076352", validateRecipeID, recipeController.getRemoveRecipePage);
 
 // View recipe details
-router.get("/recipes-view-34076352", requireAuth, recipeController.getRecipeView);
+router.get("/recipes-view-34076352", recipeController.getRecipeView);
 
 // Filter recipes
-router.get("/recipes-filter-34076352", requireAuth, recipeController.getFilterPage);
+router.get("/recipes-filter-34076352", recipeController.getFilterPage);
 
 // Recipe suggestions form
-router.get("/recipes-suggestions-34076352", requireAuth, recipeController.getSuggestionsPage);
+router.get("/recipes-suggestions-34076352", recipeController.getSuggestionsPage);
 
 // Recipe suggestions results
-router.get("/recipes-suggestion-results-34076352", requireAuth, recipeController.getSuggestionResults);
+router.get("/recipes-suggestion-results-34076352", recipeController.getSuggestionResults);
 
 // Search and scale recipes
-router.get("/recipes-search-scale-34076352", requireAuth, recipeController.getSearchScale);
+router.get("/recipes-search-scale-34076352", recipeController.getSearchScale);
 
-// Recipe availability overview (chef only)
-router.get("/recipes-availability-34076352", requireAuth, requireRole("chef"), recipeController.getAvailabilityPage);
+// Recipe availability overview
+router.get("/recipes-availability-34076352", recipeController.getAvailabilityPage);
 
 module.exports = router;

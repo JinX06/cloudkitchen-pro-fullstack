@@ -1,25 +1,25 @@
-const { calculateInventoryValue, uniqueCategoryList } = require("../../utils/inventoryUtils.js");
 const Inventory = require("../../models/Inventory");
-
-function daysLeft(expiryDateStr) {
-  const expiryDate = new Date(expiryDateStr);
-  const today = new Date();
-  return Math.floor((expiryDate - today) / (1000 * 60 * 60 * 24));
-}
 
 // GET /inventory-34076352
 async function getInventoryPage(req, res, next) {
   try {
-    // Use .lean() to get plain JS objects instead of Mongoose functions
-    let myInventory = await Inventory.find({}).lean();
+    const now = new Date();
+    const items = await Inventory.aggregate([
+      {
+        $addFields: {
+          daysLeft: {
+            $floor: {
+              $divide: [{ $subtract: ["$expirationDate", now] }, 1000 * 60 * 60 * 24]
+            }
+          }
+        }
+      },
+      { $sort: { createdAt: -1 } }
+    ]);
 
-    // Add daysLeft field to each item for display whilst keeping original data using spread (...it)
-    myInventory = myInventory.map(it => ({ ...it, daysLeft: daysLeft(it.expirationDate)}));
-    const inventoryValue = calculateInventoryValue(myInventory);
-
-    res.render("inventory/inventory.html", { myInventory, inventoryValue });
-  } catch (err) { 
-    return next(err); 
+    res.render("inventory/inventory.html", { myInventory: items });
+  } catch (err) {
+    return next(err);
   }
 }
 
@@ -43,6 +43,36 @@ async function getRemoveInventoryPage(req, res, next) {
   }
 }
 
+// GET /inventory-edit-34076352
+async function getEditInventoryPage(req, res, next) {
+  try {
+    const selectedId = req.selectedItemId;
+    const inventoryList = await Inventory.find({}).sort({ createdAt: -1 }).lean();
+
+    const selectedItem = selectedId ? inventoryList.find((doc) => doc.inventoryId === selectedId) || null : null;
+
+    res.render("inventory/inventory-edit.html", {
+      myInventory: inventoryList,
+      selectedItem,
+      selectedItemId: selectedId,
+      error: null,
+      form: selectedItem ? {
+        inventoryId: selectedItem.inventoryId,
+        ingredientName: selectedItem.ingredientName,
+        quantity: selectedItem.quantity,
+        unit: selectedItem.unit,
+        category: selectedItem.category,
+        purchaseDate: selectedItem.purchaseDate ? selectedItem.purchaseDate.toISOString().split("T")[0] : "",
+        expiryDate: selectedItem.expirationDate ? selectedItem.expirationDate.toISOString().split("T")[0] : "",
+        location: selectedItem.location,
+        cost: selectedItem.cost,
+      } : {},
+    });
+  } catch (err) {
+    return next(err);
+  }
+}
+
 // GET /inventory-view-34076352
 async function getInventoryViewPage(req, res, next) {
   try {
@@ -57,44 +87,51 @@ async function getInventoryViewPage(req, res, next) {
 // GET /inventory-alerts-34076352
 async function getInventoryAlertsPage(req, res, next) {
   try {
-    const items = await Inventory.find({}).lean();
-
-    // Add daysLeft field to each item for display
-    const itemsDaysLeft = items.map(it => ({ ...it, daysLeft: daysLeft(it.expirationDate) }));
-
-    // Get expiring items (<= 3 days) and not already expired (> 0 days)
-    const expiringItems = itemsDaysLeft.filter(it => it.daysLeft <= 3 && it.daysLeft > 0);
-
-    // Get items which has low stock (< 2 quantity)
-    const lowStock = itemsDaysLeft.filter(it => it.quantity < 2);
-
-    // Group items by category for summary
-    const uniqueCategories = uniqueCategoryList(items);
-
-    // Calculate item count and total value per category
-    const categoryGroups = [];
-
-    for (const category of uniqueCategories) {
-        categoryGroups.push({
-            category: category,
-            itemCount: 0,
-            value: 0
-        });
-    }
-
-    for (const item of items) {
-        const group = categoryGroups.find(g => g.category === item.category);
-        if (group) {
-            group.itemCount++;
-            group.value += item.cost;
+    const now = new Date();
+    const itemsWithDaysLeft = await Inventory.aggregate([
+      {
+        $addFields: {
+          daysLeft: {
+            $floor: {
+              $divide: [{ $subtract: ["$expirationDate", now] }, 1000 * 60 * 60 * 24]
+            }
+          }
         }
-    }
+      }
+    ]);
+
+    const expiringItems = itemsWithDaysLeft.filter(item => item.daysLeft > 0 && item.daysLeft <= 3);
+    const lowStock = itemsWithDaysLeft.filter(item => Number(item.quantity) < 2);
+
+    const categoryGroups = await Inventory.aggregate([
+      {
+        $group: {
+          _id: "$category",
+          itemCount: { $sum: 1 },  // Count of items in this category sum += 1
+          value: { $sum: "$cost" }
+        }
+      },
+      { $sort: { category: 1 } }
+    ]);
+
+    const totals = await Inventory.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalValue: { $sum: "$cost" },
+          totalItems: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const totalValue = (totals[0]?.totalValue || 0).toFixed(2);
+    const totalItems = totals[0]?.totalItems || 0;
 
     res.render("inventory/inventory-alerts.html", {
       expiringItems,
       lowStock,
-      myInventoryValue: calculateInventoryValue(items),
-      totalItems: items.length,
+      myInventoryValue: totalValue,
+      totalItems,
       categoryGroups,
     });
   } catch (err) { 
@@ -106,6 +143,7 @@ module.exports = {
   getInventoryPage,
   getAddInventoryPage,
   getRemoveInventoryPage,
+  getEditInventoryPage,
   getInventoryViewPage,
   getInventoryAlertsPage,
 };

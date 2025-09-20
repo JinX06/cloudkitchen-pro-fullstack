@@ -17,7 +17,9 @@ async function getInventoryPage(req, res, next) {
       { $sort: { createdAt: -1 } }
     ]);
 
-    res.render("inventory/inventory.html", { myInventory: items });
+    const inventoryValue = items.reduce((sum, item) => sum + Number(item.cost), 0).toFixed(2);
+
+    res.render("inventory/inventory.html", { myInventory: items, inventoryValue });
   } catch (err) {
     return next(err);
   }
@@ -147,4 +149,3 @@ module.exports = {
   getInventoryViewPage,
   getInventoryAlertsPage,
 };
-

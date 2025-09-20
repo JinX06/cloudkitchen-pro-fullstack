@@ -100,10 +100,9 @@ async function postSignup(req, res, next) {
     const userId = await peekNextID("user");
     const user = await User.create({ userId, email, password, fullname, role, phone, loggedIn: false });
     
-    // Increment ID and log in
+    // Increment ID and redirect to log in page
     await incrementID("user");
-    await User.updateOne({ _id: user._id }, { $set: { loggedIn: true } });
-    return res.redirect(`/home-34076352?userId=${user.userId}`);
+    return res.redirect("auth/login.html");
 
   } catch (err) {
     const status = err.status || 400;

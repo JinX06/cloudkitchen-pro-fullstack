@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
     required: true,
     validate: {
       // password REGEX from: https://ihateregex.io/expr/password/
-      validator: (v) => /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/.test(v),
+      validator: (v) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/.test(v),
       message: "Password must be 8+ chars and include uppercase, lowercase, number, and special character."
     }
   },

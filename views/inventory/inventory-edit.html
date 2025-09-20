@@ -3,6 +3,9 @@
 <div class="card bg-dark text-white" style="margin: 20px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8)">
   <h2>🛠️ Edit Inventory Item</h2>
 
+  <% if (notice) { %>
+    <div class="alert alert-success" role="alert"><%= notice %></div>
+  <% } %>
   <% if (error) { %>
     <div class="alert alert-danger" role="alert"><%= error %></div>
   <% } %>

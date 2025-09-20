@@ -53,11 +53,19 @@ async function getEditInventoryPage(req, res, next) {
 
     const selectedItem = selectedId ? inventoryList.find((doc) => doc.inventoryId === selectedId) || null : null;
 
+    let notice;
+    if (req.query.notice === "updated") {
+      notice = "Inventory item updated successfully.";
+    } else {
+      notice = null;
+    }
+
     res.render("inventory/inventory-edit.html", {
       myInventory: inventoryList,
       selectedItem,
       selectedItemId: selectedId,
       error: null,
+      notice,
       form: selectedItem ? {
         inventoryId: selectedItem.inventoryId,
         ingredientName: selectedItem.ingredientName,

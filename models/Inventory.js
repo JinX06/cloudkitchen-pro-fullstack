@@ -98,7 +98,4 @@ const InventorySchema = new mongoose.Schema({
   },
 }, { timestamps: true }); // use mongoose createdAt, updatedAt timestamps
 
-InventorySchema.index({ inventoryId: 1 }, { unique: true });
-InventorySchema.index({ userId: 1 });
-
 module.exports = mongoose.model("Inventory", InventorySchema);

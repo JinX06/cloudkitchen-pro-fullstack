@@ -10,6 +10,7 @@ function scoreToDifficultyLabel(score) {
   return labelMapping[rounded];
 }
 
+// HD TASK 1
 async function getSmartRecipeRecommendationsPage(req, res, next) {
   try {
     const now = new Date();
@@ -135,7 +136,7 @@ async function getSmartRecipeRecommendationsPage(req, res, next) {
       ingredientDetails.forEach((item) => {
         const key = item.label.toLowerCase();
 
-        // First time seeing this ingredient? Initialize tracking for it
+        // Add ingredient to a set if new (unique ingredients)
         if (!ingredientUsage[key]) {
           ingredientUsage[key] = {
             label: item.label,
@@ -339,6 +340,317 @@ async function getSmartRecipeRecommendationsPage(req, res, next) {
   }
 }
 
+// HD TASK 3
+async function getRecipeAnalyticsDashboard(req, res, next) {
+  try {
+    // Recipe Performance Analytics for most popular recipes
+    const popularRecipes = await Recipe.aggregate([
+      {
+        $addFields: {
+          reviewCount: { $size: "$reviews" },
+          totalRatings: { $sum: "$ratings" }
+        }
+      },
+      {
+        $sort: { reviewCount: -1, avgRating: -1 }
+      },
+      {
+        $limit: 5
+      },
+      {
+        $project: {
+          _id: 0,
+          recipeId: 1,
+          title: 1,
+          chef: 1,
+          reviewCount: 1,
+          avgRating: 1,
+          difficulty: 1,
+          cuisineType: 1
+        }
+      }
+    ]);
+
+    // Ingredient Usage Analysis
+    const ingredientUsage = await Recipe.aggregate([
+      { $unwind: "$ingredients" },
+      {
+        $group: {
+          _id: { $toLower: { $trim: { input: { $arrayElemAt: [{ $split: ["$ingredients", " "] }, -1] } } } },
+          count: { $sum: 1 },
+          recipes: { $addToSet: "$title" }
+        }
+      },
+      { $match: { _id: { $ne: "" } } },
+      { $sort: { count: -1 } },
+      { $limit: 10 },
+      {
+        $project: {
+          _id: 0,
+          ingredient: "$_id",
+          count: 1,
+          recipes: { $slice: ["$recipes", 3] }
+        }
+      }
+    ]);
+
+    // User Recipe Insights - recipes by chef
+    const recipesByChef = await Recipe.aggregate([
+      {
+        $group: {
+          _id: "$chef",
+          recipeCount: { $sum: 1 },
+          avgRating: { $avg: "$avgRating" },
+          cuisineTypes: { $addToSet: "$cuisineType" },
+          difficultyDistribution: {
+            $push: "$difficulty"
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          chef: "$_id",
+          recipeCount: 1,
+          avgRating: 1,
+          cuisineTypes: 1,
+          easyCount: {
+            $size: {
+              $filter: {
+                input: "$difficultyDistribution",
+                as: "diff",
+                cond: { $eq: ["$$diff", "Easy"] }
+              }
+            }
+          },
+          mediumCount: {
+            $size: {
+              $filter: {
+                input: "$difficultyDistribution",
+                as: "diff",
+                cond: { $eq: ["$$diff", "Medium"] }
+              }
+            }
+          },
+          hardCount: {
+            $size: {
+              $filter: {
+                input: "$difficultyDistribution",
+                as: "diff",
+                cond: { $eq: ["$$diff", "Hard"] }
+              }
+            }
+          }
+        }
+      },
+      { $sort: { recipeCount: -1 } },
+      { $limit: 5 }
+    ]);
+
+    // Cuisine Distribution
+    const cuisineDistribution = await Recipe.aggregate([
+      {
+        $group: {
+          _id: "$cuisineType",
+          count: { $sum: 1 },
+          avgPrepTime: { $avg: "$prepTime" },
+          avgRating: { $avg: "$avgRating" },
+          recipes: { $push: "$title" }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          cuisineType: "$_id",
+          count: 1,
+          avgPrepTime: { $round: ["$avgPrepTime", 1] },
+          avgRating: { $round: ["$avgRating", 1] },
+          recipes: { $slice: ["$recipes", 3] }
+        }
+      },
+      { $sort: { count: -1 } }
+    ]);
+
+    // Difficulty Distribution
+    const difficultyDistribution = await Recipe.aggregate([
+      {
+        $group: {
+          _id: "$difficulty",
+          count: { $sum: 1 },
+          avgPrepTime: { $avg: "$prepTime" },
+          avgRating: { $avg: "$avgRating" }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          difficulty: "$_id",
+          count: 1,
+          avgPrepTime: { $round: ["$avgPrepTime", 1] },
+          avgRating: { $round: ["$avgRating", 1] },
+          percentage: { $multiply: [{ $divide: ["$count", { $literal: await Recipe.countDocuments() }] }, 100] }
+        }
+      },
+      { $sort: { count: -1 } }
+    ]);
+
+    // Meal Type Distribution
+    const mealTypeDistribution = await Recipe.aggregate([
+      {
+        $group: {
+          _id: "$mealType",
+          count: { $sum: 1 },
+          avgPrepTime: { $avg: "$prepTime" }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          mealType: "$_id",
+          count: 1,
+          avgPrepTime: { $round: ["$avgPrepTime", 1] },
+          percentage: { $multiply: [{ $divide: ["$count", { $literal: await Recipe.countDocuments() }] }, 100] }
+        }
+      },
+      { $sort: { count: -1 } }
+    ]);
+
+    // Get inventory data (used by both cost analysis and 90%+ suggestions)
+    const inventoryItems = await Inventory.find({}).lean();
+
+    // Normalise label helper using parseIngredient
+    const normalize = (val) => {
+      const parsed = parseIngredient(String(val || ""));
+      return String(parsed && parsed.item ? parsed.item : val).toLowerCase().trim();
+    };
+
+    // Build an inventory index keyed by normalised ingredient label
+    const inventoryIndex = {};
+    inventoryItems.forEach(item => {
+      const key = normalize(item.ingredientName);
+      if (!key) return;
+      if (!inventoryIndex[key]){
+        inventoryIndex[key] = [];
+      }
+      const qty = Number(item.quantity) || 0;
+      const totalCost = Number(item.cost) || 0; // use 'cost' from Inventory model
+      const unitCost = qty > 0 ? totalCost / qty : totalCost; // fallback if qty missing
+      inventoryIndex[key].push({
+        unitCost, // cost per 1 unit
+        unit: item.unit,
+        quantity: qty,
+        name: item.ingredientName,
+        totalCost
+      });
+    });
+    const inventoryKeys = Object.keys(inventoryIndex);
+    
+    // Helper to find best matching inventory key for a given ingredient label
+    const findInventoryKey = (label) => {
+      const l = normalize(label);
+      if (!l) return null;
+      if (inventoryIndex[l]) return l;
+      const found = inventoryKeys.find(k => l.includes(k) || k.includes(l));
+      return found || null;
+    };
+
+    // Cost Analysis - Use recipe data with inventory prices
+    const recipeCostAnalysis = await Recipe.aggregate([
+      {
+        $project: {
+          title: 1,
+          ingredientCount: { $size: "$ingredients" },
+          ingredients: 1
+        }
+      },
+      { $sort: { ingredientCount: -1 } },
+      { $limit: 10 }
+    ]);
+
+    // Estimate costs based on ingredient matches (uses unitCost * qty parsed from ingredient)
+    for (const recipe of recipeCostAnalysis) {
+      let estimatedCost = 0;
+      let matchedIngredients = 0;
+
+      (recipe.ingredients || []).forEach(ingredient => {
+        const key = findInventoryKey(ingredient);
+        if (key) {
+          const entries = inventoryIndex[key];
+          // Average unit cost across matching inventory entries
+          const avgUnitCost = entries.length ? entries.reduce((sum, e) => sum + (Number(e.unitCost) || 0), 0) / entries.length : 0;
+
+          // Use parsed quantity if present, otherwise assume 1
+          const parsed = parseIngredient(ingredient);
+          const qty = Number(parsed.qty) || 1;
+
+          estimatedCost += avgUnitCost * qty;
+          matchedIngredients++;
+        }
+      });
+
+      recipe.estimatedCost = Number(estimatedCost.toFixed(2));
+      recipe.matchedIngredients = matchedIngredients;
+    }
+
+    // Sort by estimated cost
+    recipeCostAnalysis.sort((a, b) => b.estimatedCost - a.estimatedCost);
+
+    // 90%+ Suggested Recipes (cookability)
+    const allRecipes = await Recipe.find({}).lean();
+
+    const highCookabilitySuggestions = [];
+    allRecipes.forEach(r => {
+      const ing = Array.isArray(r.ingredients) ? r.ingredients : [];
+      const total = ing.length;
+      if (total === 0) return;
+
+      let matched = 0;
+      ing.forEach(line => {
+        if (findInventoryKey(line)) matched++;
+      });
+
+      const percent = Math.round((matched / total) * 100);
+      if (percent >= 90) {
+        highCookabilitySuggestions.push({
+          recipeId: r.recipeId,
+          title: r.title,
+          chef: r.chef,
+          cuisineType: r.cuisineType,
+          difficulty: r.difficulty,
+          prepTime: r.prepTime,
+          matched,
+          total,
+          percent,
+          avgRating: r.avgRating || 0
+        });
+      }
+    });
+
+    highCookabilitySuggestions.sort((a, b) => {
+      if (b.percent !== a.percent) return b.percent - a.percent;
+      if (b.matched !== a.matched) return b.matched - a.matched;
+      return (b.avgRating || 0) - (a.avgRating || 0);
+    });
+
+    res.render("hd/recipe-analytics-dashboard.html", {
+      popularRecipes,
+      ingredientUsage,
+      recipesByChef,
+      cuisineDistribution,
+      difficultyDistribution,
+      mealTypeDistribution,
+      recipeCostAnalysis,
+      highCookabilitySuggestions
+    });
+  } catch (err) {
+    return next(err);
+  }
+}
+
+
+
 module.exports = {
   getSmartRecipeRecommendationsPage,
+  getRecipeAnalyticsDashboard,
+  getSmartInventoryManagementPage
 };

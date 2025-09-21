@@ -89,12 +89,34 @@ async function getRecipeView(req, res, next) {
 // GET /recipes-filter-34076352
 async function getFilterPage(req, res, next) {
   try {
-    const { mealType, cuisineType, difficulty } = req.query;
+    const { mealType, cuisineType, difficulty, prepMin, prepMax } = req.query;
     const query = { userId: req.currentUser.userId };
+    console.log(req.query);
 
     if (mealType) query.mealType = mealType.trim();
     if (cuisineType) query.cuisineType = cuisineType.trim();
-    if (difficulty) query.difficulty = difficulty.trim();
+
+    // Normalize difficulty (accept "easy" or "Easy")
+    if (typeof difficulty === "string" && difficulty.trim() !== "") {
+      const d = difficulty.trim().toLowerCase();
+      if (d === "easy" || d === "medium" || d === "hard") {
+        query.difficulty = d[0].toUpperCase() + d.slice(1); // "Easy", "Medium", "Hard"
+      }
+    }
+
+    // Prep time range handling
+    const prepConditions = {};
+    if (typeof prepMin !== "undefined" && prepMin !== "") {
+      const minVal = parseInt(prepMin);
+      if (!Number.isNaN(minVal)) prepConditions.$gte = Math.max(0, minVal);
+    }
+    if (typeof prepMax !== "undefined" && prepMax !== "") {
+      const maxVal = parseInt(prepMax);
+      if (!Number.isNaN(maxVal)) prepConditions.$lte = Math.max(0, maxVal);
+    }
+    if (Object.keys(prepConditions).length > 0) {
+      query.prepTime = prepConditions;
+    }
     
     const filteredRecipes = await Recipe.find(query);
     const uniqueCuisines = await Recipe.distinct("cuisineType", { userId: req.currentUser.userId });
@@ -107,6 +129,8 @@ async function getFilterPage(req, res, next) {
       mealType,
       cuisineType,
       difficulty,
+      prepMin: prepMin || "",
+      prepMax: prepMax || ""
     });
   } catch (err) { 
     return next(err); 

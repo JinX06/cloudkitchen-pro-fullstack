@@ -98,4 +98,7 @@ const InventorySchema = new mongoose.Schema({
   },
 }, { timestamps: true }); // use mongoose createdAt, updatedAt timestamps
 
+InventorySchema.index({ userId: 1, ingredientName: 1 });
+InventorySchema.index({ expirationDate: 1 });
+
 module.exports = mongoose.model("Inventory", InventorySchema);

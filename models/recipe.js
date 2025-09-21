@@ -152,5 +152,7 @@ const RecipeSchema = new mongoose.Schema({
 }, { timestamps: true }); // use mongoose createdAt, updatedAt timestamps
 
 RecipeSchema.index({ userId: 1, title: 1 }, { unique: true });
+RecipeSchema.index({ cuisineType: 1, difficulty: 1 });
+RecipeSchema.index({ title: 1 });
 
 module.exports = mongoose.model("Recipe", RecipeSchema);

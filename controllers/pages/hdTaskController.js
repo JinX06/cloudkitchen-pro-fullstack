@@ -647,7 +647,170 @@ async function getRecipeAnalyticsDashboard(req, res, next) {
   }
 }
 
+// HD TASK 4
+async function getSmartInventoryManagementPage(req, res, next) {
+  try {
+    const now = new Date();
 
+    //Inventory Waste Prediction (expiring in next 3 days)
+    const expiringItems = await Inventory.aggregate([
+      {
+        $addFields: {
+          daysUntilExpiration: {
+            $divide: [{ $subtract: ["$expirationDate", now] }, 1000 * 60 * 60 * 24]
+          }
+        }
+      },
+      {
+        $match: {
+          daysUntilExpiration: { $gte: 0, $lte: 3 }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          inventoryId: 1,
+          ingredientName: 1,
+          quantity: 1,
+          unit: 1,
+          expirationDate: 1,
+          daysUntilExpiration: { $round: ["$daysUntilExpiration", 1] },
+          valueAtRisk: "$cost"
+        }
+      },
+      { $sort: { daysUntilExpiration: 1 } }
+    ]);
+
+    // Case-insensitive set of expiring ingredient *item* names (normalized)
+    const expiringSet = new Set(
+      expiringItems
+        .map(i => parseIngredient(String(i.ingredientName || "")).item.toLowerCase().trim())
+        .filter(Boolean)
+    );
+
+    let recipeMatches = [];
+    if (expiringSet.size) {
+      // Pull just what we need from Mongo, then compute matches in JS (no $regexMatch)
+      const candidates = await Recipe.find(
+        {},
+        { recipeId: 1, title: 1, ingredients: 1, avgRating: 1, prepTime: 1, difficulty: 1 }
+      ).lean();
+
+      recipeMatches = candidates
+        .map(r => {
+          // normalize each recipe ingredient using the same helper
+          const ingNames = (Array.isArray(r.ingredients) ? r.ingredients : [])
+            .map(raw => parseIngredient(String(raw || "")).item.toLowerCase().trim())
+            .filter(Boolean);
+
+          // count exact matches against the expiring set
+          let matched = 0;
+          for (const name of ingNames) {
+            if (expiringSet.has(name)) {
+              matched++;
+            }
+          }
+
+          return {
+            recipeId: r.recipeId,
+            title: r.title,
+            matchedIngredients: matched,
+            avgRating: r.avgRating || 0,
+            prepTime: r.prepTime,
+            difficulty: r.difficulty
+          };
+        })
+        .filter(r => r.matchedIngredients > 0)
+        .sort((a, b) => {
+          if (b.matchedIngredients !== a.matchedIngredients) return b.matchedIngredients - a.matchedIngredients; // more matches first
+          if ((b.avgRating || 0) !== (a.avgRating || 0)) return (b.avgRating || 0) - (a.avgRating || 0); // higher review rating next
+          return (a.prepTime || 0) - (b.prepTime || 0);  // shorter prep time last
+        })
+        .slice(0, 6);
+    }
+
+    // Cost Analysis Dashboard by category
+    const inventoryValue = await Inventory.aggregate([
+      {
+        $group: {
+          _id: "$category",
+          totalValue: { $sum: "$cost" },
+          itemCount: { $sum: 1 },
+          averagePrice: { $avg: "$cost" },
+          items: {
+            $push: {
+              name: "$ingredientName",
+              value: "$cost",
+              quantity: "$quantity",
+              unit: "$unit"
+            }
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          category: "$_id",
+          totalValue: { $round: ["$totalValue", 2] },
+          itemCount: 1,
+          averagePrice: { $round: ["$averagePrice", 2] },
+          items: 1
+        }
+      },
+      { $sort: { totalValue: -1 } }
+    ]);
+
+    // Overall inventory stats
+    const inventoryStatsAgg = await Inventory.aggregate([
+      {
+        $addFields: {
+          msLeft: { $subtract: ["$expirationDate", now] }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalItems: { $sum: 1 },
+          totalValue: { $sum: "$cost" },
+          avgPrice: { $avg: "$cost" },
+          // Count items expiring within the next 3 days by summing 1 (true) or 0 (false) per document.
+          expiringItems: {
+            $sum: {
+              $cond: [
+                {
+                  $and: [
+                    { $gte: ["$msLeft", 0] }, // not expired yet
+                    { $lte: ["$msLeft", 1000 * 60 * 60 * 24 * 3] } // within 3 days
+                  ]
+                }, 1, // if true, 1 (count it)
+                0  // if false, 0 (don't count)
+              ]
+            }
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalItems: 1,
+          totalValue: { $round: ["$totalValue", 2] },
+          avgPrice: { $round: ["$avgPrice", 2] },
+          expiringItems: 1
+        }
+      }
+    ]);
+    const inventoryStats = inventoryStatsAgg[0]
+
+    res.render("hd/smart-inventory-management.html", {
+      expiringItems,
+      recipeMatches,
+      inventoryValue,
+      inventoryStats
+    });
+  } catch (err) {
+    return next(err);
+  }
+}
 
 module.exports = {
   getSmartRecipeRecommendationsPage,

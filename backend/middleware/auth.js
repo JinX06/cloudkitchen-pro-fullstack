@@ -24,7 +24,7 @@ async function attachCurrentUser(req, res, next) {
 // Middleware to require authentication
 function requireAuth(req, res, next) {
   if (!req.currentUser) {
-    return res.redirect("/login-34076352?notice=login-required");
+    return res.status(401).json({ error: "Authentication required" });
   }
   return next();
 }

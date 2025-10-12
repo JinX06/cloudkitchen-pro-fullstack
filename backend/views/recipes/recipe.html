@@ -1,0 +1,324 @@
+<%- include("partials/header", {title: "Recipe Hub -  Recipes"}) %>
+
+<style>
+  .btn { border-radius: 10px; }
+  .table thead th { background:#214c36; color:#e2f1e8; border:0; font-weight:600; text-align: center; vertical-align: middle; font-size: 0.9rem;}
+  .table tbody td { text-align: center; vertical-align: middle; font-size: 0.8rem;}
+  .card { border:1px solid rgba(255,255,255,.15); box-shadow: 0 6px 16px rgba(0,0,0,.25); }
+</style>
+
+<div class="container my-4">
+  <!-- Page header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h1 style="color: white; font-weight: bolder;">📖 All Recipes</h1>
+      <div style="color: #ffffff;">Discover and Manage your recipe collection</div>
+    </div>
+    <span class="badge bg-dark fs-6 px-2 py-3"> Total Recipes: <%= myRecipe.length %></span>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="d-flex gap-2 mb-4" style="border-radius: 10px;">
+      <a href="recipes-add-34076352?userId=<%= currentUser.userId %>" class="btn btn-primary">+ Add New Recipe</a>
+      <a href="recipes-remove-34076352?userId=<%= currentUser.userId %>" class="btn btn-danger">🗑️ Delete Recipe</a>
+    <div class="ms-auto">
+      <a href="/recipes-search-scale-34076352?userId=<%= currentUser.userId %>" class="btn btn-secondary float-right">🔍Search & Scale Recipe ⚖️</a>
+    <a href="/recipes-filter-34076352?userId=<%= currentUser.userId %>" class="btn btn-secondary float-right" style="margin-left: 5px;">🔎 Filter Recipe</a>
+
+    </div>
+  </div>
+
+  <!-- Table Card -->
+  <div class="card bg-dark text-white">
+    <div class="card-header d-flex align-items-center gap-2">
+      <span>📋</span>
+      <strong>Recipe Table</strong>
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-dark table-striped table-hover m-0">
+        <thead>
+          <tr class="text-center">
+            <th>Recipe ID</th>
+            <th>Title</th>
+            <th>Chef</th>
+            <th>Rating</th>
+            <th>Ingredients</th>
+            <th>Instructions</th>
+            <th>Meal Type</th>
+            <th>Cuisine</th>
+            <th>Difficulty</th>
+            <th>Prep Time</th>
+            <th>Servings</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let i=0; i < myRecipe.length; i++){ %>
+            <% const tempRecipe = myRecipe[i]; %>
+            <% const difficulty = myRecipe[i].difficulty; %>
+            <tr class="text-center">
+
+              <!-- RecipeID -->
+              <td><%= tempRecipe.recipeId %></td>
+
+              <!-- Title -->
+              <td class="text-middle fw-semibold"><%= tempRecipe.title %></td>
+
+              <!-- Chef -->
+              <td><%= tempRecipe.chef %></td>
+
+              <!-- Rating -->
+              <td>
+                <% if (tempRecipe.ratings.length > 0) { %>
+                  <span class="badge bg-warning text-dark"><%= tempRecipe.avgRating %> ✧</span>
+                  <div style="font-size:.6rem; color:#ddd;"><%= tempRecipe.reviews.length %> reviews</div>
+                <% } else { %>
+                  <small style="font-size: 1.2rem;">-</small>
+                <% } %>
+              </td>
+
+              <!-- Ingredients -->
+              <td class="text-start">
+                <% for(let i = 0; i < tempRecipe.ingredients.length; i++) { %>
+                  <div style="font-size: 0.6rem; padding: 2px 0;"><%= tempRecipe.ingredients[i] %></div>
+                <% } %>
+              </td>
+
+              <!-- Instructions -->
+              <td class="text-start">
+                <% for(let i = 0; i < tempRecipe.instructions.length; i++) { %>
+                  <div style="font-size: 0.6rem; padding: 2px 0;"><%= i+1%>. <%= tempRecipe.instructions[i] %></div>
+                <% } %>
+              </td>
+
+              <!-- Meal Type -->
+              <td>
+                <span class="badge text-white" style="background-color: darkcyan;"><%= tempRecipe.mealType %></span>
+              </td>
+
+              <!-- Cuisine Type -->
+              <td><%= tempRecipe.cuisineType %></td>
+
+              <!-- Difficulty -->
+              <td>
+                <% if (difficulty === "Easy") { %>
+                  <span class="badge badge-pill" style="background:#4CAF50;">Easy</span>
+                <% } else if (difficulty === "Medium") { %>
+                  <span class="badge badge-pill" style="background:#d99800;">Medium</span>
+                <% } else if (difficulty === "Hard") { %>
+                  <span class="badge badge-pill" style="background:#D32F2F;">Hard</span>
+                <% } else { %>
+                  <span class="badge badge-pill bg-secondary"><%= difficulty %></span>
+                <% } %>
+              </td>
+
+              <!-- Prep Time -->
+              <td><%= tempRecipe.prepTime %> min</td>
+
+              <!-- Servings -->
+              <td><%= tempRecipe.servings %></td>
+
+              <!-- Created Date -->
+              <td><%= new Date(tempRecipe.createdAt).toISOString().split("T")[0] %></td>
+              <td class="py-2">
+                <div class="d-flex justify-content-center gap-2">
+                  <a href="recipes-view-34076352?recipeId=<%= tempRecipe.recipeId %>&userId=<%= currentUser.userId %>" class="btn btn-sm btn-primary">View</a>
+                  <a href="recipes-edit-34076352?recipeId=<%= tempRecipe.recipeId %>&userId=<%= currentUser.userId %>" class="btn btn-sm btn-warning text-dark">Edit</a>
+                  <a href="recipes-remove-34076352?recipeId=<%= tempRecipe.recipeId %>&userId=<%= currentUser.userId %>" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+                
+                <!-- Add Review -->
+                  <a class="btn btn-primary btn-sm mt-2" data-bs-toggle="collapse" href="#collapse<%= tempRecipe.recipeId %>" role="button">+ Add Review</a>
+                  <form method="post" action="/api/recipes/add-review-34076352?userId=<%= currentUser.userId %>" class="pt-2">
+                    <div class="collapse" id="collapse<%= tempRecipe.recipeId %>">
+                    <input type="hidden" name="recipeId" value="<%= tempRecipe.recipeId %>">
+                    <div class="col">
+                      <input type="text" name="reviewer" class="form-control form-control-sm" placeholder="Your name (optional)" style="font-size: 0.7rem;">
+                    </div>
+                    
+
+                    <!-- Rating -->
+                    <div class="col">
+                      <select name="rating" class="form-select form-select-sm" required style="font-size: 0.7rem;">
+                        <option value="" disabled selected>Rate (1-5)</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                      </select>
+                    </div>
+
+                    <!-- Comment -->
+                    <div class="col mb-2">
+                      <input type="text" name="comment" class="form-control form-control-sm" style="font-size: 0.7rem;" placeholder="Short comment (optional)">
+                    </div>
+
+                    <!-- Submit -->
+                    <div>
+                      <button type="submit" class="btn btn-success btn-sm">Submit</button>
+                    </div>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h1 style="color: white; font-weight: bolder;">📖 Recipes From Other Chefs</h1>
+      <div style="color: #ffffff;">Discover and view other chef recipe collections</div>
+    </div>
+    <span class="badge bg-dark fs-6 px-2 py-3"> Total Recipes: <%= otherRecipes.length %></span>
+  </div>
+
+  <!-- Recipes Table Card From Other Chefs -->
+  <div class="card bg-dark text-white">
+    <div class="card-header d-flex align-items-center gap-2">
+      <span>📋</span>
+      <strong>Recipe Table</strong>
+    </div>
+    <div class="card-body p-0">
+      <table class="table table-dark table-striped table-hover m-0">
+        <thead>
+          <tr class="text-center">
+            <th>Recipe ID</th>
+            <th>Title</th>
+            <th>Chef</th>
+            <th>Rating</th>
+            <th>Ingredients</th>
+            <th>Instructions</th>
+            <th>Meal Type</th>
+            <th>Cuisine</th>
+            <th>Difficulty</th>
+            <th>Prep Time</th>
+            <th>Servings</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for (let i=0; i < otherRecipes.length; i++){ %>
+            <% const tempRecipe = otherRecipes[i]; %>
+            <% const difficulty = otherRecipes[i].difficulty; %>
+            <tr class="text-center">
+
+              <!-- RecipeID -->
+              <td><%= tempRecipe.recipeId %></td>
+
+              <!-- Title -->
+              <td class="text-middle fw-semibold"><%= tempRecipe.title %></td>
+
+              <!-- Chef -->
+              <td><%= tempRecipe.chef %></td>
+
+              <!-- Rating -->
+              <td>
+                <% if (tempRecipe.ratings.length > 0) { %>
+                  <span class="badge bg-warning text-dark"><%= tempRecipe.avgRating %> ✧</span>
+                  <div style="font-size:.6rem; color:#ddd;"><%= tempRecipe.reviews.length %> reviews</div>
+                <% } else { %>
+                  <small style="font-size: 1.2rem;">-</small>
+                <% } %>
+              </td>
+
+              <!-- Ingredients -->
+              <td class="text-start">
+                <% for(let i = 0; i < tempRecipe.ingredients.length; i++) { %>
+                  <div style="font-size: 0.6rem; padding: 2px 0;"><%= tempRecipe.ingredients[i] %></div>
+                <% } %>
+              </td>
+
+              <!-- Instructions -->
+              <td class="text-start">
+                <% for(let i = 0; i < tempRecipe.instructions.length; i++) { %>
+                  <div style="font-size: 0.6rem; padding: 2px 0;"><%= i+1%>. <%= tempRecipe.instructions[i] %></div>
+                <% } %>
+              </td>
+
+              <!-- Meal Type -->
+              <td>
+                <span class="badge text-white" style="background-color: darkcyan;"><%= tempRecipe.mealType %></span>
+              </td>
+
+              <!-- Cuisine Type -->
+              <td><%= tempRecipe.cuisineType %></td>
+
+              <!-- Difficulty -->
+              <td>
+                <% if (difficulty === "Easy") { %>
+                  <span class="badge badge-pill" style="background:#4CAF50;">Easy</span>
+                <% } else if (difficulty === "Medium") { %>
+                  <span class="badge badge-pill" style="background:#d99800;">Medium</span>
+                <% } else if (difficulty === "Hard") { %>
+                  <span class="badge badge-pill" style="background:#D32F2F;">Hard</span>
+                  <% } else { %>
+                    <span class="badge badge-pill bg-secondary"><%= difficulty %></span>
+                    <% } %>
+                  </td>
+                  
+                  <!-- Prep Time -->
+                  <td><%= tempRecipe.prepTime %> min</td>
+                  
+                  <!-- Servings -->
+                  <td><%= tempRecipe.servings %></td>
+                  
+                  <!-- Created Date -->
+                  <td><%= new Date(tempRecipe.createdAt).toISOString().split("T")[0] %></td>
+
+                  <td class="py-2">
+                    <div class="d-flex justify-content-center gap-2">
+                      <a href="recipes-view-34076352?recipeId=<%= tempRecipe.recipeId %>&userId=<%= currentUser.userId %>" class="btn btn-sm btn-primary">View</a>
+                    </div>
+                      <!-- Add Review -->
+                      <a class="btn btn-primary btn-sm mt-1" style="font-size: small;" data-bs-toggle="collapse" href="#collapse<%= tempRecipe.recipeId %>" role="button">+ Add Review</a>
+                      <form method="post" action="/api/recipes/add-review-34076352?userId=<%= currentUser.userId %>" class="pt-2">
+                        <div class="collapse" id="collapse<%= tempRecipe.recipeId %>">
+                          <input type="hidden" name="recipeId" value="<%= tempRecipe.recipeId %>">
+                          <div class="col">
+                            <input type="text" name="reviewer" class="form-control form-control-sm" placeholder="Your name (optional)" style="font-size: 0.7rem;">
+                          </div>
+                      
+                      
+                      <!-- Rating -->
+                      <div class="col">
+                        <select name="rating" class="form-select form-select-sm" required style="font-size: 0.7rem;">
+                          <option value="" disabled selected>Rate (1-5)</option>
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                        </select>
+                      </div>
+                      
+                      <!-- Comment -->
+                      <div class="col mb-2">
+                        <input type="text" name="comment" class="form-control form-control-sm" style="font-size: 0.7rem;" placeholder="Short comment (optional)">
+                      </div>
+                      
+                      <!-- Submit -->
+                      <div>
+                        <button type="submit" class="btn btn-success btn-sm">Submit</button>
+                      </div>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<%- include("partials/footer") %>

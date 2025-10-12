@@ -1,0 +1,167 @@
+<%- include("partials/header", { title: "Recipe Hub - Smart Inventory Management" }) %>
+
+<div class="container my-4">
+  <div class="position-relative py-4" style="color:#fff;">
+    <div class="container position-relative px-4">
+      <div class="row align-items-center g-3">
+        <div class="col-lg-7 mb-0">
+          <h1 class="fw-bold mb-2">Smart Inventory Management</h1>
+          <p class="opacity-75 mt-2">Optimize inventory, reduce waste, and manage costs efficiently</p>
+        </div>
+        <div class="col-lg-5 text-end">
+          <div class="d-inline-block bg-dark p-3 rounded shadow">
+            <div class="small mb-1 opacity-75">Total Inventory Value</div>
+            <div class="fs-3 fw-bold">$<%= inventoryStats?.totalValue %></div>
+            <div class="small mt-1">
+              <span class="badge bg-primary"><%= inventoryStats?.totalItems %> items</span>
+              <span class="badge bg-warning text-dark"><%= inventoryStats?.expiringItems %> expiring soon</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="mt-0" style="opacity: 1; border-width: 0.2rem;">
+
+  <!-- Waste Reduction & Expiration Alerts -->
+  <section class="card bg-dark text-white shadow mb-4">
+    <div class="card-header d-flex align-items-center gap-2" style="background-color: rgb(65, 68, 67);">
+      <span>⚠️</span>
+      <strong>Waste Reduction Alerts & Recipe Suggestions</strong>
+    </div>
+    <div class="card-body">
+      <div class="row mb-4">
+        <div class="col-lg-12">
+          <div class="alert <%= expiringItems.length > 0 ? 'alert-warning' : 'alert-success' %> text-dark">
+            <strong><%= expiringItems.length %> items</strong> expiring within the next 3 days.
+          </div>
+        </div>
+      </div>
+
+      <% if (expiringItems.length > 0) { %>
+        <div class="row g-3 mb-4">
+          <div class="col-lg-6">
+            <h5 class="mb-3">Items Expiring Soon</h5>
+            <div class="table-responsive">
+              <table class="table table-dark table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Days Left</th>
+                    <th>Value at Risk</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% expiringItems.forEach(function(item) { %>
+                    <tr>
+                      <td><%= item.ingredientName %></td>
+                      <td><%= item.quantity %> <%= item.unit %></td>
+                      <td><%= item.daysUntilExpiration.toFixed(1) %> days</td>
+                      <td>$<%= Number(item.valueAtRisk).toFixed(2) %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div class="col-lg-6">
+            <h5 class="mb-3">Recipe Suggestions for Expiring Items</h5>
+            <% if (recipeMatches.length > 0) { %>
+              <div class="row g-3">
+                <% recipeMatches.forEach(function(recipe) { %>
+                  <div class="col-md-6">
+                    <div class="card bg-secondary h-100">
+                      <div class="card-body">
+                        <h6 class="card-title mb-2"><%= recipe.title %></h6>
+                        <div class="small mb-2">
+                          <span class="badge bg-success"><%= recipe.matchedIngredients %> expiring ingredients used</span>
+                        </div>
+                        <div class="d-flex gap-2 small">
+                          <% if (recipe.difficulty === "Easy") { %>
+                            <span class="badge" style="background:#4CAF50;">Easy</span>
+                          <% } else if (recipe.difficulty === "Medium") { %>
+                            <span class="badge" style="background:#d99800;">Medium</span>
+                          <% } else if (recipe.difficulty === "Hard") { %>
+                            <span class="badge" style="background:#D32F2F;">Hard</span>
+                          <% } %>
+                          <span class="badge bg-primary">Prep: <%= recipe.prepTime %> mins</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+            <% } else { %>
+              <div class="alert alert-info text-dark">No recipes found that use your expiring ingredients.</div>
+            <% } %>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- Cost Analysis Dashboard -->
+  <section class="card bg-dark text-white shadow mb-4">
+    <div class="card-header d-flex align-items-center gap-2" style="background-color: rgb(65, 68, 67);">
+      <span>💰</span>
+      <strong>Cost Analysis Dashboard</strong>
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <% if (inventoryValue.length > 0) { %>
+          <% inventoryValue.forEach(function(category) { %>
+            <div class="col-md-6 col-lg-4">
+              <div class="card bg-secondary h-100">
+                <div class="card-body">
+                  <h5 class="card-title mb-2"><%= category.category %></h5>
+                  <div class="d-flex justify-content-between mb-3">
+                    <div>
+                      <div class="small opacity-75">Total Value</div>
+                      <div class="fs-4 fw-bold">$<%= category.totalValue %></div>
+                    </div>
+                    <div class="text-end">
+                      <div class="small opacity-75">Items</div>
+                      <div class="fs-4 fw-bold"><%= category.itemCount %></div>
+                    </div>
+                  </div>
+                  <div class="small">Average price: $<%= category.averagePrice %> per item</div>
+                  <hr class="my-2" style="opacity: 0.2;">
+                  <div class="small opacity-75 mb-1">Top items by value:</div>
+                  <div class="small">
+                    <% category.items.sort((a, b) => b.value - a.value).forEach(function(item, index) { %>
+                      <%= item.name %> (<%= item.quantity %> <%= item.unit %>) - $<%= Number(item.value).toFixed(2) %><br>
+                    <% }) %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <div class="col-12">
+            <div class="alert alert-warning text-dark">No inventory data available for cost analysis.</div>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </section>
+
+  <!-- Smart Shopping List Generator -->
+  <section class="card bg-dark text-white shadow mb-4">
+    <div class="card-header d-flex align-items-center gap-2" style="background-color: rgb(65, 68, 67);">
+      <span>🛒</span>
+      <strong>Smart Shopping List Generator</strong>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-12 mb-3">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<%- include("partials/footer") %>

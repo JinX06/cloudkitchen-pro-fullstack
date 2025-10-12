@@ -1,0 +1,128 @@
+<%- include("partials/header", {title: "Recipe Hub -  Home (Manager)" }) %>
+
+  <style>
+    .titlebox {
+      background: rgb(63, 108, 81);
+      border-radius: 1rem;
+      box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    .quickaction {
+      background-color: rgb(47, 50, 49);
+      height: 100%;
+      border-radius: .4rem;
+    }
+
+    .card-header {
+      background-color: rgb(111, 73, 41);
+    }
+  </style>
+
+  <!-- Welcome banner -->
+  <div class="container-fluid titlebox mb-4">
+    <div class="position-relative py-4" style="color:#fff;">
+      <div class="container position-relative px-4">
+        <div class="row align-items-center g-3">
+          <div class="col-lg-7">
+            <h1 class="display-6 fw-bold mb-2">Welcome back, <%= currentUser.fullname %>!</h1>
+            <div class="small opacity-75">User ID: <strong>
+                <%= currentUser.userId %>
+              </strong></div>
+            <div class="small opacity-75">Email: <strong>
+                <%= currentUser.email %>
+              </strong></div>
+            <div class="small opacity-75">Role: <span class="badge text-bg-light">manager</span></div>
+            <div class="d-flex flex-wrap gap-2 mt-3">
+              <a href="/inventory-34076352?userId=<%= currentUser.userId %>" class="btn btn-outline-light">View
+                Inventory</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats-->
+  <div class="container mb-4">
+    <div class="row g-3 g-md-4">
+      <div class="col-6 col-lg-4">
+        <div class="card text-center shadow border-0 bg-light text-dark">
+          <div class="card-body py-4">
+            <div class="fs-4">👥</div>
+            <div class="display-6 fw-bold">
+              <%= userCount %>
+            </div>
+            <div class="text-uppercase small" style="color: grey;">Total Users</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-4">
+        <div class="card text-center shadow border-0 bg-light text-dark">
+          <div class="card-body py-4">
+            <div class="fs-4">🧺</div>
+            <div class="display-6 fw-bold">
+              <%= inventoryCount %>
+            </div>
+            <div class="text-uppercase small" style="color: grey;">Inventory Items</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-4">
+        <div class="card text-center shadow border-0 bg-light text-dark">
+          <div class="card-body py-4">
+            <div class="fs-4">💰</div>
+            <div class="display-6 fw-bold">
+              <%= inventoryValue %> $
+            </div>
+            <div class="text-uppercase small" style="color: grey;">Inventory Value</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="container mb-5">
+    <h2 class="h4 mb-3 text-light">Quick Actions</h2>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="card quickaction action-tile shadow">
+          <div class="card-header text-white"><span class="me-1">🧺</span>Inventory Management</div>
+          <div class="card-body vstack gap-2">
+          <a href="/inventory-add-34076352?userId=<%= currentUser.userId %>"
+            class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;">Add
+            Item</a>
+          <a href="/inventory-edit-34076352?userId=<%= currentUser.userId %>"
+            class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;">Edit
+            Item</a>
+          <a href="/inventory-34076352?userId=<%= currentUser.userId %>"
+            class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;">View
+              Inventory</a>
+            <a href="/inventory-remove-34076352?userId=<%= currentUser.userId %>"
+              class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;">Remove
+              Item</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card quickaction action-tile shadow">
+          <div class="card-header text-white"><span class="me-1">📊</span>Insights</div>
+          <div class="card-body vstack gap-2">
+            <a href="/recipes-34076352?userId=<%= currentUser.userId %>"
+              class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;">Browse
+              Recipes</a>
+            <a href="/recipes-search-scale-34076352?userId=<%= currentUser.userId %>"
+              class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;">Search &
+              Scale</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr style="border: solid white; opacity: 100%; margin-top: 10px; margin-bottom: 30px;">
+
+  <!-- Legacy quick actions below the new ones -->
+  <%- include("partials/quick_actions_legacy") %>
+
+    <%- include("partials/footer") %>

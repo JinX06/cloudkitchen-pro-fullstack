@@ -1,0 +1,324 @@
+<%- include("partials/header", { title: "Recipe Hub - Advanced Recipe Analytics Dashboard" }) %>
+
+<div class="container my-4">
+  <div class="position-relative py-4" style="color:#fff;">
+    <div class="container position-relative px-4">
+      <div class="row align-items-center g-3">
+        <div class="col-lg-7 mb-0">
+          <h1 class="fw-bold mb-2">Advanced Recipe Analytics</h1>
+          <div class="opacity-75 mt-2">Admin: <strong><%= currentUser && currentUser.fullname %></strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="mt-0" style="opacity: 1; border-width: 0.2rem;">
+
+  <!-- Recipe Performance Analytics -->
+  <section class="card bg-dark text-white shadow mb-4">
+    <div class="card-header d-flex align-items-center gap-2" style="background-color: rgb(65, 68, 67);">
+      <span>🏆</span>
+      <strong>Recipe Performance (Top 5)</strong>
+    </div>
+    <div class="card-body">
+      <% if ((popularRecipes||[]).length) { %>
+        <div class="row g-3">
+          <% popularRecipes.forEach(function(recipe) { %>
+            <div class="col-md-6 col-xl-4">
+              <div class="card bg-secondary text-white h-100 shadow">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="mb-0 fw-semibold"><%= recipe.title %></h5>
+                    <span class="badge" style="background-color: darkcyan;"><%= recipe.cuisineType %></span>
+                  </div>
+                  <div class="small mb-2">By <strong><%= recipe.chef %></strong></div>
+                  <div class="d-flex flex-wrap gap-2 small mb-3">
+                    <% if (recipe.difficulty === "Easy") { %>
+                      <span class="badge" style="background:#4CAF50;">Easy</span>
+                    <% } else if (recipe.difficulty === "Medium") { %>
+                      <span class="badge" style="background:#d99800;">Medium</span>
+                    <% } else if (recipe.difficulty === "Hard") { %>
+                      <span class="badge" style="background:#D32F2F;">Hard</span>
+                    <% } else { %>
+                      <span class="badge bg-secondary"><%= recipe.difficulty %></span>
+                    <% } %>
+                  </div>
+                  <hr style="border: none; height: 1px; background-color: rgba(255,255,255,0.2); opacity: 1; margin: 0.5rem 0;">
+                  <div class="row">
+                    <div class="col-6">
+                      <div class="small text-light opacity-75">Reviews</div>
+                      <div class="fs-5 fw-bold"><%= recipe.reviewCount %></div>
+                    </div>
+                    <div class="col-6">
+                      <div class="small text-light opacity-75">Rating</div>
+                      <div class="fs-5 fw-bold"><%= Number(recipe.avgRating || 0).toFixed(1) %> ⭐</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="alert alert-warning text-dark">No recipes with reviews found.</div>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- Ingredient Usage Analysis -->
+  <section class="card bg-dark text-white shadow mb-4">
+    <div class="card-header d-flex align-items-center gap-2" style="background-color: rgb(65, 68, 67);">
+      <span>🧪</span>
+      <strong>Ingredient Usage (Top 10)</strong>
+    </div>
+    <div class="card-body">
+      <% if ((ingredientUsage||[]).length) { %>
+        <div class="row g-3">
+          <% ingredientUsage.forEach(function(item) { %>
+            <div class="col-md-6 col-xl-3">
+              <div class="card bg-secondary text-white h-100 shadow">
+                <div class="card-body">
+                  <h5 class="mb-0 fw-semibold"><%= item.ingredient %></h5>
+                  <div class="small mb-2">Used in <strong><%= item.count %></strong> recipes</div>
+                  <hr style="border: none; height: 1px; background-color: rgba(255,255,255,0.2); opacity: 1; margin: 0.5rem 0;">
+                  <div class="small text-light opacity-75">Examples:</div>
+                  <div class="small">
+                    <% (item.recipes||[]).forEach(function(name, index) { %>
+                      <%= name %><%= index < item.recipes.length - 1 ? ', ' : '' %>
+                    <% }) %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="alert alert-warning text-dark">No ingredient usage data available.</div>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- Chef Insights -->
+  <section class="card bg-dark text-white shadow mb-4">
+    <div class="card-header d-flex align-items-center gap-2" style="background-color: rgb(65, 68, 67);">
+      <span>👨‍🍳</span>
+      <strong>Chef Insights</strong>
+    </div>
+    <div class="card-body">
+      <% if ((recipesByChef||[]).length) { %>
+        <div class="row g-3">
+          <% recipesByChef.forEach(function(chef) { %>
+            <div class="col-md-6">
+              <div class="card" style="background-color: rgb(47, 50, 49); height: 100%; border-radius: .4rem; box-shadow: 0 6px 16px rgba(0,0,0,.25);">
+                <div class="card-body text-white">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="mb-0 fw-semibold"><%= chef.chef %></h5>
+                    <span class="badge bg-info text-dark"><%= chef.recipeCount %> Recipes</span>
+                  </div>
+                  <div class="small mb-3">Avg Rating: <strong><%= Number(chef.avgRating || 0).toFixed(1) %> ⭐</strong></div>
+
+                  <div class="mb-3">
+                    <div class="small opacity-75 mb-1">Difficulty Distribution</div>
+                    <div class="progress" style="height: 10px; background: rgba(255,255,255,0.1);">
+                      <div class="progress-bar bg-success" style="width: <%= chef.recipeCount ? (chef.easyCount/chef.recipeCount*100) : 0 %>%"></div>
+                      <div class="progress-bar bg-warning" style="width: <%= chef.recipeCount ? (chef.mediumCount/chef.recipeCount*100) : 0 %>%"></div>
+                      <div class="progress-bar bg-danger" style="width: <%= chef.recipeCount ? (chef.hardCount/chef.recipeCount*100) : 0 %>%"></div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-1 small">
+                      <span><%= chef.easyCount %> Easy</span>
+                      <span><%= chef.mediumCount %> Medium</span>
+                      <span><%= chef.hardCount %> Hard</span>
+                    </div>
+                  </div>
+
+                  <div class="small opacity-75 mb-1">Cuisines</div>
+                  <div class="d-flex flex-wrap gap-1">
+                    <% (chef.cuisineTypes||[]).forEach(function(cuisine) { %>
+                      <span class="badge" style="background-color: darkcyan;"><%= cuisine %></span>
+                    <% }) %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="alert alert-warning text-dark">No chef data available.</div>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- Distribution Panels -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-4">
+      <section class="card bg-dark text-white shadow h-100">
+        <div class="card-header d-flex align-items-center gap-2" style="background-color: rgb(65, 68, 67);">
+          <span>🍽️</span>
+          <strong>Cuisine Distribution</strong>
+        </div>
+        <div class="card-body">
+          <% if ((cuisineDistribution||[]).length) { %>
+            <div class="list-group list-group-flush">
+              <% cuisineDistribution.forEach(function(c) { %>
+                <div class="list-group-item bg-transparent text-white border-secondary">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <strong><%= c.cuisineType %></strong>
+                    <span class="badge bg-primary"><%= c.count %></span>
+                  </div>
+                  <div class="small mt-1">Avg. Prep: <%= c.avgPrepTime %> mins</div>
+                  <div class="small">Avg. Rating: <%= c.avgRating %> ⭐</div>
+                </div>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <div class="alert alert-warning text-dark">No cuisine data.</div>
+          <% } %>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-md-4">
+      <section class="card bg-dark text-white shadow h-100">
+        <div class="card-header d-flex align-items-center gap-2" style="background-color: rgb(65, 68, 67);">
+          <span>📊</span>
+          <strong>Difficulty Distribution</strong>
+        </div>
+        <div class="card-body">
+          <% if ((difficultyDistribution||[]).length) { %>
+            <% difficultyDistribution.forEach(function(d) { %>
+              <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <% if (d.difficulty === "Easy") { %>
+                    <span class="badge" style="background:#4CAF50;">Easy</span>
+                  <% } else if (d.difficulty === "Medium") { %>
+                    <span class="badge" style="background:#d99800;">Medium</span>
+                  <% } else if (d.difficulty === "Hard") { %>
+                    <span class="badge" style="background:#D32F2F;">Hard</span>
+                  <% } else { %>
+                    <span class="badge bg-secondary"><%= d.difficulty %></span>
+                  <% } %>
+                  <span class="small"><%= d.count %> recipes (<%= Math.round(d.percentage || 0) %>%)</span>
+                </div>
+                <div class="progress" style="height: 10px; background: rgba(255,255,255,0.1);">
+                  <div class="progress-bar 
+                    <%= d.difficulty === 'Easy' ? 'bg-success' : d.difficulty === 'Medium' ? 'bg-warning' : 'bg-danger' %>" 
+                    style="width: <%= d.percentage || 0 %>%"></div>
+                </div>
+                <div class="small mt-1">Avg. Prep: <%= d.avgPrepTime %> mins · Avg. Rating: <%= d.avgRating %> ⭐</div>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <div class="alert alert-warning text-dark">No difficulty data.</div>
+          <% } %>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-md-4">
+      <section class="card bg-dark text-white shadow h-100">
+        <div class="card-header d-flex align-items-center gap-2" style="background-color: rgb(65, 68, 67);">
+          <span>🍲</span>
+          <strong>Meal Type Distribution</strong>
+        </div>
+        <div class="card-body">
+          <% if ((mealTypeDistribution||[]).length) { %>
+            <% mealTypeDistribution.forEach(function(m) { %>
+              <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="badge bg-info text-dark"><%= m.mealType %></span>
+                  <span class="small"><%= m.count %> recipes (<%= Math.round(m.percentage || 0) %>%)</span>
+                </div>
+                <div class="progress" style="height: 10px; background: rgba(255,255,255,0.1);">
+                  <div class="progress-bar bg-info" style="width: <%= m.percentage || 0 %>%"></div>
+                </div>
+                <div class="small mt-1">Avg. Prep: <%= m.avgPrepTime %> mins</div>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <div class="alert alert-warning text-dark">No meal type data.</div>
+          <% } %>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- High Cookability Suggestions (90%+ Inventory Match) -->
+  <section class="card bg-dark text-white shadow mb-4">
+    <div class="card-header d-flex align-items-center gap-2" style="background-color: rgb(65, 68, 67);">
+      <span>✅</span>
+      <strong>High Cookability Suggestions (90%+ Inventory Match)</strong>
+    </div>
+    <div class="card-body">
+      <% if ((highCookabilitySuggestions||[]).length) { %>
+        <div class="row g-3">
+          <% highCookabilitySuggestions.forEach(function(r) { %>
+            <div class="col-md-6 col-xl-4">
+              <div class="card" style="background-color: rgb(47, 50, 49); height: 100%; border-radius: .4rem; box-shadow: 0 6px 16px rgba(0,0,0,.25);">
+                <div class="card-body text-white">
+                  <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                    <div>
+                      <h5 class="mb-1 fw-semibold"><%= r.title %></h5>
+                      <div class="small">Chef <strong><%= r.chef %></strong> · <span class="opacity-75"><%= r.cuisineType %></span></div>
+                    </div>
+                    <span class="badge bg-success"><%= r.percent %>% ready</span>
+                  </div>
+
+                  <div class="d-flex flex-wrap gap-2 small mb-2">
+                    <% if (r.difficulty === "Easy") { %>
+                      <span class="badge" style="background:#4CAF50;">Easy</span>
+                    <% } else if (r.difficulty === "Medium") { %>
+                      <span class="badge" style="background:#d99800;">Medium</span>
+                    <% } else if (r.difficulty === "Hard") { %>
+                      <span class="badge" style="background:#D32F2F;">Hard</span>
+                    <% } else { %>
+                      <span class="badge bg-secondary"><%= r.difficulty %></span>
+                    <% } %>
+                    <span class="badge bg-primary">Prep: <%= r.prepTime %> mins</span>
+                    <span class="badge bg-info text-dark">Ingredients: <%= r.matched %> / <%= r.total %></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="alert alert-info text-dark">No recipes currently meet the 90% inventory match threshold.</div>
+      <% } %>
+    </div>
+  </section>
+
+  <!-- Recipe Cost Analysis -->
+  <section class="card bg-dark text-white shadow mb-5">
+    <div class="card-header d-flex align-items-center gap-2" style="background-color: rgb(65, 68, 67);">
+      <span>💰</span>
+      <strong>Recipe Cost Analysis (Top 10 by ingredients)</strong>
+    </div>
+    <div class="card-body">
+      <% if ((recipeCostAnalysis||[]).length) { %>
+        <div class="row g-3">
+          <% recipeCostAnalysis.forEach(function(r) { %>
+            <div class="col-md-6 col-xl-4">
+              <div class="card bg-secondary text-white h-100 shadow">
+                <div class="card-body">
+                  <h5 class="mb-0 fw-semibold"><%= r.title %></h5>
+                  <div class="small mb-2">Ingredients: <strong><%= r.ingredientCount %></strong></div>
+                  <div class="d-flex justify-content-between my-2">
+                    <div>
+                      <div class="small opacity-75">Est. Cost</div>
+                      <div class="fs-5 fw-bold">$<%= Number(r.estimatedCost).toFixed(2) %></div>
+                    </div>
+                  </div>
+                  <div class="small opacity-75"><%= r.matchedIngredients %> of <%= r.ingredientCount %> ingredients matched with inventory prices</div>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="alert alert-warning text-dark">No cost data available.</div>
+      <% } %>
+    </div>
+  </section>
+</div>
+
+<%- include("partials/footer") %>

@@ -2,6 +2,34 @@ const Recipe = require("../../models/Recipe");
 const { peekNextID, incrementID } = require("../../utils/id");
 const { getRecipeSuggestions } = require("../../utils/recipeSuggestions/recipeSuggestions.js");
 
+// GET /api/recipes-34076352
+async function listRecipes(req, res, next) {
+  try {
+    const items = await Recipe.find({ userId: req.currentUser.userId })
+      .sort({ createdAt: -1 })
+      .lean();
+    return res.status(200).json({ items });
+  } catch (err) {
+    err.status = err.status || 500;
+    return next(err);
+  }
+}
+
+// GET /api/recipes-34076352/:id
+async function getRecipe(req, res, next) {
+  try {
+    const recipeId = req.params.id;
+    const item = await Recipe.findOne({ recipeId, userId: req.currentUser.userId }).lean();
+    if (!item) {
+      return res.status(404).json({ error: "Not found" });
+    }
+    return res.status(200).json({ item });
+  } catch (err) {
+    err.status = err.status || 500;
+    return next(err);
+  }
+}
+
 // POST /api/recipes/add-34076352
 async function addRecipe(req, res, next) {
   try {
@@ -25,12 +53,11 @@ async function addRecipe(req, res, next) {
       avgRating: 0,
     });
     await incrementID("recipe");
-    return res.redirect(`/recipes-34076352?userId=${req.currentUser.userId}`);
+    const created = await Recipe.findOne({ recipeId, userId: req.currentUser.userId }).lean();
+    return res.status(201).json({ recipe: created });
   } catch (err) {
     // Friendly validation message on the same add page
-    const cuisines = ["Italian","Asian","Mexican","American","French","Indian","Mediterranean","Other"];
     let message = "Unable to add recipe.";
-    console.log(err)
 
     // Duplicate title validation message
     if (err && err.code === 11000) {
@@ -48,9 +75,7 @@ async function addRecipe(req, res, next) {
       }
       message = messages.join(" ");
     } 
-    
-    const form = req.body || {};
-    return res.status(400).render("recipes/recipe-add.html", { cuisines, error: message, form });
+    return res.status(400).json({ error: message });
   }
 }
 
@@ -65,7 +90,7 @@ async function deleteRecipe(req, res, next) {
       throw err;
     }
     await Recipe.deleteOne({ recipeId: recipe.recipeId });
-    return res.redirect(`/recipes-34076352?userId=${req.currentUser.userId}`);
+    return res.status(204).send();
   } catch (err) {
     err.status = err.status || 400;
     return next(err);
@@ -86,7 +111,7 @@ async function postRecipeSuggestions(req, res, next) {
 
     const list = await Recipe.find({ userId: req.currentUser.userId }).lean();
     req.app.locals.suggestedRecipes = getRecipeSuggestions(userResponse, list);
-    return res.redirect(`/recipes-suggestion-results-34076352?userId=${req.currentUser.userId}`);
+    return res.status(200).json({ suggestions: req.app.locals.suggestedRecipes });
   } catch (err) {
     return next(err);
   }
@@ -107,7 +132,8 @@ async function addReview(req, res, next) {
     const sum = recipe.ratings.reduce((a, b) => a + b, 0);
     recipe.avgRating = Math.round((sum / recipe.ratings.length) * 100) / 100;
     await recipe.save();
-    return res.redirect(`/recipes-34076352?userId=${req.currentUser.userId}`);
+    const updated = await Recipe.findOne({ recipeId }).lean();
+    return res.status(200).json({ recipe: updated });
   } catch (err) {
     err.status = err.status || 400;
     return next(err);
@@ -145,61 +171,16 @@ async function updateRecipe(req, res, next) {
     );
 
     if (!updated) {
-      const err = new Error("Recipe not found or you do not have permission to modify it.");
+      const err = new Error("Not found");
       err.status = 404;
       throw err;
     }
 
-    return res.redirect(`/recipes-edit-34076352?recipeId=${recipeId}&userId=${req.currentUser.userId}&notice=updated`);
+    const refreshed = await Recipe.findOne({ recipeId, userId: req.currentUser.userId }).lean();
+    return res.status(200).json({ recipe: refreshed });
   } catch (err) {
     if (err.name === "ValidationError" || err.status === 400) {
-      try {
-        const recipeId = (req.body?.recipeId || "").trim();
-        const myRecipe = await Recipe.find({ userId: req.currentUser.userId });
-
-        const selectedRecipe = myRecipe.find((r) => r.recipeId === recipeId) || null;
-        const cuisinesList = await Recipe.distinct("cuisineType", { userId: req.currentUser.userId });
-
-        let ingredientsValue = "";
-        if (Array.isArray(req.body?.ingredients)) {
-          ingredientsValue = req.body.ingredients.join("\n");
-        } else if (typeof req.body?.ingredients === "string" && req.body.ingredients.trim().length > 0) {
-          ingredientsValue = req.body.ingredients;
-        } else if (selectedRecipe) {
-          ingredientsValue = (selectedRecipe.ingredients || []).join("\n");
-        }
-
-        let instructionsValue = "";
-        if (Array.isArray(req.body?.instructions)) {
-          instructionsValue = req.body.instructions.join("\n");
-        } else if (typeof req.body?.instructions === "string" && req.body.instructions.trim().length > 0) {
-          instructionsValue = req.body.instructions;
-        } else if (selectedRecipe) {
-          instructionsValue = (selectedRecipe.instructions || []).join("\n");
-        }
-
-        return res.status(400).render("recipes/recipe-edit.html", {
-          myRecipe,
-          selectedRecipe,
-          selectedRecipeId: recipeId,
-          cuisines: cuisinesList,
-          error: err.message,
-          notice: null,
-          form: {
-            recipeId,
-            title: req.body?.title || selectedRecipe?.title || "",
-            mealType: req.body?.mealType || selectedRecipe?.mealType || "",
-            cuisineType: req.body?.cuisineType || selectedRecipe?.cuisineType || "",
-            prepTime: req.body?.prepTime || selectedRecipe?.prepTime || "",
-            difficulty: req.body?.difficulty || selectedRecipe?.difficulty || "",
-            servings: req.body?.servings || selectedRecipe?.servings || "",
-            ingredients: ingredientsValue,
-            instructions: instructionsValue,
-          },
-        });
-      } catch (renderError) {
-        return next(renderError);
-      }
+      return res.status(400).json({ error: err.message });
     }
 
     err.status = err.status || 400;
@@ -213,4 +194,6 @@ module.exports = {
   postRecipeSuggestions,
   addReview,
   updateRecipe,
+  listRecipes,
+  getRecipe,
 };

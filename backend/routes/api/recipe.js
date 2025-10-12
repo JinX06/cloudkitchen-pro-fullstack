@@ -8,6 +8,12 @@ const { validateRecipeIDQuery } = require("../../middleware/validation/idValidat
 // Require auth for all API endpoints
 router.use(requireAuth);
 
+// NEW: list recipes for current user
+router.get("/recipes-34076352", recipeApiController.listRecipes);
+
+// NEW: get a single recipe by recipeId
+router.get("/recipes-34076352/:id", recipeApiController.getRecipe);
+
 // Add recipe
 router.post("/recipes/add-34076352", requireRole("chef"), validateRecipeReqBody, recipeApiController.addRecipe);
 

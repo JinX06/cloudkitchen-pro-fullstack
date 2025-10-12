@@ -3,37 +3,36 @@ const Recipe = require("../../models/Recipe.js");
 const Inventory = require("../../models/Inventory.js");
 const User = require("../../models/User.js");
 
-// GET /home-34076352
-async function getHome(req, res, next) {
+async function getDashboardStats(req, res, next) {
   try {
-    if (!req.currentUser) return res.redirect("/login-34076352?notice=login-required");
+    if (!req.currentUser) {
+      const err = new Error("Authentication required");
+      err.status = 401;
+      throw err;
+    }
 
     const totalUsers = await User.countDocuments({});
     const totalRecipes = await Recipe.countDocuments({});
     const totalInventory = await Inventory.countDocuments({});
     const myRecipes = await Recipe.countDocuments({ userId: req.currentUser.userId });
     const cuisines = await Recipe.distinct("cuisineType", { userId: req.currentUser.userId });
-    
-    const allInv = await Inventory.find({});
-    const inventoryValue = calculateInventoryValue(allInv);
 
-    const role = req.currentUser.role;
-    let view;
-    if (role === "admin") view = "home/admin.html";
-    else if (role === "chef") view = "home/chef.html";
-    else if (role === "manager") view = "home/manager.html";
+    const myInventoryItems = await Inventory.find({ userId: req.currentUser.userId });
+    const inventoryValue = calculateInventoryValue(myInventoryItems);
 
-    return res.render(view, {
-      userCount: totalUsers,
-      recipeCount: totalRecipes,
-      inventoryCount: totalInventory,
+    return res.status(200).json({
+      users: totalUsers,
+      recipes: totalRecipes,
+      inventory: totalInventory,
       myRecipeCount: myRecipes,
       cuisineCount: cuisines.length,
       inventoryValue,
     });
-  } catch (err) { return next(err); }
+  } catch (err) {
+    return next(err);
+  }
 }
 
 module.exports = {
-  getHome,
+  getDashboardStats,
 };

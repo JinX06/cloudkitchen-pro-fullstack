@@ -8,6 +8,12 @@ const { validateItemIDQuery } = require("../../middleware/validation/idValidatio
 // Require auth for all Inventory API endpoints
 router.use(requireAuth);
 
+// NEW — list all inventory items for current user
+router.get("/inventory-34076352", inventoryApiController.listInventory);
+
+// NEW — get a single inventory item by inventoryId
+router.get("/inventory-34076352/:id", inventoryApiController.getInventoryItem);
+
 // Add inventory item
 router.post("/inventory/add-34076352", validateInventoryReqBody, inventoryApiController.addInventoryItem);
 

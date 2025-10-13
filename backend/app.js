@@ -32,7 +32,10 @@ app.use(morgan("dev"));
 // app.use(morgan("tiny"));
 
 // For POST requests - parse the body to json and urlencoded
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cors());
 
 // Use Bootstrap css from node_modules instead of CDNs so html can reference bootstrap css
 app.use("/bootstrap", express.static(path.join(__dirname, "node_modules", "bootstrap", "dist")));
@@ -45,36 +48,20 @@ app.use(attachCurrentUser);
 
 // ================== Routes ==================
 
-app.get("/", (req, res) => {
-    res.redirect("/welcome-34076352")
-});
-
-app.use("/", require(path.join(__dirname, "routes/pages/auth")));
-app.use("/", require(path.join(__dirname, "routes/pages/welcome")));
-app.use("/", require(path.join(__dirname, "routes/pages/home")));
-
-app.use("/", require(path.join(__dirname, "routes/pages/recipe")));
-app.use("/api", require(path.join(__dirname, "routes/api/recipe")))
-
-app.use("/", require(path.join(__dirname, "routes/pages/inventory")));
-app.use("/api", require(path.join(__dirname, "routes/api/inventory")))
-app.use("/", require(path.join(__dirname, "routes/pages/hd")));
-
-app.use("/", require("./routes/pages/errors"));
+app.use(require(path.join(__dirname, "routes/api/auth")))
+app.use(require(path.join(__dirname, "routes/api/home")))
+app.use(require(path.join(__dirname, "routes/api/recipe")))
+app.use(require(path.join(__dirname, "routes/api/inventory")))
+// app.use(require(path.join(__dirname, "routes/api/hd")))
 
 // ============ Error Handling Middleware ============
-app.use((req, res, next) => {
-    console.log(`404 Error: ${req.method} ${req.originalUrl} not found`);
-    res.status(404).render("404.html");
+
+app.use((req, res) => {
+    res.status(404).json({ error: 'Not found' })
 });
 
 app.use((err, req, res, next) => {
-    console.error("Error:", err.message);
-    const status = err.status || 500;
-    res.status(status).render("error.html", {
-        code: status,
-        message: status === 500 ? "Something went wrong on our end." : err.message,
-    });
+    res.status(err.status || 500).json({ error: err.message || 'Server error' })
 });
 
 // Connect to MongoDB and start server

@@ -1,8 +1,8 @@
 //import required modules
 const express = require("express");
-const ejs = require("ejs");
 const morgan = require("morgan")
 const path = require("path");
+const cors = require("cors")
 
 const app = express();
 const { connectToMongoDB } = require("./db/connection");
@@ -10,10 +10,6 @@ const { attachCurrentUser } = require("./middleware/auth");
 
 // Set the port number
 const port_number = 8080;
-
-// Set the view engine to EJS
-app.set("view engine", "ejs");
-app.engine("html", ejs.renderFile);
 
 // App locals
 app.locals.suggestedRecipes = [];

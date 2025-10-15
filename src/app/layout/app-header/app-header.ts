@@ -1,7 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+
 import { AuthService } from '../../services/auth.service';
+import { UserContextService } from '../../services/user-context.service';
 
 @Component({
   selector: 'app-app-header',
@@ -12,35 +14,23 @@ import { AuthService } from '../../services/auth.service';
 })
 export class AppHeader {
   private readonly auth = inject(AuthService);
+  private readonly userContext = inject(UserContextService);
   private readonly router = inject(Router);
-
-  protected readonly currentUser = this.auth.currentUser;
-
-  protected userRole() {
-    return this.currentUser()?.role ?? null;
-  }
-
-  protected queryParams() {
-    const user = this.currentUser();
-    return user ? { userId: user.userId } : undefined;
-  }
+  
+  protected readonly currentUser = this.userContext.currentUser;
+  user = this.currentUser()!;
 
   logout() {
-    const user = this.currentUser();
-    if (!user) {
-      this.auth.clearCurrentUser();
-      this.router.navigate(['/welcome']);
-      return;
-    }
+    const { userId } = this.currentUser()!;
 
-    this.auth.logout(user.userId).subscribe({
+    this.auth.logout(userId).subscribe({
       next: () => {
-        this.auth.clearCurrentUser();
-        this.router.navigate(['/welcome']);
+        this.userContext.clear();
+        this.router.navigate(['/welcome-34076352']);
       },
       error: () => {
-        this.auth.clearCurrentUser();
-        this.router.navigate(['/welcome']);
+        this.userContext.clear();
+        this.router.navigate(['/welcome-34076352']);
       }
     });
   }

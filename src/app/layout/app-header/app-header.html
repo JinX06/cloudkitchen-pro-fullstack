@@ -1,9 +1,8 @@
 <nav
   class="navbar navbar-dark navbar-expand-lg mb-4 fixed-top shadow"
-  style="background-color:#212922; padding-top:.25rem; padding-bottom:.25rem; height:65px;"
->
+  style="background-color:#212922; padding-top:.25rem; padding-bottom:.25rem; height:65px;">
   <div class="container-fluid justify-content-start" style="margin-left:10px;">
-    <a class="navbar-brand d-flex align-items-center" routerLink="/welcome" [queryParams]="queryParams()">
+    <a class="navbar-brand d-flex align-items-center" routerLink="/welcome-34076352" [queryParams]="{ userId: user.userId }">
       <img
         src="logo.png"
         alt="Recipe Hub logo"
@@ -14,20 +13,12 @@
 
     <ul class="navbar-nav flex-row ms-3 align-items-center" style="gap: 1rem;">
       <li class="nav-item">
-        <a class="nav-link" href="#">Home</a>
+        <a class="nav-link" routerLink="/home-34076352" [queryParams]="{ userId: user.userId }">Home</a>
       </li>
 
-      @if (userRole() === 'chef') {
+      @if (user.role === 'chef') {
         <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            id="recipesDropdown"
-            role="button"
-            data-bs-toggle="dropdown"
-          >
-            Recipes
-          </a>
+          <a class="nav-link dropdown-toggle" href="#" id="recipesDropdown" role="button" data-bs-toggle="dropdown"> Recipes </a>
           <ul class="dropdown-menu dropdown-menu-dark">
             <li><a class="dropdown-item" href="#">View Recipes</a></li>
             <li><a class="dropdown-item" href="#">Add Recipe</a></li>
@@ -36,15 +27,7 @@
       }
 
       <li class="nav-item dropdown">
-        <a
-          class="nav-link dropdown-toggle"
-          href="#"
-          id="inventoryDropdown"
-          role="button"
-          data-bs-toggle="dropdown"
-        >
-          Inventory
-        </a>
+        <a class="nav-link dropdown-toggle" href="#" id="inventoryDropdown" role="button" data-bs-toggle="dropdown"> Inventory </a>
         <ul class="dropdown-menu dropdown-menu-dark">
           <li><a class="dropdown-item" href="#">View Inventory</a></li>
           <li><a class="dropdown-item" href="#">Add Inventory</a></li>
@@ -52,21 +35,13 @@
       </li>
 
       <li class="nav-item dropdown">
-        <a
-          class="nav-link dropdown-toggle"
-          href="#"
-          id="hdTasksDropdown"
-          role="button"
-          data-bs-toggle="dropdown"
-        >
-          HD Task
-        </a>
+        <a class="nav-link dropdown-toggle" href="#" id="hdTasksDropdown" role="button" data-bs-toggle="dropdown">HD Tasks</a>
         <ul class="dropdown-menu dropdown-menu-dark">
-          @if (userRole() === 'chef') {
+          @if (user.role === 'chef') {
             <li><a class="dropdown-item" href="#">Smart Recipe Recommendations (HD 1)</a></li>
             <li><a class="dropdown-item" href="#">Updated Search &amp; Filter (HD 3)</a></li>
           }
-          @if (userRole() === 'admin') {
+          @if (user.role === 'admin') {
             <li><a class="dropdown-item" href="#">Advanced Recipe Analytics Dashboard (HD 3)</a></li>
             <li><a class="dropdown-item" href="#">Smart Inventory Management (HD 4)</a></li>
           }
@@ -76,7 +51,7 @@
 
     <div class="d-flex align-items-center ms-auto me-3" style="color: rgb(180, 180, 180); font-size: 0.85rem;">
       <span class="me-2">
-        Welcome, <strong>{{ currentUser()?.fullname }}</strong> ({{ currentUser()?.email }})
+        Welcome, <strong>{{ user.fullname }}</strong> ({{ user.email }})
       </span>
       <button class="btn btn-sm btn-outline-light" type="button" (click)="logout()">
         Logout

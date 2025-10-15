@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../services/auth.service';
+import { UserContextService } from '../../../services/user-context.service';
 
 @Component({
   selector: 'app-login',
@@ -24,12 +25,22 @@ export class Login {
   protected success: string | null = null;
 
   private readonly auth = inject(AuthService);
+  private readonly userContext = inject(UserContextService);
+  private readonly router = inject(Router);
+  contextUserId = this.userContext.getUserId();
+ 
+
+  protected readonly userId = this.contextUserId
+  // protected readonly userId = this.route.snapshot.queryParamMap.get('userId');
+  protected readonly queryParams = { userId: this.userId };
 
   submit(form: NgForm) {
     if (form.invalid) {
       form.form.markAllAsTouched();
       return;
     }
+
+    this.userContext.clear();
 
     const payload = {
       email: this.form.email.trim(),
@@ -38,9 +49,14 @@ export class Login {
 
     this.auth.login(payload).subscribe(
       (response) => {
-        this.auth.setCurrentUser(response.user);
         this.error = null;
         this.success = 'Logged in successfully.';
+
+        this.userContext.setUser(response.user);
+
+        this.router.navigate(['/home-34076352'], {
+          queryParams: { userId: response.user.userId }
+        });
       },
       (err: HttpErrorResponse) => {
         this.success = null;

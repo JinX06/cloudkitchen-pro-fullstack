@@ -2,10 +2,10 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
-import { AuthService } from './services/auth.service';
 import { AuthHeader } from './layout/auth-header/auth-header';
 import { AppHeader } from './layout/app-header/app-header';
 import { AppFooter } from './layout/app-footer/app-footer';
+import { UserContextService } from './services/user-context.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +15,7 @@ import { AppFooter } from './layout/app-footer/app-footer';
   styleUrl: './app.css'
 })
 export class App {
-  private readonly auth = inject(AuthService);
+  private readonly userContext = inject(UserContextService);
 
-  protected readonly currentUser = this.auth.currentUser;
+  protected readonly currentUser = this.userContext.currentUser;
 }

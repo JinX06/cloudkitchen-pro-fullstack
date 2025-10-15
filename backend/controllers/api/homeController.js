@@ -31,6 +31,7 @@ async function getDashboardStats(req, res, next) {
         fullname: req.currentUser.fullname,
         email: req.currentUser.email,
         role: req.currentUser.role,
+        phone: req.currentUser.phone,
       },
     });
   } catch (err) {

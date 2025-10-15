@@ -1,0 +1,6 @@
+main.container {
+  flex: 1 0 auto;
+  padding-bottom: 2rem;
+  background-color: transparent;
+  color: #f8f9fa;
+}

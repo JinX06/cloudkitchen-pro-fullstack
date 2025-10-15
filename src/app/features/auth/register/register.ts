@@ -52,7 +52,7 @@ export class Register {
       next: () => {
         this.error = null;
         form.resetForm({ role: '' });
-        this.router.navigate(['/auth/login']);
+        this.router.navigate(['/login-34076352']);
       },
       error: (err: HttpErrorResponse) => {
         this.error = 'Unable to create the account.';

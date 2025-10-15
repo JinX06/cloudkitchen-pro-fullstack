@@ -1,0 +1,31 @@
+<nav
+  class="navbar navbar-dark navbar-expand-lg mb-4 fixed-top shadow"
+  style="background-color:#212922; padding-top:.25rem; padding-bottom:.25rem; height:65px;"
+>
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" routerLink="/welcome" [queryParams]="queryParams()">
+      <img
+      src="logo.png"
+        alt="Recipe Hub logo"
+        style="height:45px; width:auto; margin-right:5px;"
+      />
+      <strong>Recipe Hub</strong>
+    </a>
+    <div class="ms-auto">
+      <a
+        class="btn btn-outline-light me-2"
+        routerLink="/auth/login"
+        [queryParams]="queryParams()"
+      >
+        Login
+      </a>
+      <a
+        class="btn btn-light"
+        routerLink="/auth/register"
+        [queryParams]="queryParams()"
+      >
+        Sign Up
+      </a>
+    </div>
+  </div>
+</nav>

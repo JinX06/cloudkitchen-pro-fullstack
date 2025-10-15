@@ -1,1 +1,51 @@
-<p>login works!</p>
+<div class="container my-5" style="max-width: 640px;">
+  <div class="card bg-dark text-white shadow">
+    <div class="card-header" style="background: #818181; color: #fff;">
+      Login
+    </div>
+    <div class="card-body">
+      @if (success) {
+        <div class="alert alert-success" role="alert">
+          {{ success }}
+        </div>
+      }
+      @if (error) {
+        <div class="alert alert-danger" role="alert">
+          {{ error }}
+        </div>
+      }
+
+      <form #loginForm="ngForm" (ngSubmit)="submit(loginForm)" class="d-grid gap-3" novalidate>
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-control" placeholder="chef@example.com" required email [(ngModel)]="form.email" #emailRef="ngModel"/>
+          @if (emailRef.invalid && emailRef.touched) {
+            <div class="text-warning small mt-1">
+              Please enter a valid email address (e.g. chef@example.com).
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" name="password" class="form-control" placeholder="********" required [(ngModel)]="form.password" #passwordRef="ngModel"/>
+          @if (passwordRef.invalid && passwordRef.touched) {
+            <div class="text-warning small mt-1">
+              Password is required.
+            </div>
+          }
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+          <a class="btn btn-outline-light" routerLink="/">Back</a>
+          <button class="btn btn-primary" type="submit">Login</button>
+        </div>
+      </form>
+
+      <div class="mt-3 text-white">
+        New here?
+        <a routerLink="/auth/register" class="link-light">Create an account</a>
+      </div>
+    </div>
+  </div>
+</div>

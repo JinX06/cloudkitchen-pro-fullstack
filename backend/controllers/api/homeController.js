@@ -19,7 +19,6 @@ async function getDashboardStats(req, res, next) {
 
     const myInventoryItems = await Inventory.find({ userId: req.currentUser.userId });
     const inventoryValue = calculateInventoryValue(myInventoryItems);
-
     return res.status(200).json({
       users: totalUsers,
       recipes: totalRecipes,
@@ -27,6 +26,12 @@ async function getDashboardStats(req, res, next) {
       myRecipeCount: myRecipes,
       cuisineCount: cuisines.length,
       inventoryValue,
+      currentUser: {
+        userId: req.currentUser.userId,
+        fullname: req.currentUser.fullname,
+        email: req.currentUser.email,
+        role: req.currentUser.role,
+      },
     });
   } catch (err) {
     return next(err);

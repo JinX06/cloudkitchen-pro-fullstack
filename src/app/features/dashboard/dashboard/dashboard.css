@@ -1,0 +1,15 @@
+.titlebox {
+  background: rgb(63, 108, 81);
+  border-radius: 1rem;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.quickaction {
+  background-color: rgb(47, 50, 49);
+  height: 100%;
+  border-radius: .4rem;
+}
+
+.card-header {
+  background-color: rgb(111, 73, 41);
+}

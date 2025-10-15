@@ -20,6 +20,7 @@ import { AuthUser } from '../../../models/auth.model';
 export class Dashboard {
   protected userId = '';
   protected user!: AuthUser;
+  protected lastUpdated: Date = new Date();
 
   protected totalUsers = 0;
   protected totalRecipes = 0;
@@ -32,7 +33,6 @@ export class Dashboard {
   private readonly router = inject(Router);
   private readonly dashboard = inject(DashboardService);
   private readonly userContext = inject(UserContextService);
-  private readonly destroyRef = inject(DestroyRef);
   private refreshInterval: any;
   private dataSubscription: Subscription | null = null;
 
@@ -95,6 +95,7 @@ export class Dashboard {
     this.cuisineCount = stats.cuisineCount;
 
     this.error = null;
+    this.lastUpdated = new Date(); // date updates when data loads
   }
 
 

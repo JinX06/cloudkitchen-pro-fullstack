@@ -1,0 +1,23 @@
+  .quickaction {
+    background-color: rgb(47, 50, 49);
+    height: 100%;
+    border-radius: .4rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .card-header {
+    background-color: rgb(111, 73, 41);
+  }
+
+  .action-tile .btn-secondary {
+    background-color: #697168 !important;
+    opacity: 1;
+    border-width: 1.3px;
+  }
+
+  .quick-actions-divider {
+    border: solid white;
+    opacity: 1;
+    margin-top: 10px;
+    margin-bottom: 30px;
+  }

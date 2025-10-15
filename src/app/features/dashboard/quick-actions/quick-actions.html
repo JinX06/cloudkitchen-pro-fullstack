@@ -1,0 +1,132 @@
+@if (userDetails()) {
+
+  @if (user.role === 'chef') {
+    <div class="container mb-5">
+      <h2 class="h4 mb-3 text-light">Quick Actions</h2>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card quickaction action-tile shadow">
+            <div class="card-header text-white"><span class="me-1">🍳</span>Recipe Management</div>
+            <div class="card-body vstack gap-2">
+              <a routerLink="/recipes-add-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">Add Recipe</a>
+              <a routerLink="/recipes-edit-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">Edit Recipe</a>
+              <a routerLink="/recipes-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">View Recipes</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card quickaction action-tile shadow">
+            <div class="card-header text-white"><span class="me-1">🧺</span>Inventory Management</div>
+            <div class="card-body vstack gap-2">
+              <a routerLink="/inventory-add-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">Add Item</a>
+              <a routerLink="/inventory-edit-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">Edit Item</a>
+              <a routerLink="/inventory-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">View Inventory</a>
+              <a routerLink="/recipes-availability-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">Recipe Integration</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else if (user.role === 'manager') {
+    <div class="container mb-5">
+      <h2 class="h4 mb-3 text-light">Quick Actions</h2>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card quickaction action-tile shadow">
+            <div class="card-header text-white"><span class="me-1">🧺</span>Inventory Management</div>
+            <div class="card-body vstack gap-2">
+              <a routerLink="/inventory-add-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">Add Item</a>
+              <a routerLink="/inventory-edit-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">Edit Item</a>
+              <a routerLink="/inventory-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">View Inventory</a>
+              <a routerLink="/inventory-remove-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">Remove Item</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card quickaction action-tile shadow">
+            <div class="card-header text-white"><span class="me-1">📊</span>Insights</div>
+            <div class="card-body vstack gap-2">
+              <a routerLink="/recipes-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">Browse Recipes</a>
+              <a routerLink="/recipes-search-scale-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">Search &amp; Scale</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else if (user.role === 'admin') {
+    <div class="container mb-5">
+      <h2 class="h4 mb-3 text-light">Quick Actions</h2>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card quickaction action-tile shadow">
+            <div class="card-header text-white"><span class="me-1">🧺</span>Inventory Management</div>
+            <div class="card-body vstack gap-2">
+              <a routerLink="/inventory-add-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">Add Item</a>
+              <a routerLink="/inventory-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">View Inventory</a>
+              <a routerLink="/inventory-edit-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">Edit Item</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card quickaction action-tile shadow">
+            <div class="card-header text-white"><span class="me-1">🛠️</span>Admin Tools</div>
+            <div class="card-body vstack gap-2">
+              <a routerLink="/inventory-alerts-34076352" class="btn w-100 btn-secondary text-light btn-outline-light" style="background-color:#697168;" [queryParams]="{ userId: user.userId }">Smart Inventory Alerts</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <hr class="quick-actions-divider" />
+
+  <div class="container mb-5">
+    <h2 class="h4 mb-3 text-light">Legacy Quick Actions For A1 (Deprecated)</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card quickaction action-tile shadow" style="background-color: rgb(47, 50, 49);">
+          <div class="card-header text-white"><span class="me-1">🍳</span>Recipe Actions</div>
+          <div class="card-body vstack gap-2">
+            <a routerLink="/recipes-add-34076352" class="btn w-100 btn-secondary text-light btn-outline-light"
+              style="background-color: #697168;" [queryParams]="{ userId: user.userId }">+ Add New Recipe</a>
+            <a routerLink="/recipes-34076352" class="btn w-100 btn-secondary text-light btn-outline-light"
+              style="background-color: #697168;" [queryParams]="{ userId: user.userId }">View All Recipes</a>
+            <a routerLink="/recipes-remove-34076352" class="btn w-100 btn-secondary text-light btn-outline-light"
+              style="background-color: #697168;" [queryParams]="{ userId: user.userId }">Delete Recipe</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card quickaction action-tile shadow" style="background-color: rgb(47, 50, 49);">
+          <div class="card-header text-white"><span class="me-1">🧺</span>Inventory Actions</div>
+          <div class="card-body vstack gap-2">
+            <a routerLink="/inventory-add-34076352" class="btn w-100 btn-secondary text-light btn-outline-light"
+              style="background-color: #697168;" [queryParams]="{ userId: user.userId }">+ Add Inventory Item</a>
+            <a routerLink="/inventory-34076352" class="btn w-100 btn-secondary text-light btn-outline-light"
+              style="background-color: #697168;" [queryParams]="{ userId: user.userId }">View Inventory</a>
+            <a routerLink="/inventory-remove-34076352" class="btn w-100 btn-secondary text-light btn-outline-light"
+              style="background-color: #697168;" [queryParams]="{ userId: user.userId }">Delete Item</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card quickaction action-tile shadow" style="background-color: rgb(47, 50, 49);">
+          <div class="card-header text-white"><span class="me-1">🏆</span>HD Tasks</div>
+          <div class="card-body vstack gap-2">
+            <a routerLink="/recipes-filter-34076352" class="btn w-100 btn-secondary text-light btn-outline-light"
+              style="background-color: #697168;" [queryParams]="{ userId: user.userId }">Filter Recipes</a>
+            <a routerLink="/recipes-search-scale-34076352" class="btn w-100 btn-secondary text-light btn-outline-light"
+              style="background-color: #697168;" [queryParams]="{ userId: user.userId }">Search &amp; Scale</a>
+            <a routerLink="/recipes-suggestions-34076352" class="btn w-100 btn-secondary text-light btn-outline-light"
+              style="background-color: #697168;" [queryParams]="{ userId: user.userId }">Smart Recipe Suggestions (HD++)</a>
+            <a routerLink="/inventory-alerts-34076352" class="btn w-100 btn-secondary text-light btn-outline-light"
+              style="background-color: #697168;" [queryParams]="{ userId: user.userId }">Smart Inventory Alerts</a>
+            <a routerLink="/recipes-availability-34076352" class="btn w-100 btn-secondary text-light btn-outline-light"
+              style="background-color: #697168;" [queryParams]="{ userId: user.userId }">Recipe Integration</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

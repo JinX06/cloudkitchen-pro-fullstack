@@ -5,10 +5,12 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { UserContextService } from '../../services/user-context.service';
 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   selector: 'app-app-header',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, NgbModule],
   templateUrl: './app-header.html',
   styleUrl: './app-header.css'
 })

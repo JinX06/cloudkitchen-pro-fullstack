@@ -3,11 +3,7 @@
   style="background-color:#212922; padding-top:.25rem; padding-bottom:.25rem; height:65px;">
   <div class="container-fluid justify-content-start" style="margin-left:10px;">
     <a class="navbar-brand d-flex align-items-center" routerLink="/welcome-34076352" [queryParams]="{ userId: user.userId }">
-      <img
-        src="logo.png"
-        alt="Recipe Hub logo"
-        style="height:45px; width:auto; margin-right:5px;"
-      />
+      <img src="logo.png" alt="Recipe Hub logo" style="height:45px; width:auto; margin-right:5px;"/>
       <strong>Recipe Hub</strong>
     </a>
 
@@ -17,33 +13,33 @@
       </li>
 
       @if (user.role === 'chef') {
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="recipesDropdown" role="button" data-bs-toggle="dropdown"> Recipes </a>
-          <ul class="dropdown-menu dropdown-menu-dark">
-            <li><a class="dropdown-item" href="#">View Recipes</a></li>
-            <li><a class="dropdown-item" href="#">Add Recipe</a></li>
+        <li ngbDropdown class="nav-item dropdown">
+          <a ngbDropdownToggle class="dropdown-toggle nav-link dropdown-menu-dark" id="recipesDropdown" role="button" data-bs-toggle="dropdown"> Recipes </a>
+          <ul ngbDropdownMenu class="dropdown-menu dropdown-menu-dark">
+            <li><a ngbDropdownItem class="dropdown-item" routerLink="/recipes-34076352" [queryParams]="{ userId: user.userId }">View Recipes</a></li>
+            <li><a ngbDropdownItem class="dropdown-item" routerLink="/add-recipe-34076352" [queryParams]="{ userId: user.userId }">Add Recipe</a></li>
           </ul>
         </li>
       }
 
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="inventoryDropdown" role="button" data-bs-toggle="dropdown"> Inventory </a>
-        <ul class="dropdown-menu dropdown-menu-dark">
-          <li><a class="dropdown-item" href="#">View Inventory</a></li>
-          <li><a class="dropdown-item" href="#">Add Inventory</a></li>
+      <li ngbDropdown class="nav-item dropdown">
+        <a ngbDropdownToggle class="dropdown-toggle nav-link dropdown-menu-dark" id="inventoryDropdown" role="button" data-bs-toggle="dropdown"> Inventory </a>
+        <ul ngbDropdownMenu class="dropdown-menu dropdown-menu-dark">
+          <li><a ngbDropdownItem class="dropdown-item" routerLink="/inventory-34076352" [queryParams]="{ userId: user.userId }">View Inventory</a></li>
+          <li><a ngbDropdownItem class="dropdown-item" routerLink="/add-inventory-34076352" [queryParams]="{ userId: user.userId }">Add Inventory</a></li>
         </ul>
       </li>
 
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="hdTasksDropdown" role="button" data-bs-toggle="dropdown">HD Tasks</a>
-        <ul class="dropdown-menu dropdown-menu-dark">
+      <li ngbDropdown class="nav-item dropdown">
+        <a ngbDropdownToggle class="nav-link dropdown-toggle" id="hdTasksDropdown" role="button" data-bs-toggle="dropdown">HD Tasks</a>
+        <ul ngbDropdownMenu class="dropdown-menu dropdown-menu-dark">
           @if (user.role === 'chef') {
-            <li><a class="dropdown-item" href="#">Smart Recipe Recommendations (HD 1)</a></li>
-            <li><a class="dropdown-item" href="#">Updated Search &amp; Filter (HD 3)</a></li>
+            <li><a ngbDropdownItem class="dropdown-item" href="#">Smart Recipe Recommendations (HD 1)</a></li>
+            <li><a ngbDropdownItem class="dropdown-item" href="#">Updated Search &amp; Filter (HD 3)</a></li>
           }
           @if (user.role === 'admin') {
-            <li><a class="dropdown-item" href="#">Advanced Recipe Analytics Dashboard (HD 3)</a></li>
-            <li><a class="dropdown-item" href="#">Smart Inventory Management (HD 4)</a></li>
+            <li><a ngbDropdownItem class="dropdown-item" href="#">Advanced Recipe Analytics Dashboard (HD 3)</a></li>
+            <li><a ngbDropdownItem class="dropdown-item" href="#">Smart Inventory Management (HD 4)</a></li>
           }
         </ul>
       </li>

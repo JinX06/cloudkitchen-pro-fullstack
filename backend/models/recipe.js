@@ -1,29 +1,29 @@
 const mongoose = require("mongoose");
 
-const ReviewSchema = new mongoose.Schema({
-  reviewer: { 
-    type: String, 
-    trim: true, 
-    default: "Anonymous" 
-  },
+// const ReviewSchema = new mongoose.Schema({
+//   reviewer: { 
+//     type: String, 
+//     trim: true, 
+//     default: "Anonymous" 
+//   },
 
-  rating: { 
-    type: Number, 
-    min: [1, "Rating must be between 1 and 5."],
-    max: [5, "Rating must be between 1 and 5."],
-    required: [true, "Rating is required."]
-  },
+//   rating: { 
+//     type: Number, 
+//     min: [1, "Rating must be between 1 and 5."],
+//     max: [5, "Rating must be between 1 and 5."],
+//     required: [true, "Rating is required."]
+//   },
 
-  comment: { 
-    type: String, 
-    trim: true,
-    default: "" 
-  },
-  date: {
-    type: String, 
-    required: [true, "Review date is required."]
-  }
-}, { _id: false });
+//   comment: { 
+//     type: String, 
+//     trim: true,
+//     default: "" 
+//   },
+//   date: {
+//     type: String, 
+//     required: [true, "Review date is required."]
+//   }
+// }, { _id: false });
 
 const RecipeSchema = new mongoose.Schema({
   recipeId: {
@@ -145,14 +145,14 @@ const RecipeSchema = new mongoose.Schema({
       message: "servings must be an integer" 
     } 
   },
-  ratings: { type: [Number], default: [] },
-  reviews: { type: [ReviewSchema], default: [] },
-  avgRating: { type: Number, default: 0 }
+  // ratings: { type: [Number], default: [] },
+  // reviews: { type: [ReviewSchema], default: [] },
+  // avgRating: { type: Number, default: 0 }
 
 }, { timestamps: true }); // use mongoose createdAt, updatedAt timestamps
 
-RecipeSchema.index({ userId: 1, title: 1 }, { unique: true });
-RecipeSchema.index({ cuisineType: 1, difficulty: 1 });
-RecipeSchema.index({ title: 1 });
+// RecipeSchema.index({ userId: 1, title: 1 }, { unique: true });
+// RecipeSchema.index({ cuisineType: 1, difficulty: 1 });
+// RecipeSchema.index({ title: 1 });
 
 module.exports = mongoose.model("Recipe", RecipeSchema);

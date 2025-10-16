@@ -9,24 +9,24 @@ const { validateRecipeIDQuery } = require("../../middleware/validation/idValidat
 router.use(requireAuth);
 
 // NEW: list recipes for current user
-router.get("/recipes-34076352", recipeApiController.listRecipes);
+router.get("/recipes-list-34076352", recipeApiController.listRecipes);
 
 // NEW: get a single recipe by recipeId
-router.get("/recipes-34076352/:id", recipeApiController.getRecipe);
+router.get("/recipes-view-34076352/:id", recipeApiController.getRecipe);
 
 // Add recipe
-router.post("/recipes/add-34076352", requireRole("chef"), validateRecipeReqBody, recipeApiController.addRecipe);
+router.post("/recipes-add-34076352", requireRole("chef"), validateRecipeReqBody, recipeApiController.addRecipe);
 
 // Delete recipe
-router.post("/recipes/delete-34076352", validateRecipeIDQuery, recipeApiController.deleteRecipe);
+router.delete("/recipes-delete-34076352", validateRecipeIDQuery, recipeApiController.deleteRecipe);
 
 // Update recipe
-router.post("/recipes/update-34076352", requireRole("chef"), validateRecipeReqBody, recipeApiController.updateRecipe);
+router.put("/recipes-update-34076352", requireRole("chef"), validateRecipeReqBody, recipeApiController.updateRecipe);
 
-// Get recipe suggestions
-router.post("/recipes-suggestions-34076352", recipeApiController.postRecipeSuggestions);
+// Get recipe suggestions (Ignored for now)
+// router.post("/recipes-suggestions-34076352", recipeApiController.postRecipeSuggestions);
 
-// Add recipe review
-router.post("/recipes/add-review-34076352", validateReviewReqBody, recipeApiController.addReview);
+// Add recipe review (Ignored for now)
+// router.post("/recipes/add-review-34076352", validateReviewReqBody, recipeApiController.addReview);
 
 module.exports = router;

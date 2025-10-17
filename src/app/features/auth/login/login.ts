@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../services/auth.service';
 import { UserContextService } from '../../../services/user-context.service';
 
@@ -58,7 +57,7 @@ export class Login {
           queryParams: { userId: response.user.userId }
         });
       },
-      (err: HttpErrorResponse) => {
+      (err) => {
         this.success = null;
         this.error = err.error.error || 'Login failed.';
       }

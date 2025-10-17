@@ -1,9 +1,7 @@
 import { Component, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 
 import { DashboardService, DashboardStatsResponse } from '../../../services/dashboard.service';
 import { UserContextService } from '../../../services/user-context.service';
@@ -60,10 +58,10 @@ export class Dashboard {
   loadData() {
     this.dataSubscription = this.dashboard.getStats(this.userId).subscribe(
       (stats) => this.handleStats(stats),
-      (err: HttpErrorResponse) => this.handleError(err)
+      (err) => this.handleError(err)
     );
   }
-  private handleError(err: HttpErrorResponse): void {
+  private handleError(err: any): void {
     this.userContext.clear();
 
     if (err.status === 401 || err.status === 403) {

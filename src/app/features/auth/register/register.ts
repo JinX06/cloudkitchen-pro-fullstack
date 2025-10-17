@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
@@ -54,7 +53,7 @@ export class Register {
         form.resetForm({ role: '' });
         this.router.navigate(['/login-34076352']);
       },
-      error: (err: HttpErrorResponse) => {
+      error: (err) => {
         this.error = 'Unable to create the account.';
       }
     });

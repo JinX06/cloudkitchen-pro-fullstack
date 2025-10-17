@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
@@ -61,7 +60,7 @@ export class ListRecipes implements OnInit {
 
     this.recipesService.list(this.userId).subscribe({
       next: (response: RecipeListResponse) => this.handleListSuccess(response),
-      error: (err: HttpErrorResponse) => this.handleListError(err),
+      error: (err) => this.handleListError(err),
     });
   }
 
@@ -96,7 +95,7 @@ export class ListRecipes implements OnInit {
   }
 
   // Gracefully handle list success and error
-  private handleListError(err: HttpErrorResponse): void {
+  private handleListError(err: any): void {
     this.isLoading = false;
 
     this.error = err.error?.error || 'Unable to load recipes.';
@@ -117,7 +116,7 @@ export class ListRecipes implements OnInit {
         this.success = 'Recipe deleted successfully.';
         this.loadRecipes();
       },
-      error: (err: HttpErrorResponse) => {
+      error: (err) => {
         this.deletingId = null;
 
         this.error = err.error?.error || 'Unable to delete recipe.';

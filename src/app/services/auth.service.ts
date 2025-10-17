@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthResponse } from '../models/auth.model';
 
-const API_BASE = 'http://localhost:8080';
+const API_BASE = 'http://localhost:8080/api';
 
 @Injectable({
   providedIn: 'root'

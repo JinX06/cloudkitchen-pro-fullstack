@@ -8,18 +8,17 @@ const app = express();
 const { connectToMongoDB } = require("./db/connection");
 const { attachCurrentUser } = require("./middleware/auth");
 
+//import routers
+const authRouter = require("./routes/api/auth");
+const homeRouter = require("./routes/api/home");
+const recipeRouter = require("./routes/api/recipe");
+const inventoryRouter = require("./routes/api/inventory");
+
 // Set the port number
 const port_number = 8080;
 
 // App locals
 app.locals.suggestedRecipes = [];
-
-// Set Express to look for views in multiple directories
-app.set("views", [
-    path.join(__dirname, "views"), 
-    path.join(__dirname, "views", "recipes"),
-    path.join(__dirname, "views", "inventory")
-]);
 
 // ================ Middleware ================
 
@@ -33,21 +32,15 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 
-// Use Bootstrap css from node_modules instead of CDNs so html can reference bootstrap css
-app.use("/bootstrap", express.static(path.join(__dirname, "node_modules", "bootstrap", "dist")));
-
-// Serve static files from the public/images directory
-app.use("/images", express.static(path.join(__dirname, "public", "images")));
-
 // Attach current user from query string (if any)
 app.use(attachCurrentUser);
 
 // ================== Routes ==================
 
-app.use(require(path.join(__dirname, "routes/api/auth")))
-app.use(require(path.join(__dirname, "routes/api/home")))
-app.use(require(path.join(__dirname, "routes/api/recipe")))
-app.use(require(path.join(__dirname, "routes/api/inventory")))
+app.use("/api", authRouter);
+app.use("/api", homeRouter);
+app.use("/api", recipeRouter)
+app.use("/api", inventoryRouter)
 // app.use(require(path.join(__dirname, "routes/api/hd")))
 
 // ============ Error Handling Middleware ============

@@ -30,7 +30,8 @@ export class RecipesService {
   }
 
   update(payload: RecipeUpdateRequest, userId: string): Observable<RecipeResponse> {
-    return this.http.put<RecipeResponse>(`${API_BASE}/recipes-update-34076352?userId=${userId}`,payload);
+    const { recipeId, ...body } = payload;
+    return this.http.put<RecipeResponse>(`${API_BASE}/recipes-update-34076352/${recipeId}?userId=${userId}`, body);
   }
 
   remove(recipeId: string, userId: string): Observable<void> {

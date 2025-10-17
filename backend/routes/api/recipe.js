@@ -21,7 +21,7 @@ router.post("/recipes-add-34076352", requireRole("chef"), validateRecipeReqBody,
 router.delete("/recipes-delete-34076352", validateRecipeIDQuery, recipeApiController.deleteRecipe);
 
 // Update recipe
-router.put("/recipes-update-34076352", requireRole("chef"), validateRecipeReqBody, recipeApiController.updateRecipe);
+router.put("/recipes-update-34076352/:id", requireRole("chef"), validateRecipeReqBody, recipeApiController.updateRecipe);
 
 // Get recipe suggestions (Ignored for now)
 // router.post("/recipes-suggestions-34076352", recipeApiController.postRecipeSuggestions);

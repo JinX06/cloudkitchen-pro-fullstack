@@ -149,9 +149,23 @@ async function updateRecipe(req, res, next) {
       throw err;
     }
 
-    const recipeId = (req.body?.recipeId || "").trim();
+    const recipeId = (req.params?.id || req.body?.recipeId || "").trim();
+    if (!recipeId) {
+      const err = new Error("Recipe ID is required.");
+      err.status = 400;
+      throw err;
+    }
 
-    const { title, ingredients, instructions, mealType, cuisineType, prepTime, difficulty, servings } = req.validated;
+    const {
+      title,
+      ingredients,
+      instructions,
+      mealType,
+      cuisineType,
+      prepTime,
+      difficulty,
+      servings,
+    } = req.validated;
 
     const updateDoc = {
       title,
@@ -168,18 +182,25 @@ async function updateRecipe(req, res, next) {
       { recipeId, userId: req.currentUser.userId },
       { $set: updateDoc },
       { new: true, runValidators: true }
-    );
+    ).lean();
 
     if (!updated) {
-      const err = new Error("Not found");
+      const err = new Error("Recipe not found or you do not have permission to modify it.");
       err.status = 404;
       throw err;
     }
 
-    const refreshed = await Recipe.findOne({ recipeId, userId: req.currentUser.userId }).lean();
-    return res.status(200).json({ recipe: refreshed });
+    return res.status(200).json({ recipe: updated });
   } catch (err) {
-    if (err.name === "ValidationError" || err.status === 400) {
+    if (err.name === "ValidationError" && err.errors) {
+      const messages = Object.values(err.errors)
+        .map((e) => (typeof e.message === "string" ? e.message : null))
+        .filter(Boolean)
+        .join(" ");
+      return res.status(400).json({ error: messages || 'Unable to update recipe.' });
+    }
+
+    if (err.status === 400) {
       return res.status(400).json({ error: err.message });
     }
 

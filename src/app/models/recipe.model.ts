@@ -37,8 +37,8 @@ export interface RecipeResponse {
 export interface RecipePayload {
   title: string;
   chef: string;
-  ingredients: string[];
-  instructions: string[];
+  ingredients: string | string[];
+  instructions: string | string[];
   mealType: Recipe['mealType'];
   cuisineType: Recipe['cuisineType'];
   prepTime: number;

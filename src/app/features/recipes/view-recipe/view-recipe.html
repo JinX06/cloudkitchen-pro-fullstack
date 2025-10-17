@@ -1,1 +1,68 @@
-<p>view-recipe works!</p>
+<div>
+  <style>
+    .view-container {
+      margin: 20px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+    }
+
+    .recipe-detail-card {
+      border-radius: 6px;
+    }
+
+    .view-buttons .btn + .btn {
+      margin-left: 0.5rem;
+    }
+  </style>
+  <div class="card bg-dark text-white view-container">
+    <h2>📖 View Recipe</h2>
+
+    @if (isLoading) {
+      <div class="d-flex align-items-center gap-3 mt-3">
+      <div class="spinner-border text-light" role="status"></div>
+        <span>Loading recipe…</span>
+      </div>
+    } @else if (recipe) {
+      <h4>Recipe Details:</h4>
+      <div class="card bg-white text-dark recipe-detail-card">
+        <div class="card-header bg-secondary text-white fw-bold" style="padding: 20px;">
+          <h4 class="mb-1">{{ recipe.title }}</h4>
+          <small style="font-weight: lighter;">By: {{ recipe.chef }}</small>
+        </div>
+        <div class="card-body">
+          <div><strong>User ID:</strong> {{ recipe.userId }}</div>
+          <div><strong>Meal Type:</strong> {{ recipe.mealType }}</div>
+          <div><strong>Cuisine:</strong> {{ recipe.cuisineType }}</div>
+          <div><strong>Difficulty:</strong> {{ recipe.difficulty }}</div>
+          <div><strong>Prep Time:</strong> {{ recipe.prepTime }} min</div>
+          <div><strong>Servings:</strong> {{ recipe.servings }}</div>
+          <div><strong>Created:</strong> {{ recipe.createdAt | date: 'yyyy-MM-dd' }}</div>
+          <div><strong>Ingredients:</strong> {{ recipe.ingredients.join(', ') }}</div>
+          <div><strong>Instructions:</strong> {{ recipe.instructions.join(', ') }}</div>
+
+          <hr />
+
+          <div class="d-flex gap-2 view-buttons">
+            <button type="button" class="btn btn-primary" (click)="goBack()">Back</button>
+            <a
+              class="btn btn-warning text-dark"
+              [routerLink]="['/recipes-edit-34076352']"
+              [queryParams]="{ userId: userId, recipeId: recipe.recipeId }"
+            >
+              Edit Recipe
+            </a>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div
+        class="alert alert-warning"
+        style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; margin-top: 20px;"
+      >
+        {{ error || 'Recipe not found.' }}
+      </div>
+      <button type="button" class="btn btn-secondary" (click)="goBack()">Back</button>
+    }
+  </div>
+</div>

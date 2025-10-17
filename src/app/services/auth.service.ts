@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AuthResponse } from '../models/auth.model';
 
 const API_BASE = 'http://localhost:8080';
@@ -19,8 +19,7 @@ export class AuthService {
   }
 
   logout(userId: string) {
-    const params = new HttpParams().set('userId', userId);
-    return this.http.post<void>(`${API_BASE}/logout-34076352`, null, { params });
+    return this.http.post<void>(`${API_BASE}/logout-34076352?userId=${userId}`, {} );
   }
 
 }

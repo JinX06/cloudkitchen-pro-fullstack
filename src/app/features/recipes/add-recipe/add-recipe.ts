@@ -12,6 +12,7 @@ import { UserContextService } from '../../../services/user-context.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './add-recipe.html',
+  styleUrl: './add-recipe.css'
 })
 
 export class AddRecipe implements OnInit {

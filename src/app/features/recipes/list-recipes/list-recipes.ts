@@ -13,6 +13,7 @@ import { UserContextService } from '../../../services/user-context.service';
   standalone: true,
   imports: [CommonModule, RouterLink, NgbModalModule],
   templateUrl: './list-recipes.html',
+  styleUrl: './list-recipes.css'
 })
 export class ListRecipes implements OnInit {
   protected userId = '';

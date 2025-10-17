@@ -12,6 +12,7 @@ import { Recipe } from '../../../models/recipe.model';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './remove-recipe.html',
+  styleUrl: './remove-recipe.css'
 })
 export class RemoveRecipe implements OnInit {
   recipeId = '';

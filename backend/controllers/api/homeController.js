@@ -1,5 +1,5 @@
 const { calculateInventoryValue } = require("../../utils/inventoryUtils.js");
-const Recipe = require("../../models/Recipe.js");
+const Recipe = require("../../models/recipe.js");
 const Inventory = require("../../models/Inventory.js");
 const User = require("../../models/User.js");
 

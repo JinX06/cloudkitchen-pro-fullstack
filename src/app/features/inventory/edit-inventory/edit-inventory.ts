@@ -140,7 +140,6 @@ export class EditInventory implements OnInit {
           this.serverError = 'Inventory item not found.';
           return;
         }
-        console.log(item)
         this.formModel = {
           inventoryId: item.inventoryId || this.inventoryId,
           ingredientName: item.ingredientName,

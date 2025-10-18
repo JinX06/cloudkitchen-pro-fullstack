@@ -1,1 +1,242 @@
-<p>edit-recipe works!</p>
+<div class="container my-4">
+  <style>
+    .required::after {
+      content: " *";
+      color: #ef4444;
+    }
+
+    .recipe-edit-card .form-label {
+      color: #ffffff;
+    }
+
+    .recipe-edit-card textarea.form-control {
+      resize: vertical;
+    }
+  </style>
+  <h1 class="text-light fw-bold">🛠️ Edit Recipe</h1>
+
+  @if (success) {
+    <div class="alert alert-success" role="alert">{{ success }}</div>
+  }
+  @if (serverError && !currentRecipe) {
+    <div class="alert alert-danger" role="alert">{{ serverError }}</div>
+  }
+
+  <div
+    class="card bg-dark text-white recipe-edit-card"
+    style="border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.6);"
+  >
+    <div class="card-body">
+      <label for="recipeEditSelect" class="form-label">Select a recipe to edit:</label>
+      <select
+        id="recipeEditSelect"
+        #recipeSelect
+        class="form-select"
+        [(ngModel)]="selectedRecipeId"
+        (change)="onRecipeChange(recipeSelect.value)"
+      >
+        <option value="">Select recipe…</option>
+        @for (recipe of recipes; track recipe.recipeId) {
+          <option [value]="recipe.recipeId">
+            {{ recipe.recipeId }} | {{ recipe.title }}
+          </option>
+        }
+      </select>
+
+      @if (isLoading) {
+        <div class="d-flex align-items-center gap-3 mt-4">
+          <div class="spinner-border text-light" role="status"></div>
+          <span>Loading recipe…</span>
+        </div>
+
+      } @else if (currentRecipe) {
+        <hr class="border-light" />
+
+        @if (serverError) {
+          <div class="alert alert-danger" role="alert">{{ serverError }}</div>
+        }
+
+        <form
+          #recipeForm="ngForm"
+          (ngSubmit)="submit(recipeForm)"
+          class="was-validated"
+          novalidate
+        >
+          <input type="hidden" name="recipeId" [value]="formData.recipeId" />
+
+          <!-- Recipe Title -->
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label required">Recipe Title</label>
+              <input
+                type="text"
+                name="title"
+                class="form-control"
+                required
+                minlength="3"
+                maxlength="100"
+                [(ngModel)]="formData.title"
+                #titleModel="ngModel"
+                [class.is-invalid]="(recipeForm.submitted || titleModel.touched) && titleModel.invalid"
+              />
+              <div class="invalid-feedback">Please enter a recipe title.</div>
+            </div>
+
+            <!-- Meal Type -->
+            <div class="col-md-4">
+              <label class="form-label required">Meal Type</label>
+              <select
+                name="mealType"
+                class="form-select"
+                required
+                [(ngModel)]="formData.mealType"
+                #mealTypeModel="ngModel"
+                [class.is-invalid]="(recipeForm.submitted || mealTypeModel.touched) && mealTypeModel.invalid"
+              >
+                <option value="" disabled>Select…</option>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner">Dinner</option>
+                <option value="Snack">Snack</option>
+              </select>
+              <div class="invalid-feedback">Select a meal type.</div>
+            </div>
+          </div>
+
+          <!-- Cuisine Type -->
+          <div class="row g-3 mt-1">
+            <div class="col-md-6">
+              <label class="form-label required">Cuisine Type</label>
+              <select
+                name="cuisineType"
+                class="form-select"
+                required
+                [(ngModel)]="formData.cuisineType"
+                #cuisineModel="ngModel"
+                [class.is-invalid]="(recipeForm.submitted || cuisineModel.touched) && cuisineModel.invalid"
+              >
+                <option value="" disabled>Select…</option>
+                <option value="Italian">Italian</option>
+                <option value="Asian">Asian</option>
+                <option value="Mexican">Mexican</option>
+                <option value="American">American</option>
+                <option value="French">French</option>
+                <option value="Indian">Indian</option>
+                <option value="Mediterranean">Mediterranean</option>
+                <option value="Other">Other</option>
+              </select>
+              <div class="invalid-feedback">Select a cuisine type.</div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label required">Prep Time (min)</label>
+              <input
+                type="number"
+                name="prepTime"
+                min="1"
+                max="480"
+                step="1"
+                class="form-control"
+                required
+                [(ngModel)]="formData.prepTime"
+                #prepTimeModel="ngModel"
+                [class.is-invalid]="(recipeForm.submitted || prepTimeModel.touched) && prepTimeModel.invalid"
+              />
+              <div class="invalid-feedback">Enter minutes between 1 and 480.</div>
+            </div>
+
+            <!-- Difficulty -->
+            <div class="col-md-3">
+              <label class="form-label required">Difficulty</label>
+              <select
+                name="difficulty"
+                class="form-select"
+                required
+                [(ngModel)]="formData.difficulty"
+                #difficultyModel="ngModel"
+                [class.is-invalid]="(recipeForm.submitted || difficultyModel.touched) && difficultyModel.invalid"
+              >
+                <option value="" disabled>Select…</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+              <div class="invalid-feedback">Select difficulty.</div>
+            </div>
+          </div>
+
+          <!-- Servings -->
+          <div class="row g-3 mt-1">
+            <div class="col-md-3">
+              <label class="form-label required">Servings</label>
+              <input
+                type="number"
+                name="servings"
+                min="1"
+                max="20"
+                step="1"
+                class="form-control"
+                required
+                [(ngModel)]="formData.servings"
+                #servingsModel="ngModel"
+                [class.is-invalid]="(recipeForm.submitted || servingsModel.touched) && servingsModel.invalid"
+              />
+              <div class="invalid-feedback">Enter servings between 1 and 20.</div>
+            </div>
+          </div>
+
+          <!-- Ingredients -->
+          <div class="mb-3 mt-3">
+            <label class="form-label required">Ingredients</label>
+            <textarea
+              name="ingredients"
+              class="form-control"
+              rows="6"
+              required
+              [(ngModel)]="formData.ingredientsText"
+              #ingredientsModel="ngModel"
+              [class.is-invalid]="(recipeForm.submitted || ingredientsModel.touched) && ingredientsModel.invalid"
+            ></textarea>
+            <div class="form-text text-light">Enter one ingredient per line.</div>
+            <div class="invalid-feedback">Please add at least one ingredient.</div>
+          </div>
+
+          <!-- Instructions -->
+          <div class="mb-3">
+            <label class="form-label required">Instructions</label>
+            <textarea
+              name="instructions"
+              class="form-control"
+              rows="7"
+              required
+              [(ngModel)]="formData.instructionsText"
+              #instructionsModel="ngModel"
+              [class.is-invalid]="(recipeForm.submitted || instructionsModel.touched) && instructionsModel.invalid"
+            ></textarea>
+            <div class="form-text text-light">Step-by-step instructions. One per line.</div>
+            <div class="invalid-feedback">Please provide instructions.</div>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <a
+              class="btn btn-outline-light"
+              [routerLink]="['/recipes-34076352']"
+              [queryParams]="queryParams"
+            >
+              Back to Recipes
+            </a>
+            <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+              @if (isSaving) {
+                <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+              }
+              Update Recipe
+            </button>
+          </div>
+        </form>
+      } @else {
+        <div class="alert alert-secondary mt-3">
+          Select a recipe from the list above to edit its details.
+        </div>
+      }
+    </div>
+  </div>
+</div>

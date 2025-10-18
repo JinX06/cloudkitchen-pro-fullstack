@@ -6,7 +6,7 @@ const ALLOWED_ROLES = ["chef", "manager", "admin"];
 // GET /api/inventory-34076352?userId=<id>
 async function listInventory(req, res, next) {
   try {
-    const items = await Inventory.find({ userId: req.currentUser.userId })
+    const items = await Inventory.find({})
       .sort({ expirationDate: 1 })
       .lean();
     return res.status(200).json({ items });
@@ -126,7 +126,7 @@ async function updateInventoryItem(req, res, next) {
     };
 
     const updated = await Inventory.findOneAndUpdate(
-      { inventoryId, userId: req.currentUser.userId },
+      { inventoryId },
       { $set: updateDoc },
       { new: true, runValidators: true }
     ).lean();

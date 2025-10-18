@@ -14,9 +14,12 @@ export class ChefGuard implements CanActivate {
 
   canActivate(): boolean {
     const user = this.userContext.getUser();
-    console.log(user)
-    this.showModal();
-    return user?.role === 'chef';
+    let flag = true;
+    if (user?.role !== "chef") {
+      this.showModal();
+      flag = false;
+    }
+    return flag;
   }
 
   private showModal() {

@@ -171,8 +171,8 @@
           }
           @for (item of displayInventory; track item.inventoryId) {
             <tr
-              [class.expired-row]="isExpired(item.expirationDate ?? item.expiryDate)"
-              [class.expiring-row]="!isExpired(item.expirationDate ?? item.expiryDate) && isExpiringSoon(item.expirationDate ?? item.expiryDate)"
+              [class.expired-row]="isExpired(item.expirationDate)"
+              [class.expiring-row]="!isExpired(item.expirationDate) && isExpiringSoon(item.expirationDate)"
             >
               <td>{{ item.inventoryId }}</td>
               <td class="fw-semibold">{{ item.ingredientName }}</td>

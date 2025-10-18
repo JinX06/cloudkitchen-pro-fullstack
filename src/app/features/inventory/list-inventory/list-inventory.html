@@ -1,0 +1,224 @@
+<div class="container my-4 inventory-page">
+  <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-3">
+    <div>
+      <h1 class="page-title">📦 Inventory</h1>
+      <p class="page-subtitle">Track and manage your pantry items</p>
+    </div>
+    <div class="summary-card card bg-dark text-white p-2 fw-bold">
+      <div>Total Items: {{ inventory.length }}</div>
+      <hr class="my-2" />
+      <div>Inventory Value: {{ totalValue | number : '1.2-2' }} $</div>
+    </div>
+  </div>
+
+  <div class="d-flex flex-wrap gap-2 mb-4">
+    <a
+      class="btn btn-primary"
+      routerLink="/inventory-add-34076352"
+      [queryParams]="getQueryParams()"
+      >+ Add New Item</a
+    >
+  </div>
+
+  @if (error) {
+    <div class="alert alert-danger" role="alert">
+      {{ error }}
+    </div>
+  }
+
+  @if (success) {
+    <div class="alert alert-success" role="alert">
+      {{ success }}
+    </div>
+  }
+
+  <!-- Low Stock Filter -->
+  <div class="card bg-dark text-white mb-3 filters-card">
+    <div class="card-body">
+      <div class="row g-3 align-items-center">
+        <div class="col-12 col-md-3">
+
+          <!-- Low Stock Toggle -->
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              [(ngModel)]="lowStockOnly"
+              (ngModelChange)="onFiltersChanged()"
+            />
+            <label>
+              Low stock only (<= {{ lowStockThreshold }})
+            </label>
+          </div>
+
+          <!-- Low Stock Threshold -->
+          <input
+            class="form-control form-control-sm mt-2"
+            type="number"
+            min="0"
+            [(ngModel)]="lowStockThreshold"
+            (change)="onFiltersChanged()"
+          />
+        </div>
+
+        <!-- Category Filter -->
+        <div class="col-12 col-sm-6 col-lg-3">
+          <label for="category-filter" class="form-label mb-1">Category</label>
+          <select
+            id="category-filter"
+            class="form-select form-select-sm"
+            [(ngModel)]="selectedCategory"
+            (change)="onFiltersChanged()"
+          >
+            <option value="">All categories</option>
+            @for (category of availableCategories; track category) {
+              <option [value]="category">{{ category }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Sort Filter -->
+        <div class="col-12 col-sm-6 col-lg-5">
+          <label class="form-label mb-1">Sort</label>
+          <div>
+            <!-- Expiry Sort -->
+            <div class="btn-group btn-group-sm me-2">
+              <button
+                type="button"
+                class="btn btn-outline-light"
+                [class.active]="sortKey === 'expiry'"
+                (click)="updateSort('expiry')"
+                style="margin-right: 30px;"
+              >
+                Expiry
+                @if (sortKey === 'expiry') {
+                  <span class="ms-2 sort-indicator">{{ sortDir === 'asc' ? 'ASC' : 'DESC' }}</span>
+                }
+              </button>
+
+              <!-- Category Sort -->
+              <button
+                type="button"
+                class="btn btn-outline-light"
+                [class.active]="sortKey === 'category'"
+                (click)="updateSort('category')"
+                style="margin-right: 30px;"
+
+              >
+                Category
+                @if (sortKey === 'category') {
+                  <span class="ms-2 sort-indicator">{{ sortDir === 'asc' ? 'A-Z' : 'Z-A' }}</span>
+                }
+              </button>
+
+              <!-- Quantity Sort -->
+              <button
+                type="button"
+                class="btn btn-outline-light"
+                [class.active]="sortKey === 'quantity'"
+                (click)="updateSort('quantity')"
+                style="margin-right: 30px;"
+              >
+                Quantity
+                @if (sortKey === 'quantity') {
+                  <span class="ms-2 sort-indicator">{{ sortDir === 'asc' ? 'ASC' : 'DESC' }}</span>
+                }
+              </button>
+            </div>
+            <button class="btn btn-primary btn-sm" (click)="resetFilters()">
+              Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inventory Table -->
+  <div class="card bg-dark text-white inventory-table-card">
+    <div class="card-header d-flex align-items-center gap-2">
+      <span>📋</span>
+      <strong>Inventory Table</strong>
+      @if (isLoading) {
+        <span class="ms-auto badge bg-secondary">Loading…</span>
+      }
+    </div>
+    <div class="table-responsive">
+      <table class="table table-dark table-striped table-hover mb-0 align-middle">
+        <thead>
+          <tr>
+            <th>Item ID</th>
+            <th>Ingredient</th>
+            <th>Category</th>
+            <th>Quantity</th>
+            <th>Unit</th>
+            <th>Location</th>
+            <th>Purchase Date</th>
+            <th>Expiry Date</th>
+            <th>Created At</th>
+            <th>Cost ($)</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (!isLoading && displayInventory.length === 0) {
+            <tr>
+              <td colspan="13" class="text-center py-4">
+                No inventory items found with the selected filters.
+              </td>
+            </tr>
+          }
+          @for (item of displayInventory; track item.inventoryId) {
+            <tr
+              [class.expired-row]="isExpired(item.expirationDate ?? item.expiryDate)"
+              [class.expiring-row]="!isExpired(item.expirationDate ?? item.expiryDate) && isExpiringSoon(item.expirationDate ?? item.expiryDate)"
+            >
+              <td>{{ item.inventoryId }}</td>
+              <td class="fw-semibold">{{ item.ingredientName }}</td>
+              <td>
+                <span class="badge text-white category-pill">{{ item.category }}</span>
+              </td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.unit }}</td>
+              <td>{{ item.location }}</td>
+              <td>{{ item.purchaseDate | date: 'yyyy-MM-dd' }}</td>
+              <td>{{ item.expirationDate | date: 'yyyy-MM-dd' }}</td>
+              <td>{{ item.createdAt | date: 'yyyy-MM-dd' }}</td>
+              <td>{{ item.cost | number: "1.2-2" }}</td>
+              <td>
+                <span class="{{ getExpiryBadge(item).css }}">{{ getExpiryBadge(item).label }}</span>
+              </td>
+              <td class="text-center">
+                <div class="d-flex flex-column flex-lg-row gap-1 justify-content-center">
+                  <a
+                    class="btn btn-primary btn-sm"
+                    routerLink="/inventory-view-34076352"
+                    [queryParams]="getQueryParams(item.inventoryId)"
+                  >
+                    View
+                  </a>
+                  <a
+                    class="btn btn-warning btn-sm text-dark"
+                    routerLink="/inventory-edit-34076352"
+                    [queryParams]="getQueryParams(item.inventoryId)"
+                  >
+                    Edit
+                  </a>
+                  <button
+                    class="btn btn-danger btn-sm"
+                    type="button"
+                    (click)="openDeleteModal(item)"
+                    [disabled]="deletingId === item.inventoryId"
+                  >
+                    @if (deletingId === item.inventoryId) { Deleting… } @else { Delete }
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

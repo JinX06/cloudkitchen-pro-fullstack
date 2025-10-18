@@ -34,12 +34,12 @@
         <a ngbDropdownToggle class="nav-link dropdown-toggle" id="hdTasksDropdown" role="button" data-bs-toggle="dropdown">HD Tasks</a>
         <ul ngbDropdownMenu class="dropdown-menu dropdown-menu-dark">
           @if (user.role === 'chef') {
-            <li><a ngbDropdownItem class="dropdown-item" href="#">Smart Recipe Recommendations (HD 1)</a></li>
-            <li><a ngbDropdownItem class="dropdown-item" href="#">Updated Search &amp; Filter (HD 3)</a></li>
+            <li><a ngbDropdownItem class="dropdown-item" routerLink="/ai">AI Feature 1</a></li>
+            <li><a ngbDropdownItem class="dropdown-item" routerLink="/ai">AI Feature 2</a></li>
           }
-          @if (user.role === 'admin') {
-            <li><a ngbDropdownItem class="dropdown-item" href="#">Advanced Recipe Analytics Dashboard (HD 3)</a></li>
-            <li><a ngbDropdownItem class="dropdown-item" href="#">Smart Inventory Management (HD 4)</a></li>
+          @if (user.role === 'admin' || user.role === 'manager') {
+            <li><a ngbDropdownItem class="dropdown-item" disabled="">AI Feature 1 (Chef Access Only)</a></li>
+            <li><a ngbDropdownItem class="dropdown-item" disabled="">AI Feature 2 (Chef Access Only) </a></li>
           }
         </ul>
       </li>

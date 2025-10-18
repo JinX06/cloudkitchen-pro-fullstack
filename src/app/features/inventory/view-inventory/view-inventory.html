@@ -1,0 +1,47 @@
+<style>
+  .view-card {
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+  }
+</style>
+<div>
+  <div class="card bg-dark text-white view-card">
+    <h2>📦 View Inventory Item</h2>
+
+    @if (error) {
+      <div class="alert alert-danger mt-3" role="alert">
+        {{ error }}
+      </div>
+      <button type="button" class="btn btn-secondary mt-2" (click)="goBack()">Back</button>
+    } @else if (isLoading) {
+      <div class="alert alert-info mt-3">Loading inventory item…</div>
+      <button type="button" class="btn btn-secondary mt-2" (click)="goBack()">Back</button>
+    } @else if (item) {
+      <h4 class="mt-4">Item Details:</h4>
+      <div class="card bg-white text-dark mt-3" style="border-radius: 6px;">
+        <div class="card-header bg-primary text-white fw-bold" style="padding: 20px;">
+          <h4 class="mb-0">{{ item.ingredientName }}</h4>
+          <small>Item ID: {{ item.inventoryId }}</small>
+        </div>
+        <div class="card-body">
+          <div><strong>Category:</strong> {{ item.category }}</div>
+          <div><strong>Quantity:</strong> {{ item.quantity }} {{ item.unit }}</div>
+          <div><strong>Location:</strong> {{ item.location }}</div>
+          <div><strong>Purchase Date:</strong> {{ item.purchaseDate | date: 'longDate' }}</div>
+          <div><strong>Expiry Date:</strong> {{ item.expirationDate | date: 'longDate' }}</div>
+          <div><strong>Cost:</strong> {{ item.cost | currency }}</div>
+          <div><strong>Added:</strong> {{ item.createdAt | date: 'longDate' }}</div>
+          <hr />
+          <button type="button" class="btn btn-secondary" (click)="goBack()">Back</button>
+        </div>
+      </div>
+    } @else {
+      <div class="alert alert-warning mt-3">
+        No item selected or item not found.
+      </div>
+      <button type="button" class="btn btn-secondary mt-2" (click)="goBack()">Back</button>
+    }
+  </div>
+</div>

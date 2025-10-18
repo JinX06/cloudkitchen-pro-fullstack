@@ -30,6 +30,27 @@ export class Register {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
+  // Interactive Password validation  (Like in A2)
+  protected get passwordHasMinLength() {
+    return (this.form.password || '').length >= 8;
+  }
+
+  protected get passwordHasUppercase() {
+    return /[A-Z]/.test(this.form.password || '');
+  }
+
+  protected get passwordHasLowercase() {
+    return /[a-z]/.test(this.form.password || '');
+  }
+
+  protected get passwordHasNumber() {
+    return /\d/.test(this.form.password || '');
+  }
+
+  protected get passwordHasSpecial() {
+    return /[^A-Za-z0-9]/.test(this.form.password || '');
+  }
+
   // Handle form submission
   submit(form: any) {
     

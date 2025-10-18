@@ -64,6 +64,49 @@
           <div class="form-text text-white">
             Must include at least 8 characters, one uppercase, one lowercase, one number, and one special character.
           </div>
+          <ul class="list-unstyled small text-white mt-2 mb-0">
+            <li class="d-flex align-items-center gap-2">
+               <!-- "✅" : "❌" -->
+              @if (passwordHasMinLength) {
+                <span>✅</span>
+              } @else {
+                <span>❌</span>
+              }
+              <span>At least 8 characters</span>
+            </li>
+            <li class="d-flex align-items-center gap-2">
+              @if (passwordHasUppercase) {
+                <span>✅</span>
+              } @else {
+                <span>❌</span>
+              }
+              <span>Contains an uppercase letter</span>
+            </li>
+            <li class="d-flex align-items-center gap-2">
+              @if (passwordHasLowercase) {
+                <span>✅</span>
+              } @else {
+                <span>❌</span>
+              }
+              <span>Contains a lowercase letter</span>
+            </li>
+            <li class="d-flex align-items-center gap-2">
+              @if (passwordHasNumber) {
+                <span>✅</span>
+              } @else {
+                <span>❌</span>
+              }
+              <span>Contains a number</span>
+            </li>
+            <li class="d-flex align-items-center gap-2">
+              @if (passwordHasSpecial) {
+                <span>✅</span>
+              } @else {
+                <span>❌</span>
+              }
+              <span>Contains a special character</span>
+            </li>
+          </ul>
           @if (password.invalid && password.touched) {
             <div class="text-warning small mt-1">
               Password must be 8+ characters and include uppercase, lowercase, number, and special character.

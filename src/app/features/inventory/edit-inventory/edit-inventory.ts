@@ -196,7 +196,7 @@ export class EditInventory implements OnInit {
     this.inventoryService.update(this.formModel, this.userId).subscribe({
       next: () => {
         this.isSubmitting = false;
-        this.success = 'Recipe updated successfully.';
+        this.success = 'Inventory item updated successfully.';
         this.loadInventoryItem();
       },
       error: (err) => {

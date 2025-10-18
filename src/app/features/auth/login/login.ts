@@ -26,11 +26,9 @@ export class Login {
   private readonly auth = inject(AuthService);
   private readonly userContext = inject(UserContextService);
   private readonly router = inject(Router);
-  contextUserId = this.userContext.getUserId();
- 
+  private readonly contextUserId = this.userContext.getUserId();
 
-  protected readonly userId = this.contextUserId
-  // protected readonly userId = this.route.snapshot.queryParamMap.get('userId');
+  protected readonly userId = this.contextUserId;
   protected readonly queryParams = { userId: this.userId };
 
   submit(form: any) {

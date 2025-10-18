@@ -38,7 +38,7 @@ export class ViewRecipe implements OnInit {
     }
 
     if (!this.userId) {
-      this.error = 'User context is unavailable.';
+      this.error = 'User information is unavailable.';
       return;
     }
 

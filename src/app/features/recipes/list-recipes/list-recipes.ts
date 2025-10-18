@@ -41,7 +41,7 @@ export class ListRecipes implements OnInit {
     this.queryParams = this.userId ? { userId: this.userId } : {};
 
     if (this.userId === '' || this.userId === null) {
-      this.error = 'User context is unavailable.';
+      this.error = 'User information is unavailable.';
       return false;
     }
 

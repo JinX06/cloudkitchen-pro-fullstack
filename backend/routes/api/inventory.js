@@ -1,3 +1,5 @@
+//TODO: Change route pahts to standardsized format
+
 const express = require("express");
 const router = express.Router();
 const inventoryApiController = require("../../controllers/api/inventoryController.js");
@@ -9,19 +11,19 @@ const { validateItemIDQuery } = require("../../middleware/validation/idValidatio
 router.use(requireAuth);
 
 // NEW — list all inventory items for current user
-router.get("/inventory-34076352", inventoryApiController.listInventory);
+router.get("/inventory-list-34076352", inventoryApiController.listInventory);
 
 // NEW — get a single inventory item by inventoryId
-router.get("/inventory-34076352/:id", inventoryApiController.getInventoryItem);
+router.get("/inventory-view-34076352/:id", inventoryApiController.getInventoryItem);
 
 // Add inventory item
-router.post("/inventory/add-34076352", validateInventoryReqBody, inventoryApiController.addInventoryItem);
+router.post("/inventory-add-34076352", validateInventoryReqBody, inventoryApiController.addInventoryItem);
 
 // Delete inventory item
-router.post("/inventory/delete-34076352", validateItemIDQuery, inventoryApiController.deleteInventoryItem);
+router.post("/inventory-delete-34076352", validateItemIDQuery, inventoryApiController.deleteInventoryItem);
 
 // Update inventory item
-router.post("/inventory/update-34076352", validateInventoryReqBody, inventoryApiController.updateInventoryItem);
+router.post("/inventory-update-34076352/:id", validateInventoryReqBody, inventoryApiController.updateInventoryItem);
 
 
 module.exports = router;

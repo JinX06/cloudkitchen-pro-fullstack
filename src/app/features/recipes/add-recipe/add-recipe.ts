@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
 import { RecipesService } from '../../../services/recipes.service';
@@ -72,7 +72,7 @@ export class AddRecipe implements OnInit {
   }
 
   // Reset the form
-  protected reset(form: NgForm): void {
+  protected reset(form: any): void {
     this.formData = this.defaultForm();
     form.resetForm(this.formData);
     this.serverError = null;

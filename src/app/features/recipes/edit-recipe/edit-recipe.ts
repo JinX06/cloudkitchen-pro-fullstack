@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { RecipesService } from '../../../services/recipes.service';
@@ -66,7 +66,7 @@ export class EditRecipe implements OnInit {
     this.fetchRecipe(recipeId);
   }
 
-  protected submit(form: NgForm): void {
+  protected submit(form: any): void {
     if (!this.userId || form.invalid || !this.selectedRecipeId) {
       form.form.markAllAsTouched();
       return;

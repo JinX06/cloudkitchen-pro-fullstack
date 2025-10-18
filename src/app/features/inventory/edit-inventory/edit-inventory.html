@@ -1,0 +1,203 @@
+<style>
+  .edit-card {
+    background-color: rgba(0, 0, 0, 0.65);
+    color: #ffffff;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  .edit-card label {
+    color: #ffffff;
+  }
+  .edit-card .btn {
+    border-radius: 10px;
+  }
+  .required::after {
+    content: " *";
+    color: #ef4444;
+  }
+</style>
+<div class="edit-card">
+  <h2>🛠️ Edit Inventory Item</h2>
+
+  @if (serverError) {
+    <div class="alert alert-danger" role="alert">
+      {{ serverError }}
+    </div>
+  }
+
+  @if (success) {
+    <div class="alert alert-success" role="alert">
+      {{ success }}
+    </div>
+  }
+
+  <label class="form-label mt-2 text-white" for="inventoryIdSelect">Select an item to edit:</label>
+  <select
+    id="inventoryIdSelect"
+    class="form-select mb-3"
+    [(ngModel)]="inventoryId"
+    (ngModelChange)="onInventorySelected($event)"
+    name="inventorySelector"
+  >
+    <option value="">Select an item</option>
+    @for (item of inventoryItems; track item.inventoryId) {
+      <option [value]="item.inventoryId">
+        {{ item.inventoryId }} | {{ item.ingredientName }}
+      </option>
+    }
+  </select>
+
+  @if (!inventoryItems.length && !serverError) {
+    <div class="alert alert-secondary">No inventory items available. Add an item first.</div>
+  }
+
+  @if (isLoadingItem) {
+    <div class="alert alert-info mt-3">Loading inventory item…</div>
+  }
+
+  @if (!inventoryId && !isLoadingItem) {
+    <div class="alert alert-secondary mt-3">
+      Select an inventory item from the list above to start editing.
+    </div>
+  }
+
+  @if (inventoryId && !isLoadingItem) {
+    <hr />
+    <form #editForm="ngForm" (ngSubmit)="submit(editForm)" novalidate>
+      <input type="hidden" name="inventoryId" [(ngModel)]="formModel.inventoryId" />
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="required" for="ingredientName">Ingredient Name</label>
+          <input
+            id="ingredientName"
+            class="form-control"
+            type="text"
+            name="ingredientName"
+            required
+            [(ngModel)]="formModel.ingredientName"
+          />
+        </div>
+        <div class="col-md-3">
+          <label class="required" for="quantity">Quantity</label>
+          <input
+            id="quantity"
+            class="form-control"
+            type="number"
+            name="quantity"
+            min="0"
+            step="0.01"
+            required
+            [(ngModel)]="formModel.quantity"
+          />
+        </div>
+        <div class="col-md-3">
+          <label class="required" for="unit">Unit</label>
+          <select
+            id="unit"
+            class="form-select"
+            name="unit"
+            required
+            [(ngModel)]="formModel.unit"
+          >
+            <option value="" disabled>Select…</option>
+            @for (unit of units; track unit) {
+              <option [value]="unit">{{ unit }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="row g-3 mt-2">
+        <div class="col-md-4">
+          <label class="required" for="category">Category</label>
+          <select
+            id="category"
+            class="form-select"
+            name="category"
+            required
+            [(ngModel)]="formModel.category"
+          >
+            <option value="" disabled>Select…</option>
+            @for (category of categories; track category) {
+              <option [value]="category">{{ category }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="required" for="purchaseDate">Purchase Date</label>
+          <input
+            id="purchaseDate"
+            class="form-control"
+            type="date"
+            name="purchaseDate"
+            required
+            [(ngModel)]="formModel.purchaseDate"
+          />
+        </div>
+        <div class="col-md-4">
+          <label class="required" for="expiryDate">Expiry Date</label>
+          <input
+            id="expiryDate"
+            class="form-control"
+            type="date"
+            name="expiryDate"
+            required
+            [(ngModel)]="formModel.expiryDate"
+          />
+        </div>
+      </div>
+
+      <div class="row g-3 mt-2">
+        <div class="col-md-4">
+          <label class="required" for="location">Location</label>
+          <select
+            id="location"
+            class="form-select"
+            name="location"
+            required
+            [(ngModel)]="formModel.location"
+          >
+            <option value="" disabled>Select…</option>
+            @for (location of locations; track location) {
+              <option [value]="location">{{ location }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="required" for="cost">Cost ($)</label>
+          <input
+            id="cost"
+            class="form-control"
+            type="number"
+            name="cost"
+            min="0"
+            step="0.01"
+            required
+            [(ngModel)]="formModel.cost"
+          />
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <div class="w-100 d-flex gap-2 justify-content-end">
+            <a
+              class="btn btn-outline-light px-3"
+              routerLink="/inventory-34076352"
+              [queryParams]="{ userId }"
+              >Back to Inventory</a
+            >
+          <button
+            class="btn btn-primary px-5"
+            type="submit"
+            [disabled]="editForm.invalid || isSubmitting || !userId"
+          >
+            @if (isSubmitting) { Saving… } @else { Update Item }
+          </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  }
+</div>

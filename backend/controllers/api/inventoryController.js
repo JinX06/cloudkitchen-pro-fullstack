@@ -22,7 +22,6 @@ async function getInventoryItem(req, res, next) {
     const inventoryId = req.params.id;
     const item = await Inventory.findOne({
       inventoryId,
-      userId: req.currentUser.userId,
     }).lean();
     if (!item) {
       return res.status(404).json({ error: "Item Not found" });

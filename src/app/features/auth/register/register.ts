@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 
@@ -31,7 +31,7 @@ export class Register {
   private readonly router = inject(Router);
 
   // Handle form submission
-  submit(form: NgForm) {
+  submit(form: any) {
     
     // if form is invalid, mark all fields as touched to show validation errors
     if (form.invalid) {

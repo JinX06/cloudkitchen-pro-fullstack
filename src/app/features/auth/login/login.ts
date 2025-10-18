@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { UserContextService } from '../../../services/user-context.service';
@@ -33,7 +33,7 @@ export class Login {
   // protected readonly userId = this.route.snapshot.queryParamMap.get('userId');
   protected readonly queryParams = { userId: this.userId };
 
-  submit(form: NgForm) {
+  submit(form: any) {
     if (form.invalid) {
       form.form.markAllAsTouched();
       return;

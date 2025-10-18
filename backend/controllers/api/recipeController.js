@@ -1,6 +1,5 @@
 const Recipe = require("../../models/Recipe");
 const { peekNextID, incrementID } = require("../../utils/id");
-const { getRecipeSuggestions } = require("../../utils/recipeSuggestions/recipeSuggestions.js");
 
 // GET /api/recipes-34076352
 async function listRecipes(req, res, next) {
@@ -97,49 +96,6 @@ async function deleteRecipe(req, res, next) {
   }
 }
 
-// POST /api/recipes-suggestions-34076352
-async function postRecipeSuggestions(req, res, next) {
-  try {
-    const userResponse = {
-      cuisineType: req.body.cuisineType,
-      prepBucket: req.body.prepBucket,
-      difficulty: req.body.difficulty,
-      ingBucket: req.body.ingBucket,
-      stepBucket: req.body.stepBucket,
-      mealType: req.body.mealType,
-    };
-
-    const list = await Recipe.find({ userId: req.currentUser.userId }).lean();
-    req.app.locals.suggestedRecipes = getRecipeSuggestions(userResponse, list);
-    return res.status(200).json({ suggestions: req.app.locals.suggestedRecipes });
-  } catch (err) {
-    return next(err);
-  }
-}
-
-// POST /api/recipes/add-review-34076352
-async function addReview(req, res, next) {
-  try {
-    const { recipeId, reviewer, rating, comment } = req.validated;
-    const recipe = await Recipe.findOne({ recipeId });
-    if (!recipe) {
-      const err = new Error("Recipe not found.");
-      err.status = 400;
-      throw err;
-    }
-    recipe.ratings.push(rating);
-    recipe.reviews.push({ reviewer, rating, comment, date: new Date().toISOString().split("T")[0] });
-    const sum = recipe.ratings.reduce((a, b) => a + b, 0);
-    recipe.avgRating = Math.round((sum / recipe.ratings.length) * 100) / 100;
-    await recipe.save();
-    const updated = await Recipe.findOne({ recipeId }).lean();
-    return res.status(200).json({ recipe: updated });
-  } catch (err) {
-    err.status = err.status || 400;
-    return next(err);
-  }
-}
-
 // POST /api/recipes/update-34076352
 async function updateRecipe(req, res, next) {
   try {
@@ -212,8 +168,6 @@ async function updateRecipe(req, res, next) {
 module.exports = {
   addRecipe,
   deleteRecipe,
-  postRecipeSuggestions,
-  addReview,
   updateRecipe,
   listRecipes,
   getRecipe,

@@ -1,5 +1,3 @@
-//TODO: Change route pahts to standardsized format
-
 const express = require("express");
 const router = express.Router();
 const inventoryApiController = require("../../controllers/api/inventoryController.js");

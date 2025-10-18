@@ -1,0 +1,67 @@
+<style>
+  .remove-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+</style>
+<div class="modal-header border-0">
+  <h5 class="modal-title">📦 Remove Inventory Item</h5>
+  <button type="button" class="btn-close" (click)="cancel()"></button>
+</div>
+
+<div class="modal-body">
+  @if (isLoading) {
+    <div class="d-flex align-items-center gap-2">
+      <div class="spinner-border"></div>
+      <span>Loading inventory item…</span>
+    </div>
+  } @else if (error) {
+    <div class="alert alert-warning mb-3">{{ error }}</div>
+    <button type="button" class="btn btn-secondary" (click)="cancel()">Back</button>
+  } @else if (inventoryItem) {
+    <h4>Selected Inventory Details:</h4>
+    <div class="card bg-white text-dark remove-card mt-3">
+      <div class="card-header bg-danger text-white fw-bold">
+        <h4 class="mb-0">{{ inventoryItem.ingredientName }}</h4>
+        <small>Item ID: {{ inventoryItem.inventoryId }}</small>
+      </div>
+      <div class="card-body">
+        <div><strong>Category:</strong> {{ inventoryItem.category }}</div>
+        <div><strong>Quantity:</strong> {{ inventoryItem.quantity }} {{ inventoryItem.unit }}</div>
+        <div><strong>Location:</strong> {{ inventoryItem.location }}</div>
+        <div><strong>Purchase Date:</strong> {{ inventoryItem.purchaseDate | date: 'yyyy-MM-dd' }}</div>
+        <div><strong>Expiry Date:</strong> {{ inventoryItem.expirationDate | date: 'yyyy-MM-dd' }}</div>
+        <div><strong>Cost:</strong> {{ inventoryItem.cost }}</div>
+
+        <hr />
+        <div class="form-switch mb-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="confirmDeleteCheck"
+            [(ngModel)]="isAcknowledged"
+          />
+          <label for="confirmDeleteCheck" class="ms-2 text-danger fw-semibold">
+            I understand that deleting this item cannot be undone.
+          </label>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button
+            type="button"
+            class="btn btn-danger"
+            [disabled]="!isAcknowledged || isLoading"
+            (click)="confirm()"
+          >
+            Remove Item
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="cancel()">Back</button>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="alert alert-warning mb-3">
+      Inventory details were not provided. Please close this dialog and try again.
+    </div>
+    <button type="button" class="btn btn-secondary" (click)="cancel()">Back</button>
+  }
+</div>

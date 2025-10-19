@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Translate } = require('@google-cloud/translate').v2;
 
-const translateClient = new Translate({ keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS});
+const translateClient = new Translate({ key: process.env.GOOGLE_APPLICATION_CREDENTIALS});
 async function translateRecipeText(req, res) {
   try {
     const { userId } = req.query;

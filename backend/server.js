@@ -28,7 +28,7 @@ const port_number = 8080;
 // App locals
 app.locals.suggestedRecipes = [];
 
-const ttsClient = new textToSpeech.TextToSpeechClient( {keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS} );
+const ttsClient = new textToSpeech.TextToSpeechClient( {key: process.env.GOOGLE_APPLICATION_CREDENTIALS} );
 // ================ Middleware ================
 
 

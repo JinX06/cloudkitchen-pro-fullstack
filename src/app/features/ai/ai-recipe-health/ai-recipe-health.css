@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+.ai-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(4px);
+}
+
+.btn-gradient {
+  background: linear-gradient(135deg, #2fc1a3, #5ad0ff);
+  color: #0a1f17;
+  font-weight: 600;
+  border: none;
+  padding-inline: 1.5rem;
+  box-shadow: 0 10px 30px rgba(47, 193, 163, 0.35);
+}
+
+.btn-gradient:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+}
+
+textarea.form-control {
+  min-height: 240px;
+  line-height: 1.45;
+}
+
+.list-unstyled li {
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem 1rem;
+}

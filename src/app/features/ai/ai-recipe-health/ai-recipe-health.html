@@ -1,0 +1,128 @@
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-xl-9">
+      <div class="card bg-dark text-white shadow-sm ai-card">
+        <div class="card-header border-0 bg-transparent pb-0">
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div>
+              <h2 class="h4 mb-1">AI Health Analysis</h2>
+              <div class="small text-white-50">Select a recipe and let our State Of The Art AI <strong>(CulinaryGPT)</strong> highlight nutrition concerns and improvements.</div>
+            </div>
+            <a class="btn btn-outline-light btn-sm" [routerLink]="['/recipes-34076352']" [queryParams]="queryParams">
+              ← Back to Recipes
+            </a>
+          </div>
+        </div>
+
+        <div class="card-body">
+          @if (loadingRecipes) {
+            <div class="d-flex align-items-center gap-3 text-light">
+              <div class="spinner-border text-light" role="status"></div>
+              <span>Loading your recipes…</span>
+            </div>
+          } @else {
+            <div class="row g-4">
+              <div class="col-lg-5">
+                <label for="recipeSelect" class="form-label text-uppercase small opacity-75 mb-2">Recipe</label>
+                <select
+                  id="recipeSelect"
+                  class="form-select bg-dark border-secondary text-light"
+                  [ngModel]="selectedRecipeId"
+                  (ngModelChange)="onRecipeChange($event)"
+                >
+                  <option [ngValue]="''">Choose a recipe…</option>
+                  @for (recipe of recipes; track recipe.recipeId) {
+                    <option [ngValue]="recipe.recipeId">{{ recipe.title }}</option>
+                  }
+                </select>
+                <div class="form-text text-white-50 mt-2">
+                  Ingredients auto fill when a recipe is selected, but you can edit them for custom variations.
+                </div>
+              </div>
+
+              <div class="col-lg-7">
+                <label for="ingredientsText" class="form-label text-uppercase small opacity-75 mb-2">Ingredients</label>
+                <textarea
+                  id="ingredientsText"
+                  rows="10"
+                  class="form-control bg-dark border-secondary text-light"
+                  [(ngModel)]="ingredientsText"
+                ></textarea>
+                @if (formError) {
+                  <div class="text-danger small mt-2">{{ formError }}</div>
+                }
+              </div>
+            </div>
+
+            <div class="d-flex flex-wrap align-items-center gap-3 mt-4">
+              <button class="btn btn-gradient" type="button" (click)="analyze()" [disabled]="loading">
+                Analyze Health
+              </button>
+              @if (loading) {
+                <div class="d-flex align-items-center gap-2 text-light">
+                  <span class="spinner-border spinner-border-sm" role="status"></span>
+                  <span>Analyzing recipe health…</span>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      @if (error) {
+        <div class="alert alert-danger mt-3">{{ error }}</div>
+      }
+
+      @if (result) {
+        <div class="card bg-dark text-white shadow-sm mt-3">
+          <div class="card-header border-0 bg-transparent">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+              <div>
+                <strong>Health Insights</strong>
+                <div class="small text-white-50">Balanced nutrition score and tailored actions</div>
+              </div>
+              Health Score: 
+              <span class="{{ getScoreBadge(result.healthScore) }}">
+                {{ result.healthScore ?? 'N/A' }} / 100
+              </span>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row g-4">
+              <div class="col-lg-6">
+                <h6 class="text-uppercase small text-white-50 mb-2">Key Concerns</h6>
+                @if (result.concerns?.length) {
+                  <ul class="list-unstyled m-0 ps-2">
+                    @for (concern of result.concerns; track concern) {
+                      <li class="d-flex align-items-start gap-2 mb-2">
+                        <span class="text-warning">⚠️</span>
+                        <span>{{ concern }}</span>
+                      </li>
+                    }
+                  </ul>
+                } @else {
+                  <div class="text-success small">No major health concerns detected.</div>
+                }
+              </div>
+              <div class="col-lg-6">
+                <h6 class="text-uppercase small text-white-50 mb-2">Actionable Suggestions</h6>
+                @if (result.suggestions?.length) {
+                  <ul class="list-unstyled m-0 ps-2">
+                    @for (suggestion of result.suggestions; track suggestion) {
+                      <li class="d-flex align-items-start gap-2 mb-2">
+                        <span class="text-info">💡</span>
+                        <span>{{ suggestion }}</span>
+                      </li>
+                    }
+                  </ul>
+                } @else {
+                  <div class="text-white-50 small">No suggestions available for this analysis.</div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

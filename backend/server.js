@@ -75,7 +75,7 @@ app.use((err, req, res, next) => {
 });
 
 io.on("connection", (socket) => {
-    socket.on("tts:request", (payload = {}) => {
+    socket.on("request", (payload = {}) => {
         const text = String(payload.text || "").trim();
         const request = {
             input: { text },
@@ -86,7 +86,7 @@ io.on("connection", (socket) => {
         ttsClient.synthesizeSpeech(request, (err, response) => {
             if (err) {
                 console.error("TTS failed:", err);
-                socket.emit("tts:result", { error: "TTS unavailable" });
+                socket.emit("result", { error: "TTS unavailable" });
                 return;
             }
 
@@ -98,14 +98,14 @@ io.on("connection", (socket) => {
                 fs.writeFile(filePath, response.audioContent, "binary", (err) => {
                     if (err) {
                         console.log("Unable to save TTS audio:", err);
-                        socket.emit("tts:result", { error: "TTS unavailable" });
+                        socket.emit("result", { error: "TTS unavailable" });
                         return;
                     }
-                    socket.emit("tts:result", { url: `/audio/${filename}` });
+                    socket.emit("result", { url: `/audio/${filename}` });
                 });
             } catch (fileErr) {
                 console.error("Unable to prepare audio directory:", fileErr);
-                socket.emit("tts:result", { error: "TTS unavailable" });
+                socket.emit("result", { error: "TTS unavailable" });
             }
         });
     });

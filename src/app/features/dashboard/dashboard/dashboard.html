@@ -20,6 +20,13 @@
                 <a routerLink="/inventory-34076352" class="btn btn-outline-light" [queryParams]="{ userId: user.userId }">
                   View Inventory
                 </a>
+                <a
+                  routerLink="/ai-health-34076352"
+                  class="btn btn-ai-gradient"
+                  [queryParams]="{ userId: user.userId }"
+                >
+                  AI Health Analysis
+                </a>
               </div>
               <div class="mt-3">
                 Last Updated: {{ lastUpdated | date: 'mediumTime' }} | Updates Automatically Every 30 Seconds

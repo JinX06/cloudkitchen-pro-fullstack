@@ -12,6 +12,7 @@
     .ingredient-cell, .instruction-cell { min-width: 160px; }
     .cell-line { font-size: 0.7rem; padding: 2px 0; }
     .rating-meta { font-size: 0.65rem; color:#ddd; }
+    .btn-ai-gradient { background: linear-gradient(135deg, #22c485, #5ad0ff); color: #0b1f16; font-weight: 600; border: none;}
   </style>
   <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
@@ -21,8 +22,9 @@
     <span class="badge bg-dark fs-6 px-2 py-3"> Total Recipes: {{ recipes.length }} </span>
   </div>
 
-  <div class="d-flex gap-2 mb-4" style="border-radius: 10px;">
+  <div class="d-flex flex-wrap gap-2 mb-4" style="border-radius: 10px;">
     <a class="btn btn-primary" [routerLink]="['/recipes-add-34076352']" [queryParams]="queryParams"> + Add New Recipe</a>
+    <a class="btn btn-ai-gradient" [routerLink]="['/ai-health-34076352']" [queryParams]="queryParams">AI Health Analysis</a>
   </div>
 
   @if (success) {

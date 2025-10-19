@@ -13,3 +13,10 @@
 .card-header {
   background-color: rgb(111, 73, 41);
 }
+
+.btn-ai-gradient {
+  background: linear-gradient(135deg, #22c485, #5ad0ff);
+  color: #0b1f16;
+  font-weight: 600;
+  border: none;
+}

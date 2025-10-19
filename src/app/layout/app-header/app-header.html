@@ -34,12 +34,18 @@
         <a ngbDropdownToggle class="nav-link dropdown-toggle" id="hdTasksDropdown" role="button" data-bs-toggle="dropdown">HD Tasks</a>
         <ul ngbDropdownMenu class="dropdown-menu dropdown-menu-dark">
           @if (user.role === 'chef') {
-            <li><a ngbDropdownItem class="dropdown-item" routerLink="/ai">AI Feature 1</a></li>
-            <li><a ngbDropdownItem class="dropdown-item" routerLink="/ai">AI Feature 2</a></li>
-          }
-          @if (user.role === 'admin' || user.role === 'manager') {
-            <li><a ngbDropdownItem class="dropdown-item" disabled="">AI Feature 1 (Chef Access Only)</a></li>
-            <li><a ngbDropdownItem class="dropdown-item" disabled="">AI Feature 2 (Chef Access Only) </a></li>
+            <li>
+              <a
+                ngbDropdownItem
+                class="dropdown-item"
+                [routerLink]="'/ai-health-34076352'"
+                [queryParams]="{ userId: user.userId }"
+              >
+                AI Health Analysis
+              </a>
+            </li>
+          } @else {
+            <li><a ngbDropdownItem class="dropdown-item" disabled="">AI Health Analysis (Chef Access Only)</a></li>
           }
         </ul>
       </li>

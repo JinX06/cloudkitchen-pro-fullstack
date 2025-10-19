@@ -13,6 +13,7 @@ const authRouter = require("./routes/api/auth");
 const homeRouter = require("./routes/api/home");
 const recipeRouter = require("./routes/api/recipe");
 const inventoryRouter = require("./routes/api/inventory");
+const aiRouter = require("./routes/api/ai");
 
 // Set the port number
 const port_number = 8080;
@@ -43,7 +44,14 @@ app.use("/api", authRouter);
 app.use("/api", homeRouter);
 app.use("/api", recipeRouter)
 app.use("/api", inventoryRouter)
+app.use("/api", aiRouter)
 // app.use(require(path.join(__dirname, "routes/api/hd")))
+
+// ============ SPA Fallback Route ============
+// For any non-API route, serve index.html to let Angular handle routing
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/cloudkitchen-pro/browser/index.html'));
+});
 
 // ============ Error Handling Middleware ============
 

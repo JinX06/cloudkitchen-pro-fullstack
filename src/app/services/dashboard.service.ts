@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthUser } from '../models/auth.model';
 
-const API_BASE = 'http://localhost:8080/api';
+const API_BASE = '/api';
 
 export interface DashboardStatsResponse {
   users: number;

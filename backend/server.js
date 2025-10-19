@@ -45,12 +45,14 @@ app.use("/api", homeRouter);
 app.use("/api", recipeRouter)
 app.use("/api", inventoryRouter)
 app.use("/api", aiRouter)
-// app.use(require(path.join(__dirname, "routes/api/hd")))
 
-// ============ SPA Fallback Route ============
-// For any non-API route, serve index.html to let Angular handle routing
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../dist/cloudkitchen-pro/browser/index.html'));
+// Serve the frontend for any non-API routes
+app.use((req, res, next) => {
+    if (!req.path.startsWith('/api')) {
+        res.sendFile(path.join(__dirname, '../dist/cloudkitchen-pro/browser/index.html'));
+    } else {
+        next();
+    }
 });
 
 // ============ Error Handling Middleware ============

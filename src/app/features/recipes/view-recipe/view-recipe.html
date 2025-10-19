@@ -31,15 +31,114 @@
           <small style="font-weight: lighter;">By: {{ recipe.chef }}</small>
         </div>
         <div class="card-body">
-          <div><strong>User ID:</strong> {{ recipe.userId }}</div>
-          <div><strong>Meal Type:</strong> {{ recipe.mealType }}</div>
-          <div><strong>Cuisine:</strong> {{ recipe.cuisineType }}</div>
-          <div><strong>Difficulty:</strong> {{ recipe.difficulty }}</div>
-          <div><strong>Prep Time:</strong> {{ recipe.prepTime }} min</div>
-          <div><strong>Servings:</strong> {{ recipe.servings }}</div>
-          <div><strong>Created:</strong> {{ recipe.createdAt | date: 'yyyy-MM-dd' }}</div>
-          <div><strong>Ingredients:</strong> {{ recipe.ingredients.join(', ') }}</div>
-          <div><strong>Instructions:</strong> {{ recipe.instructions.join(', ') }}</div>
+          <div class="row g-3 align-items-end mb-4">
+            <div class="col-md-4 col-lg-3">
+              <label for="targetLang" class="form-label fw-semibold">Target Language</label>
+              <select
+                id="targetLang"
+                class="form-select"
+                [(ngModel)]="targetLang"
+                aria-label="Select target language"
+              >
+                @for (language of languages; track language.code) {
+                  <option [value]="language.code">{{ language.label }} ({{ language.code }})</option>
+                }
+              </select>
+            </div>
+            <div class="col d-flex flex-wrap align-items-center gap-3">
+
+              <!-- Translate Button -->
+              <button
+                type="button"
+                class="btn btn-success"
+                (click)="translateRecipe()"
+                [disabled]="isTranslating"
+              >
+                @if (isTranslating) {
+                  <span class="spinner-border spinner-border-sm me-2 text-dark" role="status"></span>
+                }
+                Translate
+              </button>
+
+              <!-- Text-to-Speech Button -->
+              <button
+                type="button"
+                class="btn btn-success"
+                (click)="handleTts()"
+                [disabled]="isTtsLoading"
+              >
+                @if (isTtsLoading) {
+                  <span class="spinner-border spinner-border-sm me-2 text-dark" role="status"></span>
+                }
+                {{ isPlaying ? 'Pause Instructions' : 'Play Instructions' }}
+              </button>
+
+              <!-- Playback Status play or paused -->
+              @if (playbackStatus) {
+                <small class="text-muted">{{ playbackStatus }}</small>
+              }
+            </div>
+          </div>
+
+          @if (translationError) {
+            <div class="alert alert-danger" role="alert">
+              {{ translationError }}
+            </div>
+          }
+
+          @if (ttsError) {
+            <div class="alert alert-warning" role="alert">
+              {{ ttsError }}
+            </div>
+          }
+
+          <div class="row g-4">
+            <div class="col-lg-6">
+              <div class="border rounded p-3 h-100 bg-white">
+                <div><strong>User ID:</strong> {{ recipe.userId }}</div>
+                <div><strong>Meal Type:</strong> {{ recipe.mealType }}</div>
+                <div><strong>Cuisine:</strong> {{ recipe.cuisineType }}</div>
+                <div><strong>Difficulty:</strong> {{ recipe.difficulty }}</div>
+                <div><strong>Prep Time:</strong> {{ recipe.prepTime }} min</div>
+                <div><strong>Servings:</strong> {{ recipe.servings }}</div>
+                <div><strong>Created:</strong> {{ recipe.createdAt | date: 'yyyy-MM-dd' }}</div>
+                <div class="mt-3">
+                  <strong>Ingredients:</strong>
+                  <div class="mt-1" style="white-space: pre-line;">{{ recipe.ingredients.join('\n') }}</div>
+                </div>
+                <div class="mt-3">
+                  <strong>Instructions:</strong>
+                  <div class="mt-1" style="white-space: pre-line;">{{ recipe.instructions.join('\n') }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+
+              <!-- Translated Recipe Details -->
+              @if (translatedRecipe) {
+                <div class="border rounded p-3 h-100 bg-light">
+                  <div>
+                    <strong>Title:</strong>
+                    <div class="mt-1">{{ translatedRecipe.title }}</div>
+                  </div>
+                  <div class="mt-3">
+                    <strong>Ingredients:</strong>
+                    <div class="mt-1" style="white-space: pre-line;">
+                      {{ translatedRecipe.ingredients.join('\n') }}
+                    </div>
+                  </div>
+                  <div class="mt-3">
+                    <strong>Instructions:</strong>
+                    <div class="mt-1" style="white-space: pre-line;">{{ translatedRecipe.instructions }}</div>
+                  </div>
+                </div>
+              } @else {
+                <div class="border rounded p-3 h-100 d-flex align-items-center justify-content-center bg-light">
+                  <span class="text-muted text-center">Translate the recipe to view results here.</span>
+                </div>
+              }
+            </div>
+          </div>
 
           <hr />
 

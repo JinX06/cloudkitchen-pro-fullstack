@@ -14,6 +14,7 @@ import { AddInventory } from './features/inventory/add-inventory/add-inventory';
 import { ViewInventory } from './features/inventory/view-inventory/view-inventory';
 import { EditInventory } from './features/inventory/edit-inventory/edit-inventory';
 import { ChefGuard } from './guards/chef-guard';
+import { AiRecipeHealth } from './features/ai/ai-recipe-health/ai-recipe-health';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/welcome-34076352', pathMatch: 'full' },
@@ -29,5 +30,6 @@ export const routes: Routes = [
   { path: 'inventory-add-34076352', component: AddInventory, canActivate: [authGuard], title: 'Add Inventory' },
   { path: 'inventory-view-34076352', component: ViewInventory, canActivate: [authGuard], title: 'View Inventory' },
   { path: 'inventory-edit-34076352', component: EditInventory, canActivate: [authGuard], title: 'Edit Inventory' },
+  { path: 'ai-health-34076352', component: AiRecipeHealth, canActivate: [authGuard, ChefGuard], title: 'AI Health Analysis' },
   { path: "**", component: NotFound, title: "404 Not Found" }
 ];

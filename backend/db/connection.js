@@ -29,7 +29,7 @@ mongoose.connection.on("disconnected", () => {
 // Graceful shutdown
 process.on("SIGINT", async () => {
     try {
-        await User.updateMany({ loggedIn: true }, { $set: { loggedIn: false } });
+        // await User.updateMany({ loggedIn: true }, { $set: { loggedIn: false } });
         console.log("Logged out all users.");
     } catch (e) {
         console.warn("ERROR! Could not log out all users:", e.message);

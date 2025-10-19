@@ -1,4 +1,4 @@
-const Recipe = require("../../models/Recipe");
+const Recipe = require("../../models/recipe.js");
 const Inventory = require("../../models/Inventory");
 
 async function validateRecipeID(req, res, next) {

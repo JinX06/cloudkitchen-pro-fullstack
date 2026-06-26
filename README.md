@@ -1,59 +1,118 @@
-# CloudkitchenPro
+# CloudKitchen Pro
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.4.
+CloudKitchen Pro is a recipe and kitchen-inventory management application built across three FIT2095 assignment milestones. The final version is an Angular 20 single-page app backed by an Express and MongoDB API, with role-aware dashboards, recipe CRUD, inventory tracking, PWA configuration, and optional Google AI, Translate, and Text-to-Speech integrations.
 
-## Development server
+The root of this repository contains the final Angular version. Earlier assignment work is kept in the Git history instead of being left as separate top-level folders.
 
-To start a local development server, run:
+## Screenshots
+
+| Welcome | Login |
+| --- | --- |
+| ![Welcome page](docs/screenshots/welcome.png) | ![Login page](docs/screenshots/login.png) |
+
+| Chef Dashboard | Manager Dashboard | Admin Dashboard |
+| --- | --- | --- |
+| ![Chef dashboard](docs/screenshots/chef-dashboard-main.png) | ![Manager dashboard](docs/screenshots/manager-dashboard.png) | ![Admin dashboard](docs/screenshots/admin-dashboard.png) |
+
+| Recipes | Recipe Detail |
+| --- | --- |
+| ![Recipe list](docs/screenshots/recipes.png) | ![Recipe detail](docs/screenshots/recipe-detail.png) |
+
+| Inventory | AI Health Analysis |
+| --- | --- |
+| ![Inventory list](docs/screenshots/inventory.png) | ![AI health analysis](docs/screenshots/ai-health.png) |
+
+## Project Progression
+
+- Assignment 1 started as an Express and EJS recipe hub with in-memory recipe and inventory data.
+- Assignment 2 added MongoDB, Mongoose models, users, role-based navigation, CRUD flows, and dashboard statistics.
+- Assignment 3 moved the frontend to Angular and connected it to the Express API, with guarded routes, services, PWA assets, AI health analysis, translation, and text-to-speech support.
+
+## Tech Stack
+
+- Angular 20, TypeScript, Angular Router, Angular Forms
+- Bootstrap 5 and ng-bootstrap
+- Node.js, Express 5, Socket.IO
+- MongoDB and Mongoose
+- Google Gemini, Google Translate, and Google Text-to-Speech integrations through backend environment variables
+
+## Features
+
+- Role-aware dashboard for `chef`, `manager`, and `admin` users
+- Recipe creation, listing, viewing, editing, and deletion for chefs
+- Inventory creation, listing, viewing, editing, deletion, expiry status, filtering, sorting, and value totals
+- Protected Angular routes backed by Express API auth checks
+- AI recipe health analysis for chef users
+- Recipe translation and text-to-speech support when Google credentials are configured
+- PWA manifest and icons for installable app support
+
+## Local Setup
+
+Prerequisites:
+
+- Node.js 20+
+- npm
+- MongoDB running locally, or a MongoDB connection string
+
+Install frontend dependencies:
 
 ```bash
-ng serve
+npm install
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Install backend dependencies:
 
 ```bash
-ng generate component component-name
+cd backend
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Create a backend environment file:
 
 ```bash
-ng generate --help
+cp backend/.env.example backend/.env
 ```
 
-## Building
-
-To build the project run:
+For a basic local run, `MONGODB_URI` is enough. Google credentials are optional and only needed for AI, translation, and text-to-speech features.
 
 ```bash
-ng build
+MONGODB_URI=mongodb://localhost:27017/cloud_kitchen_pro-34076352
+GOOGLE_API_KEY=
+GOOGLE_APPLICATION_CREDENTIALS=/absolute/path/to/service-account.json
+PORT=8080
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Build the Angular app:
 
 ```bash
-ng test
+npm run build
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Start the backend API and static frontend server:
 
 ```bash
-ng e2e
+cd backend
+npm start
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Open:
 
-## Additional Resources
+```text
+http://localhost:8080/welcome-34076352
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+For frontend-only development, run:
+
+```bash
+npm start
+```
+
+The Angular dev server runs at `http://localhost:4200/`. The production-like flow is the built Angular app served by the backend on port `8080`.
+
+## Academic Integrity Notice
+
+This repository is shared for portfolio and learning reference only.
+
+Do not copy, reuse, or submit any part of this repository as your own academic work. Submitting another student's work, even partially, may be treated as academic misconduct and can result in failed assessments, unit failure, or disciplinary action.
+
+Use this repository to understand implementation ideas and project structure, then complete your own work independently according to your institution's academic integrity rules.

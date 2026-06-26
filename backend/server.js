@@ -23,7 +23,7 @@ const aiRouter = require("./routes/api/ai");
 const translateRouter = require("./routes/api/translate");
 
 // Set the port number
-const port_number = 8080;
+const port_number = Number(process.env.PORT) || 8080;
 
 // App locals
 app.locals.suggestedRecipes = [];
@@ -95,6 +95,7 @@ io.on("connection", (socket) => {
                 const filename = `tts${Date.now()}.mp3`;
                 const filePath = path.join(audioDir, filename);
 
+                fs.mkdirSync(audioDir, { recursive: true });
                 fs.writeFile(filePath, response.audioContent, "binary", (err) => {
                     if (err) {
                         console.log("Unable to save TTS audio:", err);

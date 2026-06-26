@@ -1,14 +1,11 @@
 {
-  "name": "assignment-3",
+  "name": "cloudkitchen-pro-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "description": "Express API backend for CloudKitchen Pro.",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://git.infotech.monash.edu/fit2095-s2-25/jong0092/assignment-3.git"
+    "start": "node server.js",
+    "test": "echo \"No backend test suite configured\""
   },
   "keywords": [],
   "author": "",

@@ -1,6 +1,6 @@
 {
-  "name": "cloudkitchen-pro",
-  "short_name": "cloudkitchen-pro",
+  "name": "CloudKitchen Pro",
+  "short_name": "CloudKitchen",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",

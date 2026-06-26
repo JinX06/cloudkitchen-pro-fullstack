@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
 
-const mongoURI = "mongodb://localhost:27017/cloud_kitchen_pro-34076352";
+const mongoURI = process.env.MONGODB_URI || "mongodb://localhost:27017/cloud_kitchen_pro-34076352";
 
 async function connectToMongoDB() {
     try {

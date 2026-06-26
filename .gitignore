@@ -8,8 +8,14 @@
 
 # Node
 /node_modules
+backend/node_modules/
 npm-debug.log
 yarn-error.log
+
+# Environment files
+.env
+.env.*
+!.env.example
 
 # IDEs and editors
 .idea/
@@ -37,6 +43,8 @@ yarn-error.log
 testem.log
 /typings
 __screenshots__/
+backend/public/audio/*.mp3
+!backend/public/audio/.gitkeep
 
 # System files
 .DS_Store
